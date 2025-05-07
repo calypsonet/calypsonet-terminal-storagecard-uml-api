@@ -52,7 +52,7 @@ legend top
     ** <back:yellow>**keypop-reader-java-api**</back>
 end legend
 
-package "terminal.storagecard" as storage {
+package "terminal.storagecard" as root {
     +class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
         +{static} **final** String VERSION
     }
@@ -94,6 +94,14 @@ package "terminal.storagecard" as storage {
             CLOSE_AFTER
         }
     }
+
+    ' Exceptions
+    +class "<<RuntimeException>>" as RuntimeException <<green>> {
+        +**ReaderIOException**: Card reader communication is broken.
+        +**CardIOException**
+        +**InconsistentDataException**: Number of R-APDUs != number of C-APDUs **or** data read in session != data read outside session.
+        +**UnexpectedCommandStatusException**
+    }
 }
 
 ' Associations
@@ -106,7 +114,12 @@ StorageCardApiFactory .right.> ProductType #C_USE : use >
 
 ' == LAYOUT ==
 
+ProductType -[hidden]- RuntimeException
+
 ' == STYLE ==
 
+package root #C_GREY1 {}
+package root.card #C_GREY2 {}
+package root.transaction #C_GREY2 {}
 
 @enduml
