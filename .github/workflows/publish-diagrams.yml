@@ -17,7 +17,7 @@ jobs:
       - name: Prepare publication locally
         working-directory: .
         run: ./.github/scripts/prepare_publication.sh
-      - name: Deploy diagrams to gh-pages
+      - name: Deploy diagrams to doc
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
