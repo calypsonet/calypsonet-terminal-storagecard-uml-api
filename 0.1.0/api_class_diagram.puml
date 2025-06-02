@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 0.1.+ (2025-05-06)
+    Terminal Storage Card API - 0.1.+ (2025-06-02)
 end title
 
 ' == THEME ==
@@ -72,8 +72,8 @@ package "terminal.storagecard" as root {
             +byte[] getBlocks(int fromBlockNumber, int toBlockNumber)
         }
         +enum "ProductType" as ProductType <<green>> {
-            NXP_MIFARE_ULTRALIGHT
-            STM_ST25
+            MIFARE_ULTRALIGHT
+            ST25_SRT512
 
             +getBlockCount(): int
             +getBlockSize(): int
