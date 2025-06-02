@@ -1,0 +1,125 @@
+@startuml
+title
+    <img:../assets/logo.svg{scale=0.2}>
+
+    Terminal Storage Card API - 0.1.+ (2025-05-06)
+end title
+
+' == THEME ==
+
+'Couleurs issues de : https://htmlcolorcodes.com/fr/tableau-de-couleur/tableau-de-couleur-design-plat/
+!define C_GREY1 F8F9F9
+!define C_GREY2 F2F3F4
+!define C_GREY3 E5E7E9
+!define C_GREY4 D7DBDD
+!define C_GREY5 CACFD2
+!define C_GREY6 BDC3C7
+!define C_LINK 3498DB
+!define C_USE 27AE60
+
+skinparam ClassBorderThickness 2
+skinparam ArrowThickness 2
+
+' Yellow
+skinparam ClassBackgroundColor #FEFECE
+skinparam ClassBorderColor #D4AC0D
+' Red
+skinparam ClassBackgroundColor<<red>> #FDEDEC
+skinparam ClassBorderColor<<red>> #E74C3C
+hide <<red>> stereotype
+' Purple
+skinparam ClassBackgroundColor<<purple>> #F4ECF7
+skinparam ClassBorderColor<<purple>> #8E44AD
+hide <<purple>> stereotype
+' blue
+skinparam ClassBackgroundColor<<blue>> #EBF5FB
+skinparam ClassBorderColor<<blue>> #3498DB
+hide <<blue>> stereotype
+' Green
+skinparam ClassBackgroundColor<<green>> #E9F7EF
+skinparam ClassBorderColor<<green>> #27AE60
+hide <<green>> stereotype
+' Grey
+skinparam ClassBackgroundColor<<grey>> #EAECEE
+skinparam ClassBorderColor<<grey>> #2C3E50
+hide <<grey>> stereotype
+
+' == CONTENT ==
+
+legend top
+    __Colors legend__ :
+    * __External API references__ :
+    ** <back:yellow>**keypop-reader-java-api**</back>
+end legend
+
+package "terminal.storagecard" as root {
+    +class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
+        +{static} **final** String VERSION
+    }
+    +interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
+        +StorageCardSelectionExtension createStorageCardSelectionExtension(ProductType productType)
+        +StorageCardTransactionManager createStorageCardTransactionManager(<back:yellow>CardReader reader</back>, StorageCard card)
+    }
+
+    package "card" as card {
+        +interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
+            +StorageCardSelectionExtension prepareReadBlock(int blockNumber)
+            +StorageCardSelectionExtension prepareReadBlocks(int fromBlockNumber, int toBlockNumber)
+        }
+        +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
+            +ProductType getProductType()
+            +byte[] getBlock(int blockNumber)
+            +byte[] getBlocks(int fromBlockNumber, int toBlockNumber)
+        }
+        +enum "ProductType" as ProductType <<green>> {
+            NXP_MIFARE_ULTRALIGHT
+            STM_ST25
+
+            +getBlockCount(): int
+            +getBlockSize(): int
+        }
+    }
+
+    package "transaction" as transaction {
+        +interface "StorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
+            +StorageCardTransactionManager prepareReadBlock(int blockNumber)
+            +StorageCardTransactionManager prepareReadBlocks(int fromBlockNumber, int toBlockNumber)
+
+            +StorageCardTransactionManager prepareWriteBlocks(int fromBlockNumber, byte[] data)
+
+            +StorageCardTransactionManager processCommands(ChannelControl channelControl)
+        }
+        +enum "ChannelControl" as ChannelControl <<green>> {
+            KEEP_OPEN
+            CLOSE_AFTER
+        }
+    }
+
+    ' Exceptions
+    +class "<<RuntimeException>>" as RuntimeException <<green>> {
+        +**ReaderIOException**: Card reader communication is broken.
+        +**CardIOException**
+        +**InconsistentDataException**: Number of R-APDUs != number of C-APDUs **or** data read in session != data read outside session.
+        +**UnexpectedCommandStatusException**
+    }
+}
+
+' Associations
+StorageCardApiFactory ..> StorageCardSelectionExtension #C_LINK : create >
+StorageCardApiFactory ..> StorageCardTransactionManager #C_LINK : create >
+StorageCard ..> ProductType #C_USE : provide >
+StorageCardTransactionManager ..> ChannelControl #C_USE : use >
+StorageCardApiFactory .right.> StorageCard #C_USE : use >
+StorageCardApiFactory .right.> ProductType #C_USE : use >
+
+' == LAYOUT ==
+
+ProductType -[hidden]- RuntimeException
+
+' == STYLE ==
+
+package root #C_GREY1 {}
+package root.card #C_GREY2 {}
+package root.transaction #C_GREY2 {}
+
+@enduml
