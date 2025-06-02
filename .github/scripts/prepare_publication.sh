@@ -15,9 +15,6 @@ git checkout -f doc
 echo "Delete existing SNAPSHOT directory..."
 rm -rf *-SNAPSHOT
 
-echo "Create target directory $version..."
-mkdir $version
-
 echo "Copy diagram folders..."
 find .. -type d -regex '\.\./[0-9].*$' -exec cp -rf -t . {} +
 
