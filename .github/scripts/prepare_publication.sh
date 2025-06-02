@@ -34,7 +34,7 @@ echo "| Version | Documents |" > list_versions.md
 echo "|:---:|---|" >> list_versions.md
 for directory in $(ls -rd [0-9]*/ | cut -f1 -d'/')
 do
-  diagrams="| $directory |"
+  diagrams=""
   cd "$directory" || exit
   for file in  $(ls -r *.svg 2>/dev/null | cut -f1 -d'/')
   do
