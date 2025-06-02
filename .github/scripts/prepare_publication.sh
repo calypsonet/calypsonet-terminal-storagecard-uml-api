@@ -15,8 +15,22 @@ git checkout -f doc
 echo "Delete existing SNAPSHOT directory..."
 rm -rf *-SNAPSHOT
 
+echo "Create target directory $version..."
+mkdir $version
+
 echo "Copy diagram folders..."
 find .. -type d -regex '\.\./[0-9].*$' -exec cp -rf -t . {} +
+
+# Find the latest stable version (first non-SNAPSHOT)
+latest_stable=$(ls -d [0-9]*/ | grep -v SNAPSHOT | cut -f1 -d'/' | sort -Vr | head -n1)
+
+# Create latest-stable copy if we have a stable version
+if [ ! -z "$latest_stable" ]; then
+    echo "Creating latest-stable directory pointing to $latest_stable..."
+    rm -rf latest-stable
+    mkdir latest-stable
+    cp -rf "$latest_stable"/* latest-stable/
+fi
 
 echo "Update versions list..."
 echo "| Version | Documents |" > list_versions.md
@@ -31,10 +45,15 @@ do
   done
   line="$line|"
   cd ..
-  echo "$line" >> ./list_versions.md
+  # If this is the stable version, write latest-stable entry first
+  if [ "$directory" = "$latest_stable" ]; then
+      echo "| **$directory (latest stable)** |" >> list_versions.md
+  else
+      echo "| $directory |" >> list_versions.md
+  fi
 done
 
+echo "Computed all versions:"
+cat list_versions.md
+cd ..
 echo "Local docs update finished."
-
-
-
