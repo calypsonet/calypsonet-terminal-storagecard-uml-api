@@ -34,18 +34,19 @@ echo "| Version | Documents |" > list_versions.md
 echo "|:---:|---|" >> list_versions.md
 for directory in $(ls -rd [0-9]*/ | cut -f1 -d'/')
 do
-  line="| $directory |"
+  diagrams="| $directory |"
   cd "$directory" || exit
   for file in  $(ls -r *.svg 2>/dev/null | cut -f1 -d'/')
   do
-    line="$line[$file]($directory/$file)<br/>"
+    diagrams="$diagrams[$file]($directory/$file)<br/>"
   done
-  line="$line|"
   cd ..
+  # If this is the stable version, write latest-stable entry first
   if [ "$directory" = "$latest_stable" ]; then
-      echo "| **$directory (latest stable)** |" >> list_versions.md
+      echo "| **$directory (latest stable)** | $diagrams |" >> list_versions.md
+  else
+      echo "| $directory | $diagrams |" >> list_versions.md
   fi
-  echo "$line" >> list_versions.md
 done
 
 echo "Computed all versions:"
