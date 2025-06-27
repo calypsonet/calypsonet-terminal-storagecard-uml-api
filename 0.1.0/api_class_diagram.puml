@@ -68,6 +68,7 @@ package "terminal.storagecard" as root {
         }
         +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +ProductType getProductType()
+            +byte[] getUID()
             +byte[] getBlock(int blockNumber)
             +byte[] getBlocks(int fromBlockNumber, int toBlockNumber)
         }
