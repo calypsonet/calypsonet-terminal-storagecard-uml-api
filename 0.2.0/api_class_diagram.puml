@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 0.1.+ (2025-06-02)
+    Terminal Storage Card API - 0.2.+ (2025-06-27)
 end title
 
 ' == THEME ==
@@ -63,14 +63,15 @@ package "terminal.storagecard" as root {
 
     package "card" as card {
         +interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
-            +StorageCardSelectionExtension prepareReadBlock(int blockNumber)
-            +StorageCardSelectionExtension prepareReadBlocks(int fromBlockNumber, int toBlockNumber)
+            +StorageCardSelectionExtension prepareReadBlock(int blockAddress)
+            +StorageCardSelectionExtension prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
         }
         +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +ProductType getProductType()
             +byte[] getUID()
-            +byte[] getBlock(int blockNumber)
-            +byte[] getBlocks(int fromBlockNumber, int toBlockNumber)
+            +<color:blue>byte[] getSystemBlock()
+            +byte[] getBlock(int blockAddress)
+            +byte[] getBlocks(int fromBlockAddress, int toBlockAddress)
         }
         +enum "ProductType" as ProductType <<green>> {
             MIFARE_ULTRALIGHT
@@ -78,15 +79,18 @@ package "terminal.storagecard" as root {
 
             +getBlockCount(): int
             +getBlockSize(): int
+            +<color:blue>hasSystemBlock(): boolean
         }
     }
 
     package "transaction" as transaction {
         +interface "StorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
-            +StorageCardTransactionManager prepareReadBlock(int blockNumber)
-            +StorageCardTransactionManager prepareReadBlocks(int fromBlockNumber, int toBlockNumber)
+            +<color:blue>StorageCardTransactionManager prepareReadSystemBlock()
+            +<color:blue>StorageCardTransactionManager prepareWriteSystemBlock(byte[] data)
 
-            +StorageCardTransactionManager prepareWriteBlocks(int fromBlockNumber, byte[] data)
+            +StorageCardTransactionManager prepareReadBlock(int blockAddress)
+            +StorageCardTransactionManager prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
+            +StorageCardTransactionManager prepareWriteBlocks(int fromBlockAddress, byte[] data)
 
             +StorageCardTransactionManager processCommands(ChannelControl channelControl)
         }
