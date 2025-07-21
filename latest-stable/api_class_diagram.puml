@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 0.2.+ (2025-06-27)
+    Terminal Storage Card API - 0.3.+ (2025-07-21)
 end title
 
 ' == THEME ==
@@ -69,7 +69,7 @@ package "terminal.storagecard" as root {
         +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +ProductType getProductType()
             +byte[] getUID()
-            +<color:blue>byte[] getSystemBlock()
+            +byte[] getSystemBlock()
             +byte[] getBlock(int blockAddress)
             +byte[] getBlocks(int fromBlockAddress, int toBlockAddress)
         }
@@ -79,14 +79,15 @@ package "terminal.storagecard" as root {
 
             +getBlockCount(): int
             +getBlockSize(): int
-            +<color:blue>hasSystemBlock(): boolean
+            +hasSystemBlock(): boolean
+            +hasWriteAcknowledgment(): boolean
         }
     }
 
     package "transaction" as transaction {
         +interface "StorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
-            +<color:blue>StorageCardTransactionManager prepareReadSystemBlock()
-            +<color:blue>StorageCardTransactionManager prepareWriteSystemBlock(byte[] data)
+            +StorageCardTransactionManager prepareReadSystemBlock()
+            +StorageCardTransactionManager prepareWriteSystemBlock(byte[] data)
 
             +StorageCardTransactionManager prepareReadBlock(int blockAddress)
             +StorageCardTransactionManager prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
@@ -101,11 +102,22 @@ package "terminal.storagecard" as root {
     }
 
     ' Exceptions
-    +class "<<RuntimeException>>" as RuntimeException <<green>> {
-        +**ReaderIOException**: Card reader communication is broken.
-        +**CardIOException**
-        +**InconsistentDataException**: Number of R-APDUs != number of C-APDUs **or** data read in session != data read outside session.
-        +**UnexpectedCommandStatusException**
+    +abstract class "<<RuntimeException>>\nStorageCardException" as StorageCardException <<green>> {
+        #StorageCardException (Integer blockAddress, String message)
+        #StorageCardException (Integer blockAddress, String message, Throwable cause)
+
+        +Integer getBlockAddress()
+    }
+    +class "**final** ReaderIOException" as ReaderIOException <<green>> extends StorageCardException {
+        +ReaderIOException (Integer blockAddress, String message)
+        +ReaderIOException (Integer blockAddress, String message, Throwable cause)
+    }
+    +class "**final** CardIOException" as CardIOException <<green>> extends StorageCardException {
+        +CardIOException (Integer blockAddress, String message)
+        +CardIOException (Integer blockAddress, String message, Throwable cause)
+    }
+    +class "**final** UnexpectedCommandStatusException" as UnexpectedCommandStatusException <<green>> extends StorageCardException {
+        +UnexpectedCommandStatusException (Integer blockAddress, String message, Throwable cause)
     }
 }
 
@@ -119,7 +131,7 @@ StorageCardApiFactory .right.> ProductType #C_USE : use >
 
 ' == LAYOUT ==
 
-ProductType -[hidden]- RuntimeException
+ProductType -[hidden]- StorageCardException
 
 ' == STYLE ==
 
