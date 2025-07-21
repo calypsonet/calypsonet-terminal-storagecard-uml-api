@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 0.3.+ (2025-07-18)
+    Terminal Storage Card API - 0.3.+ (2025-07-21)
 end title
 
 ' == THEME ==
@@ -80,6 +80,7 @@ package "terminal.storagecard" as root {
             +getBlockCount(): int
             +getBlockSize(): int
             +hasSystemBlock(): boolean
+            +hasWriteAcknowledgment(): boolean
         }
     }
 
