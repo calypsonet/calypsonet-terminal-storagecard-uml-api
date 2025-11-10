@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 0.4.+ (2025-11-06)
+    Terminal Storage Card API - 0.4.+ (2025-11-10)
 end title
 
 ' == THEME ==
@@ -92,31 +92,22 @@ package "terminal.storagecard" as root {
             +StorageCardTransactionManager prepareReadBlock(int blockAddress)
             +StorageCardTransactionManager prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
             +StorageCardTransactionManager prepareWriteBlocks(int fromBlockAddress, byte[] data)
-
-            +<color:red><s>StorageCardTransactionManager processCommands(ChannelControl channelControl)
-        }
-        +enum "<color:red><s>ChannelControl" as ChannelControl <<green>> {
-            <color:red><s>KEEP_OPEN
-            <color:red><s>CLOSE_AFTER
         }
     }
 
     ' Exceptions
-    +abstract class "<<RuntimeException>>\nStorageCardException" as StorageCardException <<green>> {
-        #StorageCardException (Integer blockAddress, String message)
-        #StorageCardException (Integer blockAddress, String message, Throwable cause)
-
+    +interface "StorageCardException" as StorageCardException <<green>> {
         +Integer getBlockAddress()
     }
-    +class "**final** ReaderIOException" as ReaderIOException <<green>> extends StorageCardException {
+    +class "<color:blue><<<back:yellow>ReaderCommunicationException</back>>></color>\n**final** ReaderIOException" as ReaderIOException <<green>> implements StorageCardException {
         +ReaderIOException (Integer blockAddress, String message)
         +ReaderIOException (Integer blockAddress, String message, Throwable cause)
     }
-    +class "**final** CardIOException" as CardIOException <<green>> extends StorageCardException {
+    +class "<color:blue><<<back:yellow>CardCommunicationException</back>>></color>\n**final** CardIOException" as CardIOException <<green>> implements StorageCardException {
         +CardIOException (Integer blockAddress, String message)
         +CardIOException (Integer blockAddress, String message, Throwable cause)
     }
-    +class "**final** UnexpectedCommandStatusException" as UnexpectedCommandStatusException <<green>> extends StorageCardException {
+    +class "<color:blue><<<back:yellow>InvalidCardResponseException</back>>></color>\n**final** UnexpectedCommandStatusException" as UnexpectedCommandStatusException <<green>> implements StorageCardException {
         +UnexpectedCommandStatusException (Integer blockAddress, String message, Throwable cause)
     }
 }
@@ -125,7 +116,6 @@ package "terminal.storagecard" as root {
 StorageCardApiFactory ..> StorageCardSelectionExtension #C_LINK : create >
 StorageCardApiFactory ..> StorageCardTransactionManager #C_LINK : create >
 StorageCard ..> ProductType #C_USE : provide >
-StorageCardTransactionManager ..> ChannelControl #C_USE : use >
 StorageCardApiFactory .right.> StorageCard #C_USE : use >
 StorageCardApiFactory .right.> ProductType #C_USE : use >
 
