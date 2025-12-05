@@ -2,7 +2,7 @@
 title
     <img:../assets/logo.svg{scale=0.2}>
 
-    Terminal Storage Card API - 1.1.0 (2025-12-01)
+    Terminal Storage Card API - 1.1.0 (2025-12-05)
 end title
 
 ' == THEME ==
@@ -58,6 +58,7 @@ package "terminal.storagecard" as root {
     }
     +interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
         +StorageCardSelectionExtension createStorageCardSelectionExtension(ProductType productType)
+
         +StorageCardTransactionManager createStorageCardTransactionManager(<back:yellow>CardReader reader</back>, StorageCard card)
     }
 
@@ -65,17 +66,17 @@ package "terminal.storagecard" as root {
         +interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
             +StorageCardSelectionExtension prepareReadBlock(int blockAddress)
             +StorageCardSelectionExtension prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
-
-            ' Mifare Classic Authentication
-            +<color:blue>StorageCardSelectionExtension prepareGeneralAuthenticate(int blockAddress, KeyType keyType, byte[] key)
-            +<color:blue>StorageCardSelectionExtension prepareGeneralAuthenticate(int blockAddress, KeyType keyType, int keyNumber)
+            .. **Mifare Classic** ..
+            +<color:blue>StorageCardSelectionExtension prepareMifareClassicAuthenticate(int blockAddress, MifareClassicKeyType mifareClassicKeyType, byte[] key)
+            +<color:blue>StorageCardSelectionExtension prepareMifareClassicAuthenticate(int blockAddress, MifareClassicKeyType mifareClassicKeyType, int keyNumber)
         }
         +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +ProductType getProductType()
             +byte[] getUID()
-            +byte[] getSystemBlock()
             +byte[] getBlock(int blockAddress)
             +byte[] getBlocks(int fromBlockAddress, int toBlockAddress)
+            .. **ST25 / SRT512** ..
+            +byte[] getSystemBlock()
         }
         +enum "ProductType" as ProductType <<green>> {
             MIFARE_ULTRALIGHT
@@ -87,27 +88,29 @@ package "terminal.storagecard" as root {
             +getBlockSize(): int
             +hasSystemBlock(): boolean
             +hasWriteAcknowledgment(): boolean
+            +<color:blue>hasAuthentication(): boolean
         }
     }
 
-    +enum "KeyType" as KeyType <<green>> {
-        KEY_A
-        KEY_B
+    +enum "<color:blue>MifareClassicKeyType" as MifareClassicKeyType <<green>> {
+        <color:blue>KEY_A
+        <color:blue>KEY_B
     }
 
     package "transaction" as transaction {
-        +interface "<color:blue><<<back:yellow>CardTransactionManager</back>>></color>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
-            +StorageCardTransactionManager prepareReadSystemBlock()
-            +StorageCardTransactionManager prepareWriteSystemBlock(byte[] data)
-
+        +interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
             +StorageCardTransactionManager prepareReadBlock(int blockAddress)
             +StorageCardTransactionManager prepareReadBlocks(int fromBlockAddress, int toBlockAddress)
             +StorageCardTransactionManager prepareWriteBlocks(int fromBlockAddress, byte[] data)
-
-            ' Mifare Classic Specifics
-            +<color:blue>StorageCardTransactionManager prepareGeneralAuthenticate(int blockAddress, KeyType keyType, byte[] key)
-            +<color:blue>StorageCardTransactionManager prepareGeneralAuthenticate(int blockAddress, KeyType keyType, int keyNumber)
+            .. **ST25 / SRT512** ..
+            +<color:red><s>StorageCardTransactionManager prepareReadSystemBlock()
+            +<color:red><s>StorageCardTransactionManager prepareWriteSystemBlock(byte[] data)
+            +<color:blue>StorageCardTransactionManager prepareSt25ReadSystemBlock()
+            +<color:blue>StorageCardTransactionManager prepareSt25WriteSystemBlock(byte[] data)
+            .. **Mifare Classic** ..
+            +<color:blue>StorageCardTransactionManager prepareMifareClassicAuthenticate(int blockAddress, MifareClassicKeyType mifareClassicKeyType, byte[] key)
+            +<color:blue>StorageCardTransactionManager prepareMifareClassicAuthenticate(int blockAddress, MifareClassicKeyType mifareClassicKeyType, int keyNumber)
         }
     }
 
@@ -118,6 +121,10 @@ package "terminal.storagecard" as root {
         +SCReaderCommunicationException (Integer blockAddress, String message)
         +SCReaderCommunicationException (Integer blockAddress, String message, Throwable cause)
     }
+    +class "<color:blue>**final** SCAuthenticationFailedException" as SCAuthenticationFailedException <<green>> implements StorageCardException {
+        +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message)
+        +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message, Throwable cause)
+    }
     +class "<<<back:yellow>CardCommunicationException</back>>></color>\n**final** SCCardCommunicationException" as SCCardCommunicationException <<green>> implements StorageCardException {
         +SCCardCommunicationException (Integer blockAddress, String message)
         +SCCardCommunicationException (Integer blockAddress, String message, Throwable cause)
@@ -126,33 +133,28 @@ package "terminal.storagecard" as root {
         +SCInvalidCardResponseException (Integer blockAddress, String message)
         +SCInvalidCardResponseException (Integer blockAddress, String message, Throwable cause)
     }
-    +class "<color:blue>**final** SCAuthenticationFailedException" as SCAuthenticationFailedException <<green>> implements StorageCardException {
-        +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message)
-        +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message, Throwable cause)
-    }
 }
 
 ' Associations
 StorageCardApiFactory ..> StorageCardSelectionExtension #C_LINK : create >
 StorageCardApiFactory ..> StorageCardTransactionManager #C_LINK : create >
-StorageCard ..> ProductType #C_USE : provide >
 StorageCardApiFactory .right.> StorageCard #C_USE : use >
 StorageCardApiFactory .right.> ProductType #C_USE : use >
-StorageCardSelectionExtension ..> KeyType #C_USE : use >
-StorageCardTransactionManager ..> KeyType #C_USE : use >
+StorageCard ..> ProductType #C_USE : provide >
+StorageCardSelectionExtension ..> MifareClassicKeyType #C_USE : use >
+StorageCardTransactionManager ..> MifareClassicKeyType #C_USE : use >
 
 ' == LAYOUT ==
 
+StorageCardApiFactory -[hidden]- StorageCardSelectionExtension
+StorageCardApiFactory -[hidden]- StorageCardTransactionManager
 ProductType -[hidden]- StorageCardException
-SCReaderCommunicationException -[hidden]down- SCCardCommunicationException
-SCCardCommunicationException -[hidden]down- SCInvalidCardResponseException
-SCInvalidCardResponseException -[hidden]down- SCAuthenticationFailedException
+SCReaderCommunicationException -[hidden]down- SCAuthenticationFailedException
 
 ' == STYLE ==
 
 package root #C_GREY1 {}
 package root.card #C_GREY2 {}
 package root.transaction #C_GREY2 {}
-package root.exception #C_GREY2 {}
 
 @enduml
