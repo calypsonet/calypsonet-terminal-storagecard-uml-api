@@ -117,7 +117,7 @@ package "terminal.storagecard" as root {
     +interface "StorageCardException" as StorageCardException <<green>> {
         +Integer getBlockAddress()
     }
-    +class "<<<back:yellow>ReaderCommunicationException</back>>></color>\n**final** SCReaderCommunicationException" as SCReaderCommunicationException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>ReaderCommunicationException</back>>>\n**final** SCReaderCommunicationException" as SCReaderCommunicationException <<green>> implements StorageCardException {
         +SCReaderCommunicationException (Integer blockAddress, String message)
         +SCReaderCommunicationException (Integer blockAddress, String message, Throwable cause)
     }
@@ -125,11 +125,11 @@ package "terminal.storagecard" as root {
         +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message)
         +<color:blue>SCAuthenticationFailedException (Integer blockAddress, String message, Throwable cause)
     }
-    +class "<<<back:yellow>CardCommunicationException</back>>></color>\n**final** SCCardCommunicationException" as SCCardCommunicationException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>CardCommunicationException</back>>>\n**final** SCCardCommunicationException" as SCCardCommunicationException <<green>> implements StorageCardException {
         +SCCardCommunicationException (Integer blockAddress, String message)
         +SCCardCommunicationException (Integer blockAddress, String message, Throwable cause)
     }
-    +class "<<<back:yellow>InvalidCardResponseException</back>>></color>\n**final** SCInvalidCardResponseException" as SCInvalidCardResponseException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>InvalidCardResponseException</back>>>\n**final** SCInvalidCardResponseException" as SCInvalidCardResponseException <<green>> implements StorageCardException {
         +SCInvalidCardResponseException (Integer blockAddress, String message)
         +SCInvalidCardResponseException (Integer blockAddress, String message, Throwable cause)
     }
