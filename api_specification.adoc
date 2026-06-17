@@ -1,0 +1,834 @@
+= Terminal Storage Card API -- Technical Specification
+Calypso Networks Association <https://calypsonet.org>
+v1.2.0-SNAPSHOT, {docdate}
+:doctype: book
+:toc: left
+:toclevels: 4
+:sectnums:
+:sectnumlevels: 4
+:sectanchors:
+:sectlinks:
+:data-uri:
+:icons: font
+:rouge-style: github
+:source-highlighter: rouge
+:docinfodir: {docdir}/assets
+:docinfo: shared
+:imagesoutdir: {docdir}/gen
+:pdf-themesdir: {docdir}/assets
+:pdf-theme: calypso
+:pdf-fontsdir: {docdir}/assets/fonts
+:experimental:
+:xrefstyle: short
+:figure-caption: Figure
+:table-caption: Table
+:example-caption: Example
+:appendix-caption: Appendix
+:organization: Calypso Networks Association
+:short-name: CNA
+:spec-name: Terminal Storage Card API
+:spec-id: CNA-TSC-API
+:spec-version: 1.2.0-SNAPSHOT
+
+[abstract]
+== Abstract
+
+This document is the official technical specification of the **{spec-name}** standardised
+by the **{organization}** ({short-name}).
+It defines, in a language-agnostic way, the interfaces, classes, enumerations, exceptions, structural
+relationships and behavioural requirements that any conforming implementation of the {spec-name} MUST satisfy.
+
+The {spec-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
+(Mifare Ultralight, Mifare Classic 1K/4K, ST25/SRT512). It exposes a block-oriented memory image, an authentication
+mechanism for Mifare Classic and a transaction manager that batches read and write commands.
+
+[discrete]
+== Document Status
+
+[cols="1h,3", grid=rows, frame=ends]
+|===
+| Specification ID    | {spec-id}
+| Version             | {spec-version}
+| Status              | Working Draft
+| Editor              | {organization}
+| Reference model     | link:api_class_diagram.puml[`api_class_diagram.puml`] / link:api_class_diagram.svg[`api_class_diagram.svg`]
+| Reference license   | Eclipse Public License -- v 2.0 (EPL-2.0)
+|===
+
+[discrete]
+== Revision History
+
+[cols="1,2,2,5", options="header"]
+|===
+| Version | Date | Editor | Description
+| 1.0.0          | _TBC_ | CNA  | Initial release covering Mifare Ultralight and ST25/SRT512 cards.
+| 1.1.0          | _TBC_ | CNA  | Added Mifare Classic 1K/4K with authentication support.
+| {spec-version} | _TBD_ | CNA  | _Work in progress._
+|===
+
+// =============================================================================
+== Introduction
+
+=== Purpose
+
+The {spec-name} defines the contracts required to:
+
+* select storage cards through the *Terminal Reader API* selection mechanism,
+* perform block-level read and write operations,
+* expose card-specific metadata (product type, UID, system block),
+* authenticate against Mifare Classic sectors using Key A or Key B.
+
+Conforming implementations MUST guarantee interoperability with [CNA-TR-API] reader implementations.
+
+=== Scope
+
+This specification covers:
+
+* the factory used to instantiate the public types of the API,
+* the abstract representation of a storage card and its product types,
+* the card-selection extension used to enrich a selection scenario with storage-card commands,
+* the transaction manager used to exchange APDUs with the selected card,
+* the family of storage-card-specific exceptions.
+
+The following topics are *out of scope*:
+
+* the wire-level protocols specific to each storage card technology,
+* the management of cryptographic key material for Mifare Classic authentication.
+
+=== Conformance
+
+A software product conforms to this specification if and only if:
+
+. it implements every interface and class defined in <<sec_specification>> with the operations and semantics
+  prescribed in this document,
+. it raises exceptions exclusively of the types defined in <<sec_exceptions>> for the situations described,
+. it preserves the structural and behavioural relationships described in <<sec_architecture>>.
+
+Throughout this specification, the key words **MUST**, **MUST NOT**, **SHALL**, **SHALL NOT**, **SHOULD**,
+**SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in **RFC 2119** and
+**RFC 8174** when, and only when, they appear in all capitals.
+
+=== Document Conventions
+
+==== Language-agnostic types
+
+[cols="1,3,3", options="header"]
+|===
+| Symbolic type   | Description                                                     | Typical bindings
+| `string`        | Sequence of characters, UTF-8 encoded by default.                | `String`, `string`, `str`.
+| `boolean`       | Two-state truth value.                                           | `boolean`, `bool`.
+| `integer`       | Signed 32-bit integer.                                           | `int`, `Int32`.
+| `byte array`    | Ordered sequence of octets.                                      | `byte[]`, `[u8]`, `bytes`.
+| `void`          | Indicates that an operation returns no value.                    | `void`, `Unit`, `None`.
+|===
+
+=== References
+
+[cols="1,1,4", options="header"]
+|===
+| Reference | Identifier | Title
+
+| [[ref_rfc2119]] [RFC 2119]
+| RFC 2119
+| _Key words for use in RFCs to Indicate Requirement Levels_, S. Bradner, March 1997.
+
+| [[ref_cna_tr]] [CNA-TR-API]
+| CNA-TR-API
+| _Terminal Reader API Specification_, {organization}.
+
+| [[ref_iso14443]] [ISO/IEC 14443]
+| ISO/IEC 14443
+| _Identification cards -- Contactless integrated circuit cards -- Proximity cards_.
+
+| [[ref_pcsc]] [PC/SC]
+| PC/SC
+| _Interoperability Specification for ICCs and Personal Computer Systems_.
+|===
+
+// =============================================================================
+== Terms, Definitions and Abbreviations
+
+=== Terms and Definitions
+
+[cols="1,4", options="header"]
+|===
+| Term              | Definition
+
+| Block             | Smallest addressable storage unit on a storage card. The block size depends on the card product type.
+| Sector            | Group of blocks sharing the same access conditions on a Mifare Classic card.
+| System Block      | Block containing card-specific metadata and configuration data. Available on selected card types only.
+| Storage Card      | Card whose primary purpose is to store binary data in addressable blocks, by opposition to a Calypso or generic application card.
+| Mifare Classic    | NXP Mifare Classic 1K/4K family of contactless storage cards using sector-based authentication.
+| UID               | Unique IDentifier of the card.
+| OTP               | One-Time-Programmable memory area whose bits can only transition from `0` to `1`.
+|===
+
+=== Abbreviations
+
+[cols="1,4", options="header"]
+|===
+| Abbreviation | Expansion
+
+| APDU | Application Protocol Data Unit
+| CNA  | Calypso Networks Association
+| OTP  | One-Time-Programmable
+| PC/SC| Personal Computer / Smart Card (interoperability standard)
+| SPI  | Service Provider Interface
+| UID  | Unique IDentifier
+| UML  | Unified Modelling Language
+|===
+
+// =============================================================================
+[[sec_architecture]]
+== Architectural Overview
+
+=== Functional positioning
+
+[plantuml, target=architecture-overview, format=svg]
+....
+@startuml
+skinparam shadowing false
+skinparam roundCorner 8
+
+component "Terminal Application" as App
+component "Terminal Storage Card API\n(this specification)" as TSC
+component "Terminal Reader API\n[CNA-TR-API]" as TR
+component "Reader Driver" as Drv
+
+App --> TSC : uses
+App --> TR : uses
+TSC --> TR : extends
+TR  --> Drv : delegated to
+@enduml
+....
+
+=== Logical packages
+
+[cols="1,1,4", options="header"]
+|===
+| Package                  | Role     | Summary
+
+| `storagecard`            | Public API
+| Factory, properties, key types and exceptions.
+
+| `storagecard.card`       | Public API
+| Storage card abstraction, product type enumeration and selection extension.
+
+| `storagecard.transaction`| Public API
+| Transaction manager for storage cards.
+|===
+
+[[sec_class_diagram]]
+=== Reference class diagram
+
+* link:api_class_diagram.puml[`api_class_diagram.puml`] -- canonical UML model,
+* link:api_class_diagram.svg[`api_class_diagram.svg`]   -- rendered representation,
+* link:api_class_diagram_diff.puml[`api_class_diagram_diff.puml`] -- delta against the previous version.
+
+image::../api_class_diagram.svg[Terminal Storage Card API class diagram, align=center]
+
+// =============================================================================
+[[sec_specification]]
+== API Specification
+
+=== Package storagecard
+
+[[type_StorageCardApiProperties]]
+==== StorageCardApiProperties
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Final class
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Purpose  | Exposes the immutable properties of the {spec-name}.
+|===
+
+===== Constants
+
+[cols="1,1,1,4", options="header"]
+|===
+| Name      | Type     | Since  | Description
+
+| `VERSION` | `string` | 1.0.0  | String representation of the version of the API implemented by the conforming binding (e.g. `"1.2"`).
+|===
+
+[[type_StorageCardApiFactory]]
+==== StorageCardApiFactory
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Interface
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Purpose  | Factory used by the application to obtain instances of the public types provided by the API.
+|===
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `createStorageCardSelectionExtension(productType: ProductType) -> StorageCardSelectionExtension`
+| Since       | 1.0.0
+| Description | Returns a new <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> dedicated to the targeted product type.
+| Parameters  | `productType` -- the targeted storage card product type.
+| Returns     | A non-`null` <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `createStorageCardTransactionManager(reader: CardReader, card: StorageCard) -> StorageCardTransactionManager`
+| Since       | 1.0.0
+| Description | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
+| Parameters
+| `reader` -- the reader through which the card communicates. +
+  `card`   -- the initial card data provided by the selection process.
+| Returns     | A non-`null` <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
+| Throws      | None.
+|===
+
+[[type_MifareClassicKeyType]]
+==== MifareClassicKeyType
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Enumeration
+| Package  | `storagecard`
+| Since    | 1.1.0
+| Purpose  | Enumerates the Mifare Classic key types used for authentication.
+|===
+
+Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
+keys, allowing fine-grained access control.
+
+[cols="1,1,4", options="header"]
+|===
+| Value   | Since | Description
+
+| `KEY_A` | 1.1.0
+| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
+  permissions while Key B may have restricted permissions.
+
+| `KEY_B` | 1.1.0
+| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
+  or read-only access, depending on the sector's access conditions.
+|===
+
+[[type_StorageCardException]]
+==== StorageCardException
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Interface (marker for exceptions)
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Purpose  | Interface implemented by every exception raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
+|===
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getBlockAddress() -> integer`
+| Since       | 1.0.0
+| Description | Returns the address of the block involved in the error, when applicable.
+| Returns     | The block address that caused the error, or `null` if not relevant.
+| Throws      | None.
+|===
+
+=== Package storagecard.card
+
+[[type_ProductType]]
+==== ProductType
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Enumeration
+| Package  | `storagecard.card`
+| Since    | 1.0.0
+| Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
+|===
+
+[cols="2,1,1,1,1,1,2", options="header"]
+|===
+| Value                | Since | Block count | Block size | System block | Write acknowledgment | Authentication
+
+| `MIFARE_ULTRALIGHT`  | 1.0.0 | 16  | 4  | No  | Yes | No
+| `MIFARE_CLASSIC_1K`  | 1.1.0 | 64  | 16 | No  | Yes | Yes
+| `MIFARE_CLASSIC_4K`  | 1.1.0 | 256 | 16 | No  | Yes | Yes
+| `ST25_SRT512`        | 1.0.0 | 16  | 4  | Yes | No  | No
+|===
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getBlockCount() -> integer`
+| Since       | 1.0.0
+| Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
+| Returns     | The number of blocks.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getBlockSize() -> integer`
+| Since       | 1.0.0
+| Description | Returns the size of each block in bytes.
+| Returns     | The block size.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `hasSystemBlock() -> boolean`
+| Since       | 1.0.0
+| Description
+| Indicates whether the product type exposes an accessible system block. For ST25/SRT512 cards, the system block is
+  accessible at address 255. When a system block is available, it MAY be read using the appropriate `prepare*`
+  operations during selection or transaction processing.
+| Returns     | `true` if the product type exposes a system block, `false` otherwise.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `hasWriteAcknowledgment() -> boolean`
+| Since       | 1.0.0
+| Description
+| Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
+  returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
+  `false`, the implementation MUST perform a verification read to confirm the write.
+| Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `hasAuthentication() -> boolean`
+| Since       | 1.1.0
+| Description
+| Indicates whether the product type requires authentication before read/write operations. When this operation
+  returns `true`, the application MUST authenticate the targeted sector before issuing read or write commands.
+| Returns     | `true` if the card requires authentication, `false` otherwise.
+| Throws      | None.
+|===
+
+[[type_StorageCard]]
+==== StorageCard
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Interface
+| Package  | `storagecard.card`
+| Since    | 1.0.0
+| Extends  | `SmartCard` ([CNA-TR-API])
+| Purpose  | Represents a storage card and exposes operations to retrieve its memory image and metadata.
+|===
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getProductType() -> ProductType`
+| Since       | 1.0.0
+| Description | Returns the product type of the storage card.
+| Returns     | A non-`null` <<type_ProductType,`ProductType`>>.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getUID() -> byte array`
+| Since       | 1.0.0
+| Description | Returns the unique identifier (UID) of the storage card.
+| Returns     | A `byte array` containing the UID.
+| Throws      | None.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getSystemBlock() -> byte array`
+| Since       | 1.0.0
+| Description
+| Returns the system block when it has been read. The system block contains card-specific metadata and
+  configuration data. This feature is specific to ST25/SRT512 cards.
+
+  The system block MUST have been previously read using `prepareSt25ReadSystemBlock()` (or the deprecated
+  `prepareReadSystemBlock()` operation).
+| Returns     | A `byte array` containing the system block data, or `null` if the system block has not been read yet.
+| Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getBlock(blockAddress: integer) -> byte array`
+| Since       | 1.0.0
+| Description
+| Returns the data block at the specified block address. If the block has not been previously read, the returned
+  array MUST be filled with zeros.
+| Parameters  | `blockAddress` -- the address of the block to retrieve.
+| Returns     | A `byte array` containing the block data; zero-filled if the block has not been read.
+| Throws      | `IndexOutOfBoundsException` -- if the block address is out of range.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `getBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> byte array`
+| Since       | 1.0.0
+| Description
+| Returns the data blocks within the specified range from the memory image of the storage card. The returned
+  array contains the blocks in order, from `fromBlockAddress` to `toBlockAddress` (both inclusive). Blocks that
+  have not been previously read MUST appear as zero-filled sections.
+| Parameters
+| `fromBlockAddress` -- the starting block address (inclusive). +
+  `toBlockAddress`   -- the ending block address (inclusive).
+| Returns     | A `byte array` containing the data blocks in the specified range.
+| Throws      | `IndexOutOfBoundsException` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
+|===
+
+[[type_StorageCardSelectionExtension]]
+==== StorageCardSelectionExtension
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Interface
+| Package  | `storagecard.card`
+| Since    | 1.0.0
+| Extends  | `CardSelectionExtension` ([CNA-TR-API])
+| Purpose  | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase.
+|===
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardSelectionExtension`
+| Since       | 1.0.0
+| Description
+| Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
+  Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Parameters  | `blockAddress` -- the address of the block to be read.
+| Returns     | The current instance.
+| Throws      | `IllegalArgumentException` -- if the block address is out of range.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension`
+| Since       | 1.0.0
+| Description | Prepares the reading of a range of blocks. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getBlock` / `getBlocks`.
+| Parameters
+| `fromBlockAddress` -- the starting block address (inclusive). +
+  `toBlockAddress`   -- the ending block address (inclusive).
+| Returns     | The current instance.
+| Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
+| Since       | 1.2.0
+| Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
+| Returns     | The current instance.
+| Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
+| Since       | 1.1.0
+| Description
+| Prepares a Mifare Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
+  the entire sector containing the specified block address.
+
+  When the key value is supplied this way, the implementation MUST forward it to the reader to be stored as a
+  *volatile* key at index 0 (see [PC/SC] *Load Key* command). The volatile key MUST be erased after usage.
+
+  *Security note:* this overload transmits the key value over the application-reader communication channel.
+  Security-sensitive applications SHOULD use the overload accepting a key index instead.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
+  `key`                  -- the 6-byte key data for authentication.
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
+  `UnsupportedOperationException` -- if the current card type does not support authentication.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension`
+| Since       | 1.1.0
+| Description
+| Prepares a Mifare Classic authentication command using a key referenced by its storage index in the reader's key
+  storage. This avoids transmitting the key value over the communication channel.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
+  `keyNumber`            -- the index of the key in the reader's key storage.
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
+  `UnsupportedOperationException` -- if the current card type does not support authentication.
+|===
+
+=== Package storagecard.transaction
+
+[[type_StorageCardTransactionManager]]
+==== StorageCardTransactionManager
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Interface
+| Package  | `storagecard.transaction`
+| Since    | 1.0.0
+| Extends  | `CardTransactionManager<StorageCardTransactionManager>` ([CNA-TR-API])
+| Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel.
+|===
+
+===== Behaviour of the inherited `processCommands(channelControl)`
+
+The inherited `processCommands(channelControl)` operation MUST:
+
+* send every APDU corresponding to a prepared command, in the order in which it was prepared;
+* update the <<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card for read commands;
+* update the <<type_StorageCard,`StorageCard`>> memory image with the data written for write commands, *only* when
+  the write is confirmed successful. For card technologies that do not provide reliable status codes (e.g.
+  ST25/SRT512), confirmation MUST be obtained via an automatic verification read; the memory image MUST be
+  updated only if this verification passes;
+* interrupt the process at the first failed command.
+
+===== Operations
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareReadSystemBlock() -> StorageCardTransactionManager` `[deprecated]`
+| Since       | 1.0.0
+| Description | Prepares the reading of the system block. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Returns     | The current instance.
+| Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
+| Status      | *Deprecated.* SHALL be replaced by `prepareSt25ReadSystemBlock()`. MUST be removed in a future major version.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareWriteSystemBlock(data: byte array) -> StorageCardTransactionManager` `[deprecated]`
+| Since       | 1.0.0
+| Description | Prepares the writing of data to the system block. The data length MUST match the block size returned by `getBlockSize()`.
+| Parameters  | `data` -- the data to be written to the system block (expected final state).
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if `data` is `null` or its length does not match the block size. +
+  `UnsupportedOperationException` -- if the current card type does not support system block write access.
+| Status      | *Deprecated.* SHALL be replaced by `prepareSt25WriteSystemBlock(data)`.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
+| Since       | 1.1.0
+| Description | Prepares the reading of the system block of an ST25/SRT512 storage card.
+| Returns     | The current instance.
+| Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareSt25WriteSystemBlock(data: byte array) -> StorageCardTransactionManager`
+| Since       | 1.1.0
+| Description
+| Prepares the writing of data to the system block of an ST25/SRT512 storage card. The data length MUST match the
+  block size. The provided data MUST represent the *expected final state* of the system block. Because ST25/SRT512
+  cards do not provide reliable status codes, the implementation MUST perform an automatic verification read and
+  fail the transaction if the physical state does not match the provided data.
+| Parameters  | `data` -- the data to be written to the system block (expected final state).
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if `data` is `null` or its length does not match the block size. +
+  `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager`
+| Since       | 1.0.0
+| Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Parameters  | `blockAddress` -- the address of the block to be read.
+| Returns     | The current instance.
+| Throws      | `IllegalArgumentException` -- if the block address is out of range.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager`
+| Since       | 1.0.0
+| Description | Prepares the reading of a range of blocks. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Parameters
+| `fromBlockAddress` -- the starting block address (inclusive). +
+  `toBlockAddress`   -- the ending block address (inclusive).
+| Returns     | The current instance.
+| Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array) -> StorageCardTransactionManager`
+| Since       | 1.0.0
+| Description
+| Prepares the writing of one or more blocks starting from the specified block offset. The number of blocks
+  written is determined by the length of `data` divided by the block size of the card.
+
+  *Important:* the application is responsible for ensuring that the write operations are coherent with the target
+  card's technology (e.g. OTP bits, counters). The provided data MUST represent the *expected final state* of the
+  blocks after the write.
+
+  For cards that do not provide reliable status codes, the implementation MUST perform an automatic verification
+  read and fail the transaction if the physical state does not match the provided data.
+| Parameters
+| `fromBlockAddress` -- the offset at which the blocks are written. +
+  `data`             -- the data to be written (expected final state).
+| Returns     | The current instance.
+| Throws      | `IllegalArgumentException` -- if `data` is `null` or its length is not a multiple of the block size.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
+| Since       | 1.1.0
+| Description
+| Prepares a Mifare Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
+  the entire sector containing the specified block address. Once authenticated, subsequent read and write
+  operations within the same sector MAY be performed without re-authentication, until the card is removed or
+  another sector is accessed.
+
+  *Security note:* same caveat as for the equivalent operation on the selection extension; security-sensitive
+  applications SHOULD use the `keyNumber` overload instead.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector. +
+  `mifareClassicKeyType` -- the type of key to use. +
+  `key`                  -- the 6-byte key data.
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
+  `UnsupportedOperationException` -- if the current card type does not support authentication.
+|===
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager`
+| Since       | 1.1.0
+| Description | Prepares a Mifare Classic authentication command using a key referenced by its storage index in the reader's key storage.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector. +
+  `mifareClassicKeyType` -- the type of key to use. +
+  `keyNumber`            -- the index of the key in the reader's key storage.
+| Returns     | The current instance.
+| Throws
+| `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
+  `UnsupportedOperationException` -- if the current card type does not support authentication.
+|===
+
+// =============================================================================
+[[sec_exceptions]]
+== Exceptions
+
+Every exception defined by this specification implements the <<type_StorageCardException,`StorageCardException`>>
+marker interface and therefore exposes the `getBlockAddress()` operation.
+
+[[type_SCAuthenticationFailedException]]
+=== SCAuthenticationFailedException
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Runtime exception (final)
+| Package  | `storagecard`
+| Since    | 1.1.0
+| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
+|===
+
+===== Constructors
+
+* `SCAuthenticationFailedException(blockAddress: integer, message: string)` -- _since 1.1.0_.
+* `SCAuthenticationFailedException(blockAddress: integer, message: string, cause: throwable)` -- _since 1.1.0_.
+
+[[type_SCCardCommunicationException]]
+=== SCCardCommunicationException
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Runtime exception (final)
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
+|===
+
+===== Constructors
+
+* `SCCardCommunicationException(blockAddress: integer, message: string)` -- _since 1.0.0_.
+* `SCCardCommunicationException(blockAddress: integer, message: string, cause: throwable)` -- _since 1.0.0_.
+
+[[type_SCInvalidCardResponseException]]
+=== SCInvalidCardResponseException
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Runtime exception (final)
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Extends  | `InvalidCardResponseException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
+|===
+
+===== Constructors
+
+* `SCInvalidCardResponseException(blockAddress: integer, message: string)` -- _since 1.0.0_.
+* `SCInvalidCardResponseException(blockAddress: integer, message: string, cause: throwable)` -- _since 1.0.0_.
+
+[[type_SCReaderCommunicationException]]
+=== SCReaderCommunicationException
+
+[cols="1h,4", grid=rows, frame=ends]
+|===
+| Kind     | Runtime exception (final)
+| Package  | `storagecard`
+| Since    | 1.0.0
+| Extends  | `ReaderCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
+|===
+
+===== Constructors
+
+* `SCReaderCommunicationException(blockAddress: integer, message: string)` -- _since 1.0.0_.
+* `SCReaderCommunicationException(blockAddress: integer, message: string, cause: throwable)` -- _since 1.0.0_.
+
+// =============================================================================
+[[sec_behaviours]]
+== Behavioural Requirements
+
+. The application MUST select the card using the [CNA-TR-API] `CardSelectionManager` enriched with a
+  <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> before instantiating a transaction manager.
+. For card types where `ProductType.hasAuthentication()` returns `true`, every read or write operation targeting a
+  protected sector MUST be preceded by a successful authentication.
+. For card types where `ProductType.hasWriteAcknowledgment()` returns `false`, every write command MUST be followed
+  by an automatic verification read; the in-memory image MUST be updated only when verification succeeds.
+. The exceptions exposed by this specification MUST carry the block address involved in the error whenever it is
+  available, so that the application can correlate failures with specific memory locations.
+
+// =============================================================================
+[appendix]
+== Copyright and License
+
+Copyright (c) {organization}, https://calypsonet.org.
+
+This specification is distributed under the terms of the *Eclipse Public License -- v 2.0* (EPL-2.0). A copy of the
+license is available in the link:LICENSE[`LICENSE`] file alongside this document and at
+https://www.eclipse.org/legal/epl-2.0/.
