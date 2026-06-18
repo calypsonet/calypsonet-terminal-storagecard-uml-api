@@ -218,8 +218,6 @@ TR  --> Drv : delegated to
 
 The following UML class diagram provides a visual representation of the types and relationships defined by this specification:
 
-
-
 [plantuml, target="api_class_diagram", format="svg"]
 ----
 include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=center]
@@ -767,11 +765,6 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 | Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
 |===
 
-===== Constructors
-
-* `SCAuthenticationFailedException(blockAddress: integer, message: string)`.
-* `SCAuthenticationFailedException(blockAddress: integer, message: string, cause: throwable)`.
-
 [[type_SCCardCommunicationException]]
 === SCCardCommunicationException
 
@@ -784,11 +777,6 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 | Since    | 1.0.0
 | Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
 |===
-
-===== Constructors
-
-* `SCCardCommunicationException(blockAddress: integer, message: string)`.
-* `SCCardCommunicationException(blockAddress: integer, message: string, cause: throwable)`.
 
 [[type_SCInvalidCardResponseException]]
 === SCInvalidCardResponseException
@@ -803,11 +791,6 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 | Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
 |===
 
-===== Constructors
-
-* `SCInvalidCardResponseException(blockAddress: integer, message: string)`.
-* `SCInvalidCardResponseException(blockAddress: integer, message: string, cause: throwable)`.
-
 [[type_SCReaderCommunicationException]]
 === SCReaderCommunicationException
 
@@ -820,11 +803,6 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 | Since    | 1.0.0
 | Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
 |===
-
-===== Constructors
-
-* `SCReaderCommunicationException(blockAddress: integer, message: string)`.
-* `SCReaderCommunicationException(blockAddress: integer, message: string, cause: throwable)`.
 
 // =============================================================================
 [[sec_behaviours]]
@@ -845,6 +823,4 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 
 Copyright (c) {organization}, https://calypsonet.org.
 
-This specification is distributed under the terms of the *Eclipse Public License -- v 2.0* (EPL-2.0). A copy of the
-license is available in the link:LICENSE[`LICENSE`] file alongside this document and at
-https://www.eclipse.org/legal/epl-2.0/.
+This specification is distributed under the terms of the *Eclipse Public License -- v 2.0* (EPL-2.0). See https://www.eclipse.org/legal/epl-2.0/ for the license text.
