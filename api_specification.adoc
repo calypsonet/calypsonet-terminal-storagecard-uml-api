@@ -518,7 +518,7 @@ keys, allowing fine-grained access control.
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
   Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
 |===
 
@@ -530,7 +530,7 @@ keys, allowing fine-grained access control.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
@@ -539,7 +539,7 @@ keys, allowing fine-grained access control.
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
 | Since       | 1.2.0
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
@@ -560,7 +560,7 @@ keys, allowing fine-grained access control.
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
@@ -577,7 +577,7 @@ keys, allowing fine-grained access control.
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
@@ -616,7 +616,7 @@ The inherited `processCommands()` operation MUST:
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
 | Since       | 1.1.0
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
@@ -630,7 +630,7 @@ The inherited `processCommands()` operation MUST:
   cards do not provide reliable status codes, the implementation MUST perform an automatic verification read and
   fail the transaction if the physical state does not match the provided data.
 | Parameters  | `data` -- the data to be written to the system block (expected final state).
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if `data` is `null` or its length does not match the block size. +
   `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
@@ -647,7 +647,7 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | Same as `prepareSt25WriteSystemBlock(data)`.
 |===
 
@@ -657,7 +657,7 @@ The inherited `processCommands()` operation MUST:
 | Since       | 1.0.0
 | Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
 |===
 
@@ -669,7 +669,7 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
@@ -690,7 +690,7 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | `IllegalArgumentException` -- if `data` is `null` or its length is not a multiple of the block size.
 |===
 
@@ -707,7 +707,7 @@ The inherited `processCommands()` operation MUST:
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws      | Same as `prepareWriteBlocks(fromBlockAddress, data)`.
 |===
 
@@ -727,7 +727,7 @@ The inherited `processCommands()` operation MUST:
 | `blockAddress`         -- the address of any block within the sector. +
   `mifareClassicKeyType` -- the type of key to use. +
   `key`                  -- the 6-byte key data.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
@@ -742,7 +742,7 @@ The inherited `processCommands()` operation MUST:
 | `blockAddress`         -- the address of any block within the sector. +
   `mifareClassicKeyType` -- the type of key to use. +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance.
+| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
