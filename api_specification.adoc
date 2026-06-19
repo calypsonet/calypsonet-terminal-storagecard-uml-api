@@ -230,24 +230,31 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 === Package storagecard
 
-[[type_StorageCardApiProperties]]
-==== StorageCardApiProperties
+[[type_MifareClassicKeyType]]
+==== MifareClassicKeyType
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Final class
+| Kind     | Enumeration
 | Package  | `storagecard`
-| Since    | 1.0.0
-| Purpose  | Exposes the immutable properties of the {spec-name}.
+| Since    | 1.1.0
+| Purpose  | Enumerates the Mifare Classic key types used for authentication.
 |===
 
-===== Constants
+Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
+keys, allowing fine-grained access control.
 
-[cols="1,1,1,4", options="header"]
+[cols="1,1,4", options="header"]
 |===
-| Name      | Type     | Since | Description
+| Value   | Since | Description
 
-| `VERSION` | `string` | 1.0.0 | String representation of the version of the API implemented by the conforming binding (e.g. `"2.0"`).
+| `KEY_A` | 1.1.0
+| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
+  permissions while Key B may have restricted permissions.
+
+| `KEY_B` | 1.1.0
+| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
+  or read-only access, depending on the sector's access conditions.
 |===
 
 [[type_StorageCardApiFactory]]
@@ -285,31 +292,24 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Throws      | None.
 |===
 
-[[type_MifareClassicKeyType]]
-==== MifareClassicKeyType
+[[type_StorageCardApiProperties]]
+==== StorageCardApiProperties
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Enumeration
+| Kind     | Final class
 | Package  | `storagecard`
-| Since    | 1.1.0
-| Purpose  | Enumerates the Mifare Classic key types used for authentication.
+| Since    | 1.0.0
+| Purpose  | Exposes the immutable properties of the {spec-name}.
 |===
 
-Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
-keys, allowing fine-grained access control.
+===== Constants
 
-[cols="1,1,4", options="header"]
+[cols="1,1,1,4", options="header"]
 |===
-| Value   | Since | Description
+| Name      | Type     | Since | Description
 
-| `KEY_A` | 1.1.0
-| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
-  permissions while Key B may have restricted permissions.
-
-| `KEY_B` | 1.1.0
-| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
-  or read-only access, depending on the sector's access conditions.
+| `VERSION` | `string` | 1.0.0 | String representation of the version of the API implemented by the conforming binding (e.g. `"2.0"`).
 |===
 
 [[type_StorageCardException]]
