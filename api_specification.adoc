@@ -760,7 +760,7 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Runtime exception (final)
+| Kind     | Runtime exception
 | Package  | `storagecard`
 | Extends  | `CardCommunicationException` ([CNA-TR-API])
 | Implements | <<type_StorageCardException,`StorageCardException`>>
@@ -773,7 +773,7 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Runtime exception (final)
+| Kind     | Runtime exception
 | Package  | `storagecard`
 | Extends  | `CardCommunicationException` ([CNA-TR-API])
 | Implements | <<type_StorageCardException,`StorageCardException`>>
@@ -786,7 +786,7 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Runtime exception (final)
+| Kind     | Runtime exception
 | Package  | `storagecard`
 | Extends  | `InvalidCardResponseException` ([CNA-TR-API])
 | Implements | <<type_StorageCardException,`StorageCardException`>>
@@ -799,7 +799,7 @@ marker interface and therefore exposes the `getBlockAddress()` operation.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Kind     | Runtime exception (final)
+| Kind     | Runtime exception
 | Package  | `storagecard`
 | Extends  | `ReaderCommunicationException` ([CNA-TR-API])
 | Implements | <<type_StorageCardException,`StorageCardException`>>
