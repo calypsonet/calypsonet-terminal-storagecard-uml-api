@@ -114,6 +114,7 @@ order to avoid ambiguity.
 | `boolean`       | Two-state truth value.                                           | `boolean`, `bool`.
 | `integer`       | Signed 32-bit integer.                                           | `int`, `Int32`.
 | `byte array`    | Ordered sequence of octets.                                      | `byte[]`, `[u8]`, `bytes`.
+| `T?`            | Nullable value: either a `T` value or the absence of value (`null`). | `Integer` (boxed), `Optional<T>`, `T?`.
 | `void`          | Indicates that an operation returns no value.                    | `void`, `Unit`, `None`.
 |===
 
@@ -326,7 +327,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Signature   | `getBlockAddress() -> integer`
+| Signature   | `getBlockAddress() -> integer?`
 | Since       | 1.0.0
 | Description | Returns the address of the block involved in the error, when applicable.
 | Returns     | The block address that caused the error, or `null` if not relevant.
@@ -336,7 +337,7 @@ keys, allowing fine-grained access control.
 [[op_getIdCommand]]
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Signature   | `getIdCommand() -> integer`
+| Signature   | `getIdCommand() -> integer?`
 | Since       | 2.0.0
 | Description
 | Returns the application-supplied identifier of the command that caused the exception, when the failing command
