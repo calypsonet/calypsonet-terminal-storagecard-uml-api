@@ -724,9 +724,9 @@ The inherited `processCommands()` operation MUST:
   *Security note:* same caveat as for the equivalent operation on the selection extension; security-sensitive
   applications SHOULD use the `keyNumber` overload instead.
 | Parameters
-| `blockAddress`         -- the address of any block within the sector. +
-  `mifareClassicKeyType` -- the type of key to use. +
-  `key`                  -- the 6-byte key data.
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
+  `key`                  -- the 6-byte key data for authentication.
 | Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
@@ -739,8 +739,8 @@ The inherited `processCommands()` operation MUST:
 | Since       | 1.1.0
 | Description | Prepares a Mifare Classic authentication command using a key referenced by its storage index in the reader's key storage.
 | Parameters
-| `blockAddress`         -- the address of any block within the sector. +
-  `mifareClassicKeyType` -- the type of key to use. +
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
 | Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
 | Throws
