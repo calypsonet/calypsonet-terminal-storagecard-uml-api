@@ -597,7 +597,7 @@ keys, allowing fine-grained access control.
 | Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel.
 |===
 
-===== Behaviour of the inherited `processCommands()`
+===== Behaviour of the inherited processCommands()
 
 The inherited `processCommands()` operation MUST:
 
