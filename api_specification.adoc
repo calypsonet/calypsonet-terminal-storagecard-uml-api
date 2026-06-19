@@ -644,7 +644,9 @@ The inherited `processCommands()` operation MUST:
 | Same as `prepareSt25WriteSystemBlock(data)` but attaches an application-supplied identifier to the prepared
   command. The identifier MAY later be obtained via <<op_getIdCommand,`StorageCardException.getIdCommand`>> if
   this specific command causes an exception to be raised.
-| Parameters  | `data` -- the data to be written. + `idCommand` -- the application-supplied identifier of this command.
+| Parameters
+| `data` -- the data to be written. +
+  `idCommand` -- the application-supplied identifier of this command.
 | Returns     | The current instance.
 | Throws      | Same as `prepareSt25WriteSystemBlock(data)`.
 |===
