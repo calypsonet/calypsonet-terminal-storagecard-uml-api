@@ -118,6 +118,16 @@ order to avoid ambiguity.
 | `void`          | Indicates that an operation returns no value.                    | `void`, `Unit`, `None`.
 |===
 
+==== Operation contracts
+
+To avoid repetition, the following rules apply to every operation table in <<sec_specification>> and are therefore
+not restated for each operation:
+
+* *Non-`null` arguments.* Unless explicitly stated otherwise, every input parameter MUST be non-`null`.
+* *Non-`null` results.* Unless the return type is marked nullable (`T?`) or the *Returns* row states otherwise, an
+  operation returns a non-`null` value.
+* *Fluent composition.* Builder-style operations return the current instance so that calls can be chained.
+
 === References
 
 [cols="1,1,4", options="header"]
@@ -228,7 +238,8 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[sec_specification]]
 == API Specification
 
-=== Package storagecard
+[[sec_pkg_storagecard]]
+=== API Entry Point and Common Definitions (`storagecard`)
 
 [[type_MifareClassicKeyType]]
 ==== MifareClassicKeyType
@@ -270,16 +281,18 @@ keys, allowing fine-grained access control.
 
 ===== Operations
 
+[[op_StorageCardApiFactory_createStorageCardSelectionExtension]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `createStorageCardSelectionExtension(productType: ProductType) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description | Returns a new <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> dedicated to the targeted product type.
 | Parameters  | `productType` -- the targeted storage card product type.
-| Returns     | A non-`null` <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>.
+| Returns     | A <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>.
 | Throws      | None.
 |===
 
+[[op_StorageCardApiFactory_createStorageCardTransactionManager]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `createStorageCardTransactionManager(reader: CardReader, card: StorageCard) -> StorageCardTransactionManager`
@@ -288,7 +301,7 @@ keys, allowing fine-grained access control.
 | Parameters
 | `reader` -- the reader through which the card communicates. +
   `card`   -- the initial card data provided by the selection process.
-| Returns     | A non-`null` <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
+| Returns     | A <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
 | Throws      | None.
 |===
 
@@ -346,7 +359,8 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
-=== Package storagecard.card
+[[sec_pkg_storagecard_card]]
+=== Storage Card Data Model (`storagecard.card`)
 
 [[type_ProductType]]
 ==== ProductType
@@ -443,7 +457,7 @@ keys, allowing fine-grained access control.
 | Signature   | `getProductType() -> ProductType`
 | Since       | 1.0
 | Description | Returns the product type of the storage card.
-| Returns     | A non-`null` <<type_ProductType,`ProductType`>>.
+| Returns     | A <<type_ProductType,`ProductType`>>.
 | Throws      | None.
 |===
 
@@ -469,6 +483,7 @@ keys, allowing fine-grained access control.
 | Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
 |===
 
+[[op_StorageCard_getBlock]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `getBlock(blockAddress: integer) -> byte array`
@@ -481,6 +496,7 @@ keys, allowing fine-grained access control.
 | Throws      | `IndexOutOfBoundsException` -- if the block address is out of range.
 |===
 
+[[op_StorageCard_getBlocks]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `getBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> byte array`
@@ -510,6 +526,7 @@ keys, allowing fine-grained access control.
 
 ===== Operations
 
+[[op_StorageCardSelectionExtension_prepareReadBlock]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardSelectionExtension`
@@ -518,10 +535,11 @@ keys, allowing fine-grained access control.
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
   Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardSelectionExtension`).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
 |===
 
+[[op_StorageCardSelectionExtension_prepareReadBlocks]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension`
@@ -530,7 +548,7 @@ keys, allowing fine-grained access control.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardSelectionExtension`).
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
@@ -539,10 +557,11 @@ keys, allowing fine-grained access control.
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
 | Since       | 1.2
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
-| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardSelectionExtension`).
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
+[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
@@ -560,12 +579,13 @@ keys, allowing fine-grained access control.
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardSelectionExtension`).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
+| `IllegalArgumentException` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
 |===
 
+[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension`
@@ -577,13 +597,14 @@ keys, allowing fine-grained access control.
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance (`StorageCardSelectionExtension`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardSelectionExtension`).
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
 |===
 
-=== Package storagecard.transaction
+[[sec_pkg_storagecard_transaction]]
+=== Storage Card Operations (`storagecard.transaction`)
 
 [[type_StorageCardTransactionManager]]
 ==== StorageCardTransactionManager
@@ -616,10 +637,11 @@ The inherited `processCommands()` operation MUST:
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
+[[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25WriteSystemBlock(data: byte array) -> StorageCardTransactionManager`
@@ -630,12 +652,13 @@ The inherited `processCommands()` operation MUST:
   cards do not provide reliable status codes, the implementation MUST perform an automatic verification read and
   fail the transaction if the physical state does not match the provided data.
 | Parameters  | `data` -- the data to be written to the system block (expected final state).
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws
-| `IllegalArgumentException` -- if `data` is `null` or its length does not match the block size. +
+| `IllegalArgumentException` -- if the length of `data` does not match the block size. +
   `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
+[[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25WriteSystemBlock(data: byte array, idCommand: integer) -> StorageCardTransactionManager`
@@ -647,20 +670,22 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | Same as `prepareSt25WriteSystemBlock(data)`.
 |===
 
+[[op_StorageCardTransactionManager_prepareReadBlock]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
 |===
 
+[[op_StorageCardTransactionManager_prepareReadBlocks]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager`
@@ -669,10 +694,11 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
+[[op_StorageCardTransactionManager_prepareWriteBlocks]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array) -> StorageCardTransactionManager`
@@ -690,10 +716,11 @@ The inherited `processCommands()` operation MUST:
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
-| Throws      | `IllegalArgumentException` -- if `data` is `null` or its length is not a multiple of the block size.
+| Returns     | The current instance (`StorageCardTransactionManager`).
+| Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
 |===
 
+[[op_StorageCardTransactionManager_prepareWriteBlocks_withId]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array, idCommand: integer) -> StorageCardTransactionManager`
@@ -707,10 +734,11 @@ The inherited `processCommands()` operation MUST:
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | Same as `prepareWriteBlocks(fromBlockAddress, data)`.
 |===
 
+[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
@@ -727,12 +755,13 @@ The inherited `processCommands()` operation MUST:
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key is `null` or not exactly 6 bytes long. +
+| `IllegalArgumentException` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
 |===
 
+[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager`
@@ -742,7 +771,7 @@ The inherited `processCommands()` operation MUST:
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance (`StorageCardTransactionManager`), to allow fluent composition.
+| Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws
 | `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
   `UnsupportedOperationException` -- if the current card type does not support authentication.
