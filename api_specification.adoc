@@ -268,211 +268,7 @@ The API is organized into the following packages:
 | `VERSION` | `string` | 1.0 | String representation of the version of the API implemented by the conforming binding (e.g. `"2.0"`).
 |===
 
-=== Enumerations
-
-[[type_MifareClassicKeyType]]
-==== Mifare Classic Key Type
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Enumeration
-| Namespace  | `storagecard`
-| Since    | 1.1
-| Purpose  | Enumerates the Mifare Classic key types used for authentication.
-|===
-
-Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
-keys, allowing fine-grained access control.
-
-[cols="1,1,4", options="header"]
-|===
-| Value   | Since | Description
-
-| `KEY_A` | 1.1
-| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
-  permissions while Key B may have restricted permissions.
-
-| `KEY_B` | 1.1
-| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
-  or read-only access, depending on the sector's access conditions.
-|===
-
-[[type_ProductType]]
-==== Product Type
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Enumeration
-| Namespace  | `storagecard.card`
-| Since    | 1.0
-| Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
-|===
-
-[cols="2,1,1,1,1,1,2", options="header"]
-|===
-| Value                | Since | Block count | Block size | System block | Write acknowledgment | Authentication
-
-| `MIFARE_ULTRALIGHT`  | 1.0 | 16  | 4  | No  | Yes | No
-| `MIFARE_CLASSIC_1K`  | 1.1 | 64  | 16 | No  | Yes | Yes
-| `MIFARE_CLASSIC_4K`  | 1.1 | 256 | 16 | No  | Yes | Yes
-| `ST25_SRT512`        | 1.0 | 16  | 4  | Yes | No  | No
-|===
-
-===== Get Block Count
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `getBlockCount() -> integer`
-| Since       | 1.0
-| Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
-| Returns     | The number of blocks.
-| Throws      | None.
-|===
-
-===== Get Block Size
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `getBlockSize() -> integer`
-| Since       | 1.0
-| Description | Returns the size of each block in bytes.
-| Returns     | The block size.
-| Throws      | None.
-|===
-
-===== Has Authentication
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `hasAuthentication() -> boolean`
-| Since       | 1.1
-| Description
-| Indicates whether the product type requires authentication before read/write operations. When this operation
-  returns `true`, the application MUST authenticate the targeted sector before issuing read or write commands.
-| Returns     | `true` if the card requires authentication, `false` otherwise.
-| Throws      | None.
-|===
-
-===== Has System Block
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `hasSystemBlock() -> boolean`
-| Since       | 1.0
-| Description
-| Indicates whether the product type exposes an accessible system block. For ST25/SRT512 cards, the system block is
-  accessible at address 255. When a system block is available, it MAY be read using the appropriate `prepare*`
-  operations during selection or transaction processing.
-| Returns     | `true` if the product type exposes a system block, `false` otherwise.
-| Throws      | None.
-|===
-
-===== Has Write Acknowledgment
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `hasWriteAcknowledgment() -> boolean`
-| Since       | 1.0
-| Description
-| Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
-  returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
-  `false`, the implementation MUST perform a verification read to confirm the write.
-| Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
-| Throws      | None.
-|===
-
-[[sec_exceptions]]
-=== Exceptions
-
-[[type_SCAuthenticationFailedException]]
-==== Sc Authentication Failed Exception
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Runtime exception
-| Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` ([CNA-TR-API])
-| Implements | <<type_StorageCardException,`StorageCardException`>>
-| Since    | 1.1
-| Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
-|===
-
-[[type_SCCardCommunicationException]]
-==== Sc Card Communication Exception
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Runtime exception
-| Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` ([CNA-TR-API])
-| Implements | <<type_StorageCardException,`StorageCardException`>>
-| Since    | 1.0
-| Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
-|===
-
-[[type_SCInvalidCardResponseException]]
-==== Sc Invalid Card Response Exception
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Runtime exception
-| Namespace  | `storagecard`
-| Extends  | `InvalidCardResponseException` ([CNA-TR-API])
-| Implements | <<type_StorageCardException,`StorageCardException`>>
-| Since    | 1.0
-| Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
-|===
-
-[[type_SCReaderCommunicationException]]
-==== Sc Reader Communication Exception
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Runtime exception
-| Namespace  | `storagecard`
-| Extends  | `ReaderCommunicationException` ([CNA-TR-API])
-| Implements | <<type_StorageCardException,`StorageCardException`>>
-| Since    | 1.0
-| Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
-|===
-
-[[type_StorageCardException]]
-==== Storage Card Exception
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Kind     | Interface (marker for exceptions)
-| Namespace  | `storagecard`
-| Since    | 1.0
-| Purpose  | Interface implemented by every exception raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
-|===
-
-===== Get Block Address
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `getBlockAddress() -> integer?`
-| Since       | 1.0
-| Description | Returns the address of the block involved in the error, when applicable.
-| Returns     | The block address that caused the error, or `null` if not relevant.
-| Throws      | None.
-|===
-
-[[op_getIdCommand]]
-===== Get ID Command
-
-[cols="1h,4", grid=rows, frame=all]
-|===
-| Signature   | `getIdCommand() -> integer?`
-| Since       | 2.0
-| Description
-| Returns the application-supplied identifier of the command that caused the exception, when the failing command
-  was prepared with an `idCommand` overload.
-| Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the exception is not attached to a specific command.
-| Throws      | None.
-|===
-
-=== Interfaces
+=== API Interfaces
 
 [[type_StorageCard]]
 ==== Storage Card
@@ -879,6 +675,210 @@ The inherited `processCommands()` operation MUST:
   `data`             -- the data to be written (expected final state).
 | Returns     | The current instance (`StorageCardTransactionManager`).
 | Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
+|===
+
+=== Enumerations
+
+[[type_MifareClassicKeyType]]
+==== Mifare Classic Key Type
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Enumeration
+| Namespace  | `storagecard`
+| Since    | 1.1
+| Purpose  | Enumerates the Mifare Classic key types used for authentication.
+|===
+
+Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
+keys, allowing fine-grained access control.
+
+[cols="1,1,4", options="header"]
+|===
+| Value   | Since | Description
+
+| `KEY_A` | 1.1
+| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
+  permissions while Key B may have restricted permissions.
+
+| `KEY_B` | 1.1
+| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
+  or read-only access, depending on the sector's access conditions.
+|===
+
+[[type_ProductType]]
+==== Product Type
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Enumeration
+| Namespace  | `storagecard.card`
+| Since    | 1.0
+| Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
+|===
+
+[cols="2,1,1,1,1,1,2", options="header"]
+|===
+| Value                | Since | Block count | Block size | System block | Write acknowledgment | Authentication
+
+| `MIFARE_ULTRALIGHT`  | 1.0 | 16  | 4  | No  | Yes | No
+| `MIFARE_CLASSIC_1K`  | 1.1 | 64  | 16 | No  | Yes | Yes
+| `MIFARE_CLASSIC_4K`  | 1.1 | 256 | 16 | No  | Yes | Yes
+| `ST25_SRT512`        | 1.0 | 16  | 4  | Yes | No  | No
+|===
+
+===== Get Block Count
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `getBlockCount() -> integer`
+| Since       | 1.0
+| Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
+| Returns     | The number of blocks.
+| Throws      | None.
+|===
+
+===== Get Block Size
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `getBlockSize() -> integer`
+| Since       | 1.0
+| Description | Returns the size of each block in bytes.
+| Returns     | The block size.
+| Throws      | None.
+|===
+
+===== Has Authentication
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `hasAuthentication() -> boolean`
+| Since       | 1.1
+| Description
+| Indicates whether the product type requires authentication before read/write operations. When this operation
+  returns `true`, the application MUST authenticate the targeted sector before issuing read or write commands.
+| Returns     | `true` if the card requires authentication, `false` otherwise.
+| Throws      | None.
+|===
+
+===== Has System Block
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `hasSystemBlock() -> boolean`
+| Since       | 1.0
+| Description
+| Indicates whether the product type exposes an accessible system block. For ST25/SRT512 cards, the system block is
+  accessible at address 255. When a system block is available, it MAY be read using the appropriate `prepare*`
+  operations during selection or transaction processing.
+| Returns     | `true` if the product type exposes a system block, `false` otherwise.
+| Throws      | None.
+|===
+
+===== Has Write Acknowledgment
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `hasWriteAcknowledgment() -> boolean`
+| Since       | 1.0
+| Description
+| Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
+  returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
+  `false`, the implementation MUST perform a verification read to confirm the write.
+| Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
+| Throws      | None.
+|===
+
+[[sec_exceptions]]
+=== Exceptions
+
+[[type_SCAuthenticationFailedException]]
+==== Sc Authentication Failed Exception
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Runtime exception
+| Namespace  | `storagecard`
+| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Since    | 1.1
+| Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
+|===
+
+[[type_SCCardCommunicationException]]
+==== Sc Card Communication Exception
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Runtime exception
+| Namespace  | `storagecard`
+| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Since    | 1.0
+| Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
+|===
+
+[[type_SCInvalidCardResponseException]]
+==== Sc Invalid Card Response Exception
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Runtime exception
+| Namespace  | `storagecard`
+| Extends  | `InvalidCardResponseException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Since    | 1.0
+| Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
+|===
+
+[[type_SCReaderCommunicationException]]
+==== Sc Reader Communication Exception
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Runtime exception
+| Namespace  | `storagecard`
+| Extends  | `ReaderCommunicationException` ([CNA-TR-API])
+| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Since    | 1.0
+| Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
+|===
+
+[[type_StorageCardException]]
+==== Storage Card Exception
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Kind     | Interface (marker for exceptions)
+| Namespace  | `storagecard`
+| Since    | 1.0
+| Purpose  | Interface implemented by every exception raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
+|===
+
+===== Get Block Address
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `getBlockAddress() -> integer?`
+| Since       | 1.0
+| Description | Returns the address of the block involved in the error, when applicable.
+| Returns     | The block address that caused the error, or `null` if not relevant.
+| Throws      | None.
+|===
+
+[[op_getIdCommand]]
+===== Get ID Command
+
+[cols="1h,4", grid=rows, frame=all]
+|===
+| Signature   | `getIdCommand() -> integer?`
+| Since       | 2.0
+| Description
+| Returns the application-supplied identifier of the command that caused the exception, when the failing command
+  was prepared with an `idCommand` overload.
+| Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the exception is not attached to a specific command.
+| Throws      | None.
 |===
 
 [[sec_behaviours]]
