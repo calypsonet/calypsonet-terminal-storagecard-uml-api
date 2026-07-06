@@ -479,7 +479,7 @@ The API is organized into the following packages:
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
-===== Prepare St 25 Read System Block
+===== Prepare ST25 Read System Block
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -585,7 +585,7 @@ The inherited `processCommands()` operation MUST:
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
-===== Prepare St 25 Read System Block
+===== Prepare ST25 Read System Block
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -597,7 +597,7 @@ The inherited `processCommands()` operation MUST:
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
-===== Prepare St 25 Write System Block (ID Command)
+===== Prepare ST25 Write System Block (ID Command)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -615,7 +615,7 @@ The inherited `processCommands()` operation MUST:
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
-===== Prepare St 25 Write System Block (No Args)
+===== Prepare ST25 Write System Block (No Args)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -794,7 +794,7 @@ keys, allowing fine-grained access control.
 === Exceptions
 
 [[type_SCAuthenticationFailedException]]
-==== Sc Authentication Failed Exception
+==== SC Authentication Failed Exception
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -807,7 +807,7 @@ keys, allowing fine-grained access control.
 |===
 
 [[type_SCCardCommunicationException]]
-==== Sc Card Communication Exception
+==== SC Card Communication Exception
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -820,7 +820,7 @@ keys, allowing fine-grained access control.
 |===
 
 [[type_SCInvalidCardResponseException]]
-==== Sc Invalid Card Response Exception
+==== SC Invalid Card Response Exception
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -833,7 +833,7 @@ keys, allowing fine-grained access control.
 |===
 
 [[type_SCReaderCommunicationException]]
-==== Sc Reader Communication Exception
+==== SC Reader Communication Exception
 
 [cols="1h,4", grid=rows, frame=all]
 |===
