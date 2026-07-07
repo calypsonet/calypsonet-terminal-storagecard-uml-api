@@ -70,7 +70,7 @@ The {spec-name} defines the contracts required to:
 * expose card-specific metadata (product type, UID, system block),
 * authenticate against MIFARE Classic sectors using Key A or Key B.
 
-Conforming implementations MUST guarantee interoperability with [CNA-TR-API] reader implementations.
+Conforming implementations MUST guarantee interoperability with <<ref_cna_tr,CNA-TR-API>> reader implementations.
 
 === Scope
 
@@ -310,7 +310,7 @@ The API is organized into the following packages:
 |===
 | Kind     | Interface
 | Namespace  | `storagecard.card`
-| Extends  | `SmartCard` ([CNA-TR-API])
+| Extends  | `SmartCard` (<<ref_cna_tr,CNA-TR-API>>)
 | Since    | 1.0
 | Purpose  | Represents a storage card and exposes operations to retrieve its memory image and metadata.
 |===
@@ -433,7 +433,7 @@ The API is organized into the following packages:
 |===
 | Kind     | Interface
 | Namespace  | `storagecard.card`
-| Extends  | `CardSelectionExtension` ([CNA-TR-API])
+| Extends  | `CardSelectionExtension` (<<ref_cna_tr,CNA-TR-API>>)
 | Since    | 1.0
 | Purpose  | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase.
 |===
@@ -470,7 +470,7 @@ The API is organized into the following packages:
   the entire sector containing the specified block address.
 
   When the key value is supplied this way, the implementation MUST forward it to the reader to be stored as a
-  *volatile* key at index 0 (see [PC/SC] *Load Key* command). The volatile key MUST be erased after usage.
+  *volatile* key at index 0 (see <<ref_pcsc,PC/SC>> *Load Key* command). The volatile key MUST be erased after usage.
 
   *Security note:* this overload transmits the key value over the application-reader communication channel.
   Security-sensitive applications SHOULD use the overload accepting a key index instead.
@@ -532,7 +532,7 @@ The API is organized into the following packages:
 |===
 | Kind     | Interface
 | Namespace  | `storagecard.transaction`
-| Extends  | `CardTransactionManager<StorageCardTransactionManager>` ([CNA-TR-API])
+| Extends  | `CardTransactionManager<StorageCardTransactionManager>` (<<ref_cna_tr,CNA-TR-API>>)
 | Since    | 1.0
 | Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel.
 |===
@@ -835,7 +835,7 @@ keys, allowing fine-grained access control.
 |===
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
 | Implements | <<type_StorageCardException,`StorageCardException`>>
 | Since    | 1.1
 | Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
@@ -848,7 +848,7 @@ keys, allowing fine-grained access control.
 |===
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` ([CNA-TR-API])
+| Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
 | Implements | <<type_StorageCardException,`StorageCardException`>>
 | Since    | 1.0
 | Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
@@ -861,7 +861,7 @@ keys, allowing fine-grained access control.
 |===
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
-| Extends  | `InvalidCardResponseException` ([CNA-TR-API])
+| Extends  | `InvalidCardResponseException` (<<ref_cna_tr,CNA-TR-API>>)
 | Implements | <<type_StorageCardException,`StorageCardException`>>
 | Since    | 1.0
 | Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
@@ -874,7 +874,7 @@ keys, allowing fine-grained access control.
 |===
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
-| Extends  | `ReaderCommunicationException` ([CNA-TR-API])
+| Extends  | `ReaderCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
 | Implements | <<type_StorageCardException,`StorageCardException`>>
 | Since    | 1.0
 | Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
@@ -919,7 +919,7 @@ keys, allowing fine-grained access control.
 [[sec_behaviours]]
 == Behavioural Requirements
 
-. The application MUST select the card using the [CNA-TR-API] `CardSelectionManager` enriched with a
+. The application MUST select the card using the <<ref_cna_tr,CNA-TR-API>> `CardSelectionManager` enriched with a
   <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> before instantiating a transaction manager.
 . For card types where `ProductType.hasAuthentication()` returns `true`, every read or write operation targeting a
   protected sector MUST be preceded by a successful authentication.
