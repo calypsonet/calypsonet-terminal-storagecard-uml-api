@@ -39,8 +39,8 @@ It defines, in a language-agnostic way, the interfaces, classes, enumerations, e
 relationships and behavioural requirements that any conforming implementation of the {spec-name} MUST satisfy.
 
 The {spec-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
-(Mifare Ultralight, Mifare Classic 1K/4K, ST25/SRT512). It exposes a block-oriented memory image, an authentication
-mechanism for Mifare Classic and a transaction manager that batches read and write commands.
+(MIFARE Ultralight, MIFARE Classic 1K/4K, ST25/SRT512). It exposes a block-oriented memory image, an authentication
+mechanism for MIFARE Classic and a transaction manager that batches read and write commands.
 
 [discrete]
 == Document Status
@@ -68,7 +68,7 @@ The {spec-name} defines the contracts required to:
 * select storage cards through the *Terminal Reader API* selection mechanism,
 * perform block-level read and write operations,
 * expose card-specific metadata (product type, UID, system block),
-* authenticate against Mifare Classic sectors using Key A or Key B.
+* authenticate against MIFARE Classic sectors using Key A or Key B.
 
 Conforming implementations MUST guarantee interoperability with [CNA-TR-API] reader implementations.
 
@@ -85,7 +85,7 @@ This specification covers:
 The following topics are *out of scope*:
 
 * the wire-level protocols specific to each storage card technology,
-* the management of cryptographic key material for Mifare Classic authentication.
+* the management of cryptographic key material for MIFARE Classic authentication.
 
 === Conformance
 
@@ -192,10 +192,10 @@ synchronisation results in undefined behaviour. Distinct instances MAY be used c
 | Term              | Definition
 
 | Block             | Smallest addressable storage unit on a storage card. The block size depends on the card product type.
-| Sector            | Group of blocks sharing the same access conditions on a Mifare Classic card.
+| Sector            | Group of blocks sharing the same access conditions on a MIFARE Classic card.
 | System Block      | Block containing card-specific metadata and configuration data. Available on selected card types only.
 | Storage Card      | Card whose primary purpose is to store binary data in addressable blocks, by opposition to a Calypso or generic application card.
-| Mifare Classic    | NXP Mifare Classic 1K/4K family of contactless storage cards using sector-based authentication.
+| MIFARE Classic    | NXP MIFARE Classic 1K/4K family of contactless storage cards using sector-based authentication.
 | UID               | Unique IDentifier of the card.
 | OTP               | One-Time-Programmable memory area whose bits can only transition from `0` to `1`.
 |===
@@ -439,14 +439,14 @@ The API is organized into the following packages:
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
-===== Prepare Mifare Classic Authenticate (Key Number)
+===== Prepare MIFARE Classic Authenticate (Key Number)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
-| Prepares a Mifare Classic authentication command using a key referenced by its storage index in the reader's key
+| Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
   storage. This avoids transmitting the key value over the communication channel.
 | Parameters
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
@@ -459,14 +459,14 @@ The API is organized into the following packages:
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
-===== Prepare Mifare Classic Authenticate (Key)
+===== Prepare MIFARE Classic Authenticate (Key)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
-| Prepares a Mifare Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
   the entire sector containing the specified block address.
 
   When the key value is supplied this way, the implementation MUST forward it to the reader to be stored as a
@@ -550,13 +550,13 @@ The inherited `processCommands()` operation MUST:
 * interrupt the process at the first failed command.
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
-===== Prepare Mifare Classic Authenticate (Key Number)
+===== Prepare MIFARE Classic Authenticate (Key Number)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager`
 | Since       | 1.1
-| Description | Prepares a Mifare Classic authentication command using a key referenced by its storage index in the reader's key storage.
+| Description | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key storage.
 | Parameters
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` -- the type of key to use (Key A or Key B). +
@@ -568,14 +568,14 @@ The inherited `processCommands()` operation MUST:
 |===
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
-===== Prepare Mifare Classic Authenticate (Key)
+===== Prepare MIFARE Classic Authenticate (Key)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
-| Prepares a Mifare Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
   the entire sector containing the specified block address. Once authenticated, subsequent read and write
   operations within the same sector MAY be performed without re-authentication, until the card is removed or
   another sector is accessed.
@@ -715,17 +715,17 @@ The inherited `processCommands()` operation MUST:
 === Enumerations
 
 [[type_MifareClassicKeyType]]
-==== Mifare Classic Key Type
+==== MIFARE Classic Key Type
 
 [cols="1h,4", grid=rows, frame=all]
 |===
 | Kind     | Enumeration
 | Namespace  | `storagecard`
 | Since    | 1.1
-| Purpose  | Enumerates the Mifare Classic key types used for authentication.
+| Purpose  | Enumerates the MIFARE Classic key types used for authentication.
 |===
 
-Mifare Classic cards support two types of keys per sector. Each sector can be protected independently by these
+MIFARE Classic cards support two types of keys per sector. Each sector can be protected independently by these
 keys, allowing fine-grained access control.
 
 [cols="1,1,4", options="header"]
@@ -733,11 +733,11 @@ keys, allowing fine-grained access control.
 | Value   | Since | Description
 
 | `KEY_A` | 1.1
-| Primary key used for authentication to a Mifare Classic sector. In most configurations, Key A has read/write
+| Primary key used for authentication to a MIFARE Classic sector. In most configurations, Key A has read/write
   permissions while Key B may have restricted permissions.
 
 | `KEY_B` | 1.1
-| Secondary key used for authentication to a Mifare Classic sector. Key B is often used for restricted operations
+| Secondary key used for authentication to a MIFARE Classic sector. Key B is often used for restricted operations
   or read-only access, depending on the sector's access conditions.
 |===
 
