@@ -355,7 +355,7 @@ The API is organized into the following packages:
 
 [cols="1h,4", grid=rows, frame=all]
 |===
-| Signature   | `getSystemBlock() -> byte array`
+| Signature   | `getSystemBlock() -> byte array?`
 | Since       | 1.0
 | Description
 | Returns the system block when it has been read. The system block contains card-specific metadata and
