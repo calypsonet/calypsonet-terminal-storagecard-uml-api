@@ -30,12 +30,6 @@ v2.0.0-SNAPSHOT, {docdate}
 :spec-id: CNA-TSC-API
 :spec-version: 2.0.0-SNAPSHOT
 :ver-cna-tr: 3.0
-:ver-cna-tc: 3.0
-:ver-cna-td: 1.0
-:ver-cna-tcc: 3.0
-:ver-cna-tccs: 0.1
-:ver-cna-tcca: 0.2
-:ver-cna-tccl: 2.0
 
 [abstract]
 == Abstract
@@ -46,7 +40,7 @@ It defines, in a language-agnostic way, the interfaces, classes, enumerations, e
 relationships and behavioural requirements that any conforming implementation of the {spec-name} MUST satisfy.
 
 The {spec-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
-(MIFARE Ultralight, MIFARE Classic 1K/4K, ST25/SRT512). It exposes a block-oriented memory image, an authentication
+(MIFARE Ultralight, MIFARE Classic 1K/4K, ST25/SRT512), all contactless cards compliant with <<ref_iso14443,ISO/IEC 14443>>. It exposes a block-oriented memory image, an authentication
 mechanism for MIFARE Classic and a transaction manager that batches read and write commands.
 
 [discrete]
@@ -194,9 +188,9 @@ is backward-compatible per that API's evolution policy.
 |===
 | Resource | Link
 
-| Calypso Networks Association | https://calypsonet.org[calypsonet.org]
-| Terminal APIs website        | https://terminal-api.calypsonet.org/[terminal-api.calypsonet.org]
-| Terminal APIs documentation  | https://docs.terminal-api.calypsonet.org[docs.terminal-api.calypsonet.org]
+| Calypso Networks Association | https://calypsonet.org
+| Terminal APIs website        | https://terminal-api.calypsonet.org/
+| Terminal APIs documentation  | https://docs.terminal-api.calypsonet.org
 |===
 
 // =============================================================================
