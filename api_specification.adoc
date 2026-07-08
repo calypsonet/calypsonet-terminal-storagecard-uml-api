@@ -863,7 +863,7 @@ keys, allowing fine-grained access control.
 | Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
 | Implements | <<type_StorageCardException,`StorageCardException`>>
 | Since    | 1.0
-| Purpose  | Indicates an input/output error during the dialogue with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
+| Purpose  | Indicates an input/output error during the dialog with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
 |===
 
 [[type_SCInvalidCardResponseException]]
