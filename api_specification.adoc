@@ -446,7 +446,7 @@ The API is organized into the following packages:
 | Since       | 1.0
 | Description | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
 | Parameters
-| `reader` (`CardReader` (<<ref_cna_tr,CNA-TR-API>>)) -- the reader through which the card communicates. +
+| `reader` (`CardReader` (<<ref_cna_tr,CNA-TR-API>>)) -- the reader through which the card is reached. +
   `card` (<<type_StorageCard,`StorageCard`>>)   -- the initial card data provided by the selection process.
 | Returns     | A <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
 | Throws      | None.
