@@ -265,11 +265,11 @@ TR  --> Drv : delegated to
 @enduml
 ....
 
-=== Logical packages
+=== Logical namespaces
 
 [cols="1,1,4", options="header"]
 |===
-| Package                  | Role     | Summary
+| Namespace                  | Role     | Summary
 
 | `storagecard`            | Public API
 | Factory, properties, key types and exceptions.
