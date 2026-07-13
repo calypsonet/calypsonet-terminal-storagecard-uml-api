@@ -340,7 +340,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Since       | 1.0
 | Description
 | Returns the data block at the specified block address. If the block has not been previously read, the returned
-  array MUST be filled with zeros. A caller cannot distinguish an unread block (returned as zeros) from a block
+  array is filled with zeros. A caller cannot distinguish an unread block (returned as zeros) from a block
   whose stored content is genuinely all-zero.
 | Parameters  | `blockAddress` -- the address of the block to retrieve.
 | Returns     | A `byte array` containing the block data; zero-filled if the block has not been read.
@@ -357,7 +357,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Description
 | Returns the data blocks within the specified range from the memory image of the storage card. The returned
   array contains the blocks in order, from `fromBlockAddress` to `toBlockAddress` (both inclusive). Blocks that
-  have not been previously read MUST appear as zero-filled sections. A caller cannot distinguish an unread block
+  have not been previously read appear as zero-filled sections. A caller cannot distinguish an unread block
   from a block whose stored content is genuinely all-zero.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
@@ -482,11 +482,10 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
-| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
-  the entire sector containing the specified block address.
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication applies to the entire sector containing the specified block address.
 
-  When the key value is supplied this way, the implementation MUST forward it to the reader to be stored as a
-  *volatile* key at index 0 (see <<ref_pcsc,PC/SC>> *Load Key* command). The volatile key MUST be erased after usage.
+  When the key value is supplied this way, it is forwarded to the reader to be stored as a *volatile* key at
+  index 0 (see <<ref_pcsc,PC/SC>> *Load Key* command). The volatile key is erased after usage.
 
   *Security note:* this overload transmits the key value over the application-reader communication channel.
   Security-sensitive applications SHOULD use the overload accepting a key index instead.
@@ -509,7 +508,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Since       | 1.0
 | Description
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
-  Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+  Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
@@ -522,7 +521,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension`
 | Since       | 1.0
-| Description | Prepares the reading of a range of blocks. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getBlock` / `getBlocks`.
+| Description | Prepares the reading of a range of blocks. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via `getBlock` / `getBlocks`.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
@@ -536,7 +535,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
 | Since       | 1.2
-| Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
+| Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
@@ -555,15 +554,15 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 ===== Behaviour Of The Inherited Process Commands()
 
-The inherited `processCommands()` operation MUST:
+The inherited `processCommands()` operation, when invoked:
 
-* send every APDU corresponding to a prepared command, in the order in which it was prepared;
-* update the <<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card for read commands;
-* update the <<type_StorageCard,`StorageCard`>> memory image with the data written for write commands, *only* when
+* sends every APDU corresponding to a prepared command, in the order in which it was prepared;
+* updates the <<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card for read commands;
+* updates the <<type_StorageCard,`StorageCard`>> memory image with the data written for write commands, *only* when
   the write is confirmed successful. For card technologies that do not provide reliable status codes (e.g.
-  ST25/SRT512), confirmation MUST be obtained via an automatic verification read; the memory image MUST be
+  ST25/SRT512), confirmation is obtained via an automatic verification read, and the memory image is
   updated only if this verification passes;
-* interrupt the process at the first failed command.
+* interrupts the process at the first failed command.
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
 ===== Prepare MIFARE Classic Authenticate (Key Number)
@@ -591,8 +590,7 @@ The inherited `processCommands()` operation MUST:
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
-| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication MUST apply to
-  the entire sector containing the specified block address. Once authenticated, subsequent read and write
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication applies to the entire sector containing the specified block address. Once authenticated, subsequent read and write
   operations within the same sector MAY be performed without re-authentication, until the card is removed or
   another sector is accessed.
 
@@ -615,7 +613,7 @@ The inherited `processCommands()` operation MUST:
 |===
 | Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager`
 | Since       | 1.0
-| Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
@@ -628,7 +626,7 @@ The inherited `processCommands()` operation MUST:
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager`
 | Since       | 1.0
-| Description | Prepares the reading of a range of blocks. Once processed, the result MUST be available in the <<type_StorageCard,`StorageCard`>>.
+| Description | Prepares the reading of a range of blocks. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
@@ -675,8 +673,8 @@ The inherited `processCommands()` operation MUST:
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card. The data length MUST match the
   block size. The provided data MUST represent the *expected final state* of the system block. Because ST25/SRT512
-  cards do not provide reliable status codes, the implementation MUST perform an automatic verification read and
-  fail the transaction if the physical state does not match the provided data.
+  cards do not provide reliable status codes, an automatic verification read is performed and the transaction
+  fails if the physical state does not match the provided data.
 | Parameters  | `data` -- the data to be written to the system block (expected final state).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws
@@ -719,8 +717,8 @@ The inherited `processCommands()` operation MUST:
   card's technology (e.g. OTP bits, counters). The provided data MUST represent the *expected final state* of the
   blocks after the write.
 
-  For cards that do not provide reliable status codes, the implementation MUST perform an automatic verification
-  read and fail the transaction if the physical state does not match the provided data.
+  For cards that do not provide reliable status codes, an automatic verification read is performed and the
+  transaction fails if the physical state does not match the provided data.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
@@ -836,7 +834,7 @@ keys, allowing fine-grained access control.
 | Description
 | Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
   returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
-  `false`, the implementation MUST perform a verification read to confirm the write.
+  `false`, a verification read is performed to confirm the write.
 | Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
 | Throws      | None.
 |===
