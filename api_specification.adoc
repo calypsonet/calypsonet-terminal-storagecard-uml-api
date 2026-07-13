@@ -768,14 +768,14 @@ keys, allowing fine-grained access control.
 | Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
 |===
 
-[cols="2,1,1,1,1,1,2", options="header"]
+[cols="1,1,4", options="header"]
 |===
-| Value                | Since | Block count | Block size | System block | Write acknowledgment | Authentication
+| Value                | Since | Description
 
-| `MIFARE_ULTRALIGHT`  | 1.0 | 16  | 4  | No  | Yes | No
-| `MIFARE_CLASSIC_1K`  | 1.1 | 64  | 16 | No  | Yes | Yes
-| `MIFARE_CLASSIC_4K`  | 1.1 | 256 | 16 | No  | Yes | Yes
-| `ST25_SRT512`        | 1.0 | 16  | 4  | Yes | No  | No
+| `MIFARE_ULTRALIGHT`  | 1.0 | MIFARE Ultralight -- 16 blocks of 4 bytes, no system block, with write acknowledgment, without authentication.
+| `MIFARE_CLASSIC_1K`  | 1.1 | MIFARE Classic 1K -- 64 blocks of 16 bytes, no system block, with write acknowledgment, with authentication.
+| `MIFARE_CLASSIC_4K`  | 1.1 | MIFARE Classic 4K -- 256 blocks of 16 bytes, no system block, with write acknowledgment, with authentication.
+| `ST25_SRT512`        | 1.0 | ST25 SRT512 -- 16 blocks of 4 bytes, with a system block, without write acknowledgment, without authentication.
 |===
 
 ===== Get Block Count
