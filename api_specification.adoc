@@ -554,7 +554,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 ===== Behaviour Of The Inherited Process Commands()
 
-The inherited `processCommands()` operation, when invoked:
+The inherited `processCommands()` operation, when called:
 
 * sends every APDU corresponding to a prepared command, in the order in which it was prepared;
 * updates the <<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card for read commands;
