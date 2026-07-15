@@ -664,7 +664,7 @@ The inherited `processCommands()` operation, when called:
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
-===== Prepare ST25 Write System Block (No Args)
+===== Prepare ST25 Write System Block (No ID Command)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
@@ -703,7 +703,7 @@ The inherited `processCommands()` operation, when called:
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks]]
-===== Prepare Write Blocks (No Args)
+===== Prepare Write Blocks (No ID Command)
 
 [cols="1h,4", grid=rows, frame=all]
 |===
