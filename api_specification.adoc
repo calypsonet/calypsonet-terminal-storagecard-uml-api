@@ -459,7 +459,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Namespace  | `storagecard.card`
 | Extends  | `CardSelectionExtension` (<<ref_cna_tr,CNA-TR-API>>)
 | Since    | 1.0
-| Purpose  | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase.
+| Purpose  | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardSelectionExtension,`StorageCardApiFactory.createStorageCardSelectionExtension`>>.
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
@@ -559,7 +559,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Namespace  | `storagecard.transaction`
 | Extends  | `CardTransactionManager<StorageCardTransactionManager>` (<<ref_cna_tr,CNA-TR-API>>)
 | Since    | 1.0
-| Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel.
+| Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardTransactionManager,`StorageCardApiFactory.createStorageCardTransactionManager`>>.
 |===
 
 The inherited `processCommands()` operation sends every APDU corresponding to a prepared command, in the order in
