@@ -130,6 +130,7 @@ Each interface, class, enumeration and exception defined in this document is des
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name       | The type's normalized name.
 | Kind       | The category of the type (interface, class, enumeration, exception, etc.).
 | Namespace  | The namespace in which the type is defined.
 | Extends    | The type extended by this type, when applicable.
@@ -302,6 +303,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCardApiProperties`
 | Kind     | Final class
 | Namespace  | `storagecard`
 | Since    | 1.0
@@ -324,6 +326,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCard`
 | Kind     | Interface
 | Namespace  | `storagecard.card`
 | Extends  | `SmartCard` (<<ref_cna_tr,CNA-TR-API>>)
@@ -408,6 +411,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCardApiFactory`
 | Kind     | Interface
 | Namespace  | `storagecard`
 | Since    | 1.0
@@ -447,6 +451,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCardSelectionExtension`
 | Kind     | Interface
 | Namespace  | `storagecard.card`
 | Extends  | `CardSelectionExtension` (<<ref_cna_tr,CNA-TR-API>>)
@@ -545,6 +550,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCardTransactionManager`
 | Kind     | Interface
 | Namespace  | `storagecard.transaction`
 | Extends  | `CardTransactionManager<StorageCardTransactionManager>` (<<ref_cna_tr,CNA-TR-API>>)
@@ -552,17 +558,18 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel.
 |===
 
-===== Behaviour Of The Inherited Process Commands()
+The inherited `processCommands()` operation sends every APDU corresponding to a prepared command, in the order in
+which it was prepared, and interrupts the process at the first failed command.
 
-The inherited `processCommands()` operation, when called:
+For read commands, it updates the
+<<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card;
 
-* sends every APDU corresponding to a prepared command, in the order in which it was prepared;
-* updates the <<type_StorageCard,`StorageCard`>> memory image with the data retrieved from the card for read commands;
-* updates the <<type_StorageCard,`StorageCard`>> memory image with the data written for write commands, *only* when
-  the write is confirmed successful. For card technologies that do not provide reliable status codes (e.g.
-  ST25/SRT512), confirmation is obtained via an automatic verification read, and the memory image is
-  updated only if this verification passes;
-* interrupts the process at the first failed command.
+for write commands, it
+updates the memory image with the data written *only* when the write is confirmed successful.
+
+For card
+technologies that do not provide reliable status codes (e.g. ST25/SRT512), confirmation is obtained via an
+automatic verification read, and the memory image is updated only if this verification passes.
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
 ===== Prepare MIFARE Classic Authenticate (Key Number)
@@ -746,6 +753,7 @@ The inherited `processCommands()` operation, when called:
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `MifareClassicKeyType`
 | Kind     | Enumeration
 | Namespace  | `storagecard`
 | Since    | 1.1
@@ -773,6 +781,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `ProductType`
 | Kind     | Enumeration
 | Namespace  | `storagecard.card`
 | Since    | 1.0
@@ -860,6 +869,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `SCAuthenticationFailedException`
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
 | Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
@@ -873,6 +883,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `SCCardCommunicationException`
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
 | Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
@@ -886,6 +897,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `SCInvalidCardResponseException`
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
 | Extends  | `InvalidCardResponseException` (<<ref_cna_tr,CNA-TR-API>>)
@@ -899,6 +911,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `SCReaderCommunicationException`
 | Kind     | Runtime exception
 | Namespace  | `storagecard`
 | Extends  | `ReaderCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
@@ -912,6 +925,7 @@ keys, allowing fine-grained access control.
 
 [cols="1h,4", grid=rows, frame=all]
 |===
+| Name     | `StorageCardException`
 | Kind     | Interface (marker for exceptions)
 | Namespace  | `storagecard`
 | Since    | 1.0
