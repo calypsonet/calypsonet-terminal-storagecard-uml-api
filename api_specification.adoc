@@ -369,6 +369,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Throws      | `IndexOutOfBoundsException` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
 |===
 
+[[op_StorageCard_getProductType]]
 ===== Get Product Type
 
 [cols="1h,4", grid=rows, frame=all]
@@ -380,6 +381,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Throws      | None.
 |===
 
+[[op_StorageCard_getSystemBlock]]
 ===== Get System Block
 
 [cols="1h,4", grid=rows, frame=all]
@@ -395,6 +397,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
 |===
 
+[[op_StorageCard_getUID]]
 ===== Get UID
 
 [cols="1h,4", grid=rows, frame=all]
@@ -534,6 +537,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
+[[op_StorageCardSelectionExtension_prepareSt25ReadSystemBlock]]
 ===== Prepare ST25 Read System Block
 
 [cols="1h,4", grid=rows, frame=all]
@@ -641,6 +645,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
 |===
 
+[[op_StorageCardTransactionManager_prepareSt25ReadSystemBlock]]
 ===== Prepare ST25 Read System Block
 
 [cols="1h,4", grid=rows, frame=all]
@@ -665,7 +670,7 @@ automatic verification read, and the memory image is updated only if this verifi
   data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
+  <<op_StorageCardException_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
@@ -713,7 +718,7 @@ automatic verification read, and the memory image is updated only if this verifi
   For cards that do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
+  <<op_StorageCardException_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
@@ -798,6 +803,7 @@ keys, allowing fine-grained access control.
 | `ST25_SRT512`        | 1.0 | ST25 SRT512 -- 16 blocks of 4 bytes, with a system block, without write acknowledgment, without authentication.
 |===
 
+[[op_ProductType_getBlockCount]]
 ===== Get Block Count
 
 [cols="1h,4", grid=rows, frame=all]
@@ -809,6 +815,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
+[[op_ProductType_getBlockSize]]
 ===== Get Block Size
 
 [cols="1h,4", grid=rows, frame=all]
@@ -820,6 +827,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
+[[op_ProductType_hasAuthentication]]
 ===== Has Authentication
 
 [cols="1h,4", grid=rows, frame=all]
@@ -833,6 +841,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
+[[op_ProductType_hasSystemBlock]]
 ===== Has System Block
 
 [cols="1h,4", grid=rows, frame=all]
@@ -847,6 +856,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
+[[op_ProductType_hasWriteAcknowledgment]]
 ===== Has Write Acknowledgment
 
 [cols="1h,4", grid=rows, frame=all]
@@ -932,6 +942,7 @@ keys, allowing fine-grained access control.
 | Purpose  | Interface implemented by every exception raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
 |===
 
+[[op_StorageCardException_getBlockAddress]]
 ===== Get Block Address
 
 [cols="1h,4", grid=rows, frame=all]
@@ -943,7 +954,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
-[[op_getIdCommand]]
+[[op_StorageCardException_getIdCommand]]
 ===== Get ID Command
 
 [cols="1h,4", grid=rows, frame=all]
