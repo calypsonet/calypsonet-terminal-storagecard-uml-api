@@ -653,14 +653,19 @@ The inherited `processCommands()` operation, when called:
 | Signature   | `prepareSt25WriteSystemBlock(data: byte array, idCommand: integer) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
-| Same as `prepareSt25WriteSystemBlock(data)` but attaches an application-supplied identifier to the prepared
-  command. The identifier MAY later be obtained via <<op_getIdCommand,`StorageCardException.getIdCommand`>> if
-  this specific command causes an exception to be raised.
+| Prepares the writing of data to the system block of an ST25/SRT512 storage card, and attaches an
+  application-supplied identifier to the prepared command. The data length MUST match the block size. The provided
+  data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
+  reliable status codes, an automatic verification read is performed and the transaction fails if the physical
+  state does not match the provided data. The identifier MAY later be obtained via
+  <<op_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | Same as `prepareSt25WriteSystemBlock(data)`.
+| Throws
+| `IllegalArgumentException` -- if the length of `data` does not match the block size. +
+  `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
@@ -690,16 +695,20 @@ The inherited `processCommands()` operation, when called:
 | Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array, idCommand: integer) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
-| Same as `prepareWriteBlocks(fromBlockAddress, data)` but attaches an application-supplied identifier to the
-  prepared command. The identifier MAY later be obtained via
-  <<op_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be
-  raised.
+| Prepares the writing of one or more blocks starting from the specified block offset, and attaches an
+  application-supplied identifier to the prepared command. The number of blocks written is determined by the
+  length of `data` divided by the block size of the card. *Important:* the application is responsible for ensuring
+  that the write operations are coherent with the target card's technology (e.g. OTP bits, counters). The provided
+  data MUST represent the *expected final state* of the blocks after the write. For cards that do not provide
+  reliable status codes, an automatic verification read is performed and the transaction fails if the physical
+  state does not match the provided data. The identifier MAY later be obtained via
+  <<op_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | Same as `prepareWriteBlocks(fromBlockAddress, data)`.
+| Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks]]
