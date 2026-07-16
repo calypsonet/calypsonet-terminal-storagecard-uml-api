@@ -346,7 +346,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
   array is filled with zeros. A caller cannot distinguish an unread block (returned as zeros) from a block
   whose stored content is genuinely all-zero.
 | Parameters  | `blockAddress` -- the address of the block to retrieve.
-| Returns     | A `byte array` containing the block data; zero-filled if the block has not been read.
+| Returns     | A non-empty `byte array` containing the block data; zero-filled if the block has not been read.
 | Throws      | `IndexOutOfBoundsException` -- if the block address is out of range.
 |===
 
@@ -365,7 +365,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | A `byte array` containing the data blocks in the specified range.
+| Returns     | A non-empty `byte array` containing the data blocks in the specified range.
 | Throws      | `IndexOutOfBoundsException` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
 |===
 
@@ -393,7 +393,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
   configuration data. This feature is specific to ST25/SRT512 cards.
 
   The system block MUST have been previously read using `prepareSt25ReadSystemBlock()`.
-| Returns     | A `byte array` containing the system block data, or `null` if the system block has not been read yet.
+| Returns     | A non-empty `byte array` containing the system block data, or `null` if the system block has not been read yet.
 | Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
 |===
 
@@ -405,7 +405,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Signature   | `getUID() -> byte array`
 | Since       | 1.0
 | Description | Returns the unique identifier (UID) of the storage card.
-| Returns     | A `byte array` containing the UID.
+| Returns     | A non-empty `byte array` containing the UID.
 | Throws      | None.
 |===
 
