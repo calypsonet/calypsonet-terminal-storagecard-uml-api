@@ -137,6 +137,7 @@ Each interface, class, enumeration and exception defined in this document is des
 | Implements | The interface implemented by this type, when applicable.
 | Since      | The version of the API in which the type was introduced.
 | Purpose    | A normative description of the type's responsibility.
+| See also   | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
 |===
 
 ==== Operation tables
@@ -151,6 +152,7 @@ Each operation defined in this document is described by a table of the form:
 | Parameters  | A description of each input parameter.
 | Returns     | A description of the returned value, if any.
 | Throws      | A list of exceptional conditions, each mapped to a specific exception type.
+| See also    | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
 |===
 
 ==== Operation contracts
@@ -520,6 +522,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
+| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardSelectionExtension_prepareReadBlocks]]
@@ -535,6 +538,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
   `toBlockAddress`   -- the ending block address (inclusive).
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardSelectionExtension_prepareSt25ReadSystemBlock]]
@@ -547,6 +551,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via `getSystemBlock`.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
 [[type_StorageCardTransactionManager]]
@@ -628,6 +633,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws      | `IllegalArgumentException` -- if the block address is out of range.
+| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareReadBlocks]]
@@ -643,6 +649,7 @@ automatic verification read, and the memory image is updated only if this verifi
   `toBlockAddress`   -- the ending block address (inclusive).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25ReadSystemBlock]]
@@ -655,6 +662,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Description | Prepares the reading of the system block of an ST25/SRT512 storage card.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
@@ -697,6 +705,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Throws
 | `IllegalArgumentException` -- if the length of `data` does not match the block size. +
   `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| See also    | <<op_ProductType_getBlockSize,`ProductType.getBlockSize`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks_withId]]
@@ -749,6 +758,7 @@ automatic verification read, and the memory image is updated only if this verifi
   `data`             -- the data to be written (expected final state).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
+| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 === Enumerations
