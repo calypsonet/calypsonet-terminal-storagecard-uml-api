@@ -28,6 +28,8 @@ v2.0.0-SNAPSHOT, {docdate}
 :short-name: CNA
 :spec-name: Terminal Storage Card API
 :spec-id: CNA-TSC-API
+:release-date: <YYMMDD>
+:doc-ref: {release-date}-SP-CNATerminalAPI-StorageCard
 :spec-version: 2.0.0-SNAPSHOT
 :ver-cna-tr: 3.0
 
@@ -48,7 +50,8 @@ mechanism for MIFARE Classic and a transaction manager that batches read and wri
 
 [cols="1h,3", grid=rows, frame=all]
 |===
-| Specification ID    | {spec-id}
+| Reference           | {doc-ref}
+| Short name          | {spec-id}
 | Version             | {spec-version}
 | Editor              | {organization}
 | Reference license   | Eclipse Public License -- v 2.0 (EPL-2.0)
@@ -195,7 +198,7 @@ is backward-compatible per that API's evolution policy.
 | https://www.rfc-editor.org/rfc/rfc8174[_Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words_], B. Leiba, May 2017.
 
 | [[ref_cna_tr]] [CNA-TR-API]
-| https://docs.terminal-api.calypsonet.org/calypsonet-terminal-reader-uml-api/[_Terminal Reader API Specification_], version {ver-cna-tr}, {organization}.
+| https://docs.terminal-api.calypsonet.org/calypsonet-terminal-reader-uml-api/[_Terminal Reader API Specification_] (SP-CNATerminalAPI-Reader), version {ver-cna-tr}, {organization}.
 
 | [[ref_iso14443]] [ISO/IEC 14443]
 | https://www.iso.org[_Identification cards -- Contactless integrated circuit cards -- Proximity cards_].
