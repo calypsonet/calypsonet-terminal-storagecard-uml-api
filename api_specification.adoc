@@ -27,8 +27,7 @@ v2.0.0-SNAPSHOT, {docdate}
 :organization: Calypso Networks Association
 :spec-name: Terminal Storage Card API
 :spec-id: CNA-TSC-API
-:doc-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
-:spec-version: 2.0.0-SNAPSHOT
+:spec-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
 :ver-cna-tr: 3.0
 
 [abstract]
@@ -48,14 +47,14 @@ mechanism for MIFARE Classic and a transaction manager that batches read and wri
 
 [cols="1h,3", grid=rows, frame=all]
 |===
-| Reference           | {doc-ref}
+| Reference           | {spec-ref}
 | Short name          | {spec-id}
-| Version             | {spec-version}
+| Version             | {revnumber}
 | Editor              | {organization}
 | Reference license   | Eclipse Public License -- v 2.0 (EPL-2.0)
 |===
 
-NOTE: The present document specifies the {spec-version} of the {spec-name}. It defines a single, coherent
+NOTE: The present document specifies the {revnumber} of the {spec-name}. It defines a single, coherent
 baseline against which conforming implementations are evaluated; the *Since* column indicates the version in
 which each member was introduced.
 
