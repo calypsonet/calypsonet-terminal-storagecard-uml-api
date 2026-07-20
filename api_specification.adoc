@@ -1,4 +1,4 @@
-= Terminal Storage Card API -- Specification
+= Specification: CNA Terminal API -- Storage Card
 Calypso Networks Association <https://calypsonet.org>
 v2.0.0-SNAPSHOT, {docdate}
 :doctype: book
