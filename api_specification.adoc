@@ -1,6 +1,5 @@
 = Specification: CNA Terminal API -- Storage Card
 Calypso Networks Association <https://calypsonet.org>
-v2.0.0-SNAPSHOT, {docdate}
 :doctype: book
 :toc: left
 :toclevels: 4
@@ -28,6 +27,9 @@ v2.0.0-SNAPSHOT, {docdate}
 :spec-name: Terminal Storage Card API
 :spec-id: CNA-TSC-API
 :spec-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
+:revnumber: 2.0.0-SNAPSHOT
+:revdate: 2026-07-20
+:reproducible:
 :ver-cna-tr: 3.0
 
 [abstract]
