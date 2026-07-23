@@ -156,7 +156,7 @@ as-is in the UML class diagram (<<sec_class_diagram>>).
 
 Each interface, class, enumeration and exception defined in this document is described by a table of the form:
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name       | The type's normalized name.
 | Kind       | The category of the type (interface, class, enumeration, exception, etc.).
@@ -176,7 +176,7 @@ notes, value tables or examples -- is placed as prose below the table.
 
 Each operation defined in this document is described by a table of the form:
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | The operation's language-agnostic signature.
 | Since       | The version of the API in which the operation was introduced.
@@ -342,7 +342,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[type_StorageCardApiProperties]]
 ==== Storage Card API Properties
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCardApiProperties`
 | Kind     | Final class
@@ -365,7 +365,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[type_StorageCard]]
 ==== Storage Card
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCard`
 | Kind     | Interface
@@ -378,7 +378,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCard_getBlock]]
 ===== Get Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getBlock(blockAddress: integer) -> byte array`
 | Since       | 1.0
@@ -394,7 +394,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCard_getBlocks]]
 ===== Get Blocks
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> byte array`
 | Since       | 1.0
@@ -413,7 +413,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCard_getProductType]]
 ===== Get Product Type
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getProductType() -> ProductType`
 | Since       | 1.0
@@ -425,7 +425,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCard_getSystemBlock]]
 ===== Get System Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getSystemBlock() -> byte array?`
 | Since       | 1.0
@@ -441,7 +441,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCard_getUID]]
 ===== Get UID
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getUID() -> byte array`
 | Since       | 1.0
@@ -453,7 +453,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[type_StorageCardApiFactory]]
 ==== Storage Card API Factory
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCardApiFactory`
 | Kind     | Interface
@@ -465,7 +465,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardApiFactory_createStorageCardSelectionExtension]]
 ===== Create Storage Card Selection Extension
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `createStorageCardSelectionExtension(productType: ProductType) -> StorageCardSelectionExtension`
 | Since       | 1.0
@@ -478,7 +478,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardApiFactory_createStorageCardTransactionManager]]
 ===== Create Storage Card Transaction Manager
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `createStorageCardTransactionManager(reader: CardReader, card: StorageCard) -> StorageCardTransactionManager`
 | Since       | 1.0
@@ -493,7 +493,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[type_StorageCardSelectionExtension]]
 ==== Storage Card Selection Extension
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCardSelectionExtension`
 | Kind     | Interface
@@ -506,7 +506,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
 ===== Prepare MIFARE Classic Authenticate (Key Number)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension`
 | Since       | 1.1
@@ -528,7 +528,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
 ===== Prepare MIFARE Classic Authenticate (Key)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
 | Since       | 1.1
@@ -553,7 +553,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardSelectionExtension_prepareReadBlock]]
 ===== Prepare Read Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardSelectionExtension`
 | Since       | 1.0
@@ -569,7 +569,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardSelectionExtension_prepareReadBlocks]]
 ===== Prepare Read Blocks
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension`
 | Since       | 1.0
@@ -589,7 +589,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[op_StorageCardSelectionExtension_prepareSt25ReadSystemBlock]]
 ===== Prepare ST25 Read System Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
 | Since       | 1.2
@@ -606,7 +606,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 [[type_StorageCardTransactionManager]]
 ==== Storage Card Transaction Manager
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCardTransactionManager`
 | Kind     | Interface
@@ -632,7 +632,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
 ===== Prepare MIFARE Classic Authenticate (Key Number)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager`
 | Since       | 1.1
@@ -659,7 +659,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
 ===== Prepare MIFARE Classic Authenticate (Key)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
 | Since       | 1.1
@@ -691,7 +691,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareReadBlock]]
 ===== Prepare Read Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager`
 | Since       | 1.0
@@ -705,7 +705,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareReadBlocks]]
 ===== Prepare Read Blocks
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager`
 | Since       | 1.0
@@ -724,7 +724,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareSt25ReadSystemBlock]]
 ===== Prepare ST25 Read System Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
 | Since       | 1.1
@@ -741,7 +741,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
 ===== Prepare ST25 Write System Block (ID Command)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25WriteSystemBlock(data: byte array, idCommand: integer) -> StorageCardTransactionManager`
 | Since       | 2.0
@@ -764,7 +764,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
 ===== Prepare ST25 Write System Block (No ID Command)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareSt25WriteSystemBlock(data: byte array) -> StorageCardTransactionManager`
 | Since       | 1.1
@@ -791,7 +791,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareWriteBlocks_withId]]
 ===== Prepare Write Blocks (ID Command)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array, idCommand: integer) -> StorageCardTransactionManager`
 | Since       | 2.0
@@ -819,7 +819,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[op_StorageCardTransactionManager_prepareWriteBlocks]]
 ===== Prepare Write Blocks (No ID Command)
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array) -> StorageCardTransactionManager`
 | Since       | 1.0
@@ -846,7 +846,7 @@ automatic verification read, and the memory image is updated only if this verifi
 [[type_MifareClassicKeyType]]
 ==== MIFARE Classic Key Type
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `MifareClassicKeyType`
 | Kind     | Enumeration
@@ -874,7 +874,7 @@ keys, allowing fine-grained access control.
 [[type_ProductType]]
 ==== Product Type
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `ProductType`
 | Kind     | Enumeration
@@ -896,7 +896,7 @@ keys, allowing fine-grained access control.
 [[op_ProductType_getBlockCount]]
 ===== Get Block Count
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getBlockCount() -> integer`
 | Since       | 1.0
@@ -908,7 +908,7 @@ keys, allowing fine-grained access control.
 [[op_ProductType_getBlockSize]]
 ===== Get Block Size
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getBlockSize() -> integer`
 | Since       | 1.0
@@ -920,7 +920,7 @@ keys, allowing fine-grained access control.
 [[op_ProductType_hasAuthentication]]
 ===== Has Authentication
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `hasAuthentication() -> boolean`
 | Since       | 1.1
@@ -934,7 +934,7 @@ keys, allowing fine-grained access control.
 [[op_ProductType_hasSystemBlock]]
 ===== Has System Block
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `hasSystemBlock() -> boolean`
 | Since       | 1.0
@@ -949,7 +949,7 @@ keys, allowing fine-grained access control.
 [[op_ProductType_hasWriteAcknowledgment]]
 ===== Has Write Acknowledgment
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `hasWriteAcknowledgment() -> boolean`
 | Since       | 1.0
@@ -967,7 +967,7 @@ keys, allowing fine-grained access control.
 [[type_SCAuthenticationFailedException]]
 ==== SC Authentication Failed Exception
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `SCAuthenticationFailedException`
 | Kind     | Runtime exception
@@ -981,7 +981,7 @@ keys, allowing fine-grained access control.
 [[type_SCCardCommunicationException]]
 ==== SC Card Communication Exception
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `SCCardCommunicationException`
 | Kind     | Runtime exception
@@ -995,7 +995,7 @@ keys, allowing fine-grained access control.
 [[type_SCInvalidCardResponseException]]
 ==== SC Invalid Card Response Exception
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `SCInvalidCardResponseException`
 | Kind     | Runtime exception
@@ -1009,7 +1009,7 @@ keys, allowing fine-grained access control.
 [[type_SCReaderCommunicationException]]
 ==== SC Reader Communication Exception
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `SCReaderCommunicationException`
 | Kind     | Runtime exception
@@ -1023,7 +1023,7 @@ keys, allowing fine-grained access control.
 [[type_StorageCardException]]
 ==== Storage Card Exception
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name     | `StorageCardException`
 | Kind     | Interface (marker for exceptions)
@@ -1035,7 +1035,7 @@ keys, allowing fine-grained access control.
 [[op_StorageCardException_getBlockAddress]]
 ===== Get Block Address
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getBlockAddress() -> integer?`
 | Since       | 1.0
@@ -1047,7 +1047,7 @@ keys, allowing fine-grained access control.
 [[op_StorageCardException_getIdCommand]]
 ===== Get ID Command
 
-[cols="1h,4", grid=rows, frame=all]
+[cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature   | `getIdCommand() -> integer?`
 | Since       | 2.0
