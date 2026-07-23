@@ -396,7 +396,11 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> byte array`
+| Signature
+| `getBlocks(` +
+`{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}toBlockAddress: integer` +
+`) -> byte array`
 | Since       | 1.0
 | Description
 | Returns the data blocks within the specified range from the memory image of the storage card. The returned
@@ -480,7 +484,11 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `createStorageCardTransactionManager(reader: CardReader, card: StorageCard) -> StorageCardTransactionManager`
+| Signature
+| `createStorageCardTransactionManager(` +
+`{nbsp}{nbsp}reader: CardReader,` +
+`{nbsp}{nbsp}card: StorageCard` +
+`) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
 | Parameters
@@ -508,7 +516,12 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension`
+| Signature
+| `prepareMifareClassicAuthenticate(` +
+`{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}keyNumber: integer` +
+`) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
@@ -530,7 +543,12 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension`
+| Signature
+| `prepareMifareClassicAuthenticate(` +
+`{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}key: byte array` +
+`) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication applies to the entire sector containing the specified block address.
@@ -571,7 +589,11 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension`
+| Signature
+| `prepareReadBlocks(` +
+`{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}toBlockAddress: integer` +
+`) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
@@ -634,7 +656,12 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager`
+| Signature
+| `prepareMifareClassicAuthenticate(` +
+`{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}keyNumber: integer` +
+`) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
@@ -661,7 +688,12 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager`
+| Signature
+| `prepareMifareClassicAuthenticate(` +
+`{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}key: byte array` +
+`) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific to
@@ -707,7 +739,11 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager`
+| Signature
+| `prepareReadBlocks(` +
+`{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}toBlockAddress: integer` +
+`) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
@@ -743,7 +779,11 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareSt25WriteSystemBlock(data: byte array, idCommand: integer) -> StorageCardTransactionManager`
+| Signature
+| `prepareSt25WriteSystemBlock(` +
+`{nbsp}{nbsp}data: byte array,` +
+`{nbsp}{nbsp}idCommand: integer` +
+`) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card, and attaches an
@@ -793,7 +833,12 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array, idCommand: integer) -> StorageCardTransactionManager`
+| Signature
+| `prepareWriteBlocks(` +
+`{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}data: byte array,` +
+`{nbsp}{nbsp}idCommand: integer` +
+`) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset, and attaches an
@@ -821,7 +866,11 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareWriteBlocks(fromBlockAddress: integer, data: byte array) -> StorageCardTransactionManager`
+| Signature
+| `prepareWriteBlocks(` +
+`{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}data: byte array` +
+`) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset. The number of blocks
