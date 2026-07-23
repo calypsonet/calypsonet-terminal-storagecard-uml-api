@@ -309,7 +309,7 @@ TR  --> Drv : delegated to
 
 === Logical namespaces
 
-[cols="1,1,4", options="header"]
+[cols=".^3,^.^1,.^5", options="header"]
 |===
 | Namespace                  | Role     | Summary
 
@@ -858,7 +858,7 @@ automatic verification read, and the memory image is updated only if this verifi
 MIFARE Classic cards support two types of keys per sector. Each sector can be protected independently by these
 keys, allowing fine-grained access control.
 
-[cols="1,1,4", options="header"]
+[cols=".^2,^.^1,.^6", options="header"]
 |===
 | Value   | Since | Description
 
@@ -883,7 +883,7 @@ keys, allowing fine-grained access control.
 | Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
 |===
 
-[cols="1,1,4", options="header"]
+[cols=".^2,^.^1,.^6", options="header"]
 |===
 | Value                | Since | Description
 
