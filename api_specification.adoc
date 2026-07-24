@@ -2,9 +2,9 @@
 Calypso Networks Association <https://calypsonet.org>
 //
 // Document identity
-:spec-name: Terminal Storage Card API
-:spec-id: CNA-TSC-API
-:spec-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
+:doc-name: Terminal Storage Card API
+:doc-id: CNA-TSC-API
+:doc-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
 :organization: Calypso Networks Association
 //
 // Revision
@@ -48,12 +48,12 @@ Calypso Networks Association <https://calypsonet.org>
 [abstract]
 == Abstract
 
-This document is the official technical specification of the **{spec-name}** standardised
+This document is the official technical specification of the **{doc-name}** standardised
 by the **{organization}** (CNA).
 It defines, in a language-agnostic way, the interfaces, classes, enumerations, exceptions, structural
-relationships and behavioural requirements that any conforming implementation of the {spec-name} MUST satisfy.
+relationships and behavioural requirements that any conforming implementation of the {doc-name} MUST satisfy.
 
-The {spec-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
+The {doc-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
 (MIFARE Ultralight, MIFARE Classic 1K/4K, ST25/SRT512), all contactless cards compliant with <<ref_iso14443,ISO/IEC 14443>>. It exposes a block-oriented memory image, an authentication
 mechanism for MIFARE Classic and a transaction manager that batches read and write commands.
 
@@ -62,15 +62,15 @@ mechanism for MIFARE Classic and a transaction manager that batches read and wri
 
 [cols="^.^1h,.^3", grid=rows, frame=all]
 |===
-| Reference           | {spec-ref}
-| Short name          | {spec-id}
+| Reference           | {doc-ref}
+| Short name          | {doc-id}
 | Version             | {revnumber}
 | Revision date       | {revdate}
 | Editor              | {organization}
 | Reference license   | Eclipse Public License -- v 2.0 (EPL-2.0)
 |===
 
-NOTE: The present document specifies the {revnumber} of the {spec-name}. It defines a single, coherent
+NOTE: The present document specifies the {revnumber} of the {doc-name}. It defines a single, coherent
 baseline against which conforming implementations are evaluated; the *Since* column indicates the version in
 which each member was introduced.
 
@@ -91,7 +91,7 @@ which each member was introduced.
 
 === Purpose
 
-The {spec-name} defines the contracts required to:
+The {doc-name} defines the contracts required to:
 
 * select storage cards through the *Terminal Reader API* selection mechanism,
 * perform block-level read and write operations,
@@ -348,7 +348,7 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 | Kind     | Final class
 | Namespace  | `storagecard`
 | Since    | 1.0
-| Purpose  | Exposes the immutable properties of the {spec-name}.
+| Purpose  | Exposes the immutable properties of the {doc-name}.
 |===
 
 ===== Constants
