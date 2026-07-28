@@ -11,6 +11,7 @@
 :doc-classification: Public
 :doc-id: CNA-TSC-API
 :doc-ref: YYMMDD-SP-CNATerminalAPI-StorageCard
+:doc-repo: https://github.com/calypsonet/calypsonet-terminal-storagecard-uml-api
 //
 // Revision (bumped every edition)
 :revnumber: 2.0.0-SNAPSHOT
@@ -97,6 +98,7 @@ mechanism for MIFARE Classic and a transaction manager that batches read and wri
 | Version             | {revnumber}
 | Revision date       | {revdate}
 | Editor              | {organization}
+| Source repository   | {doc-repo}
 | Reference license   | Eclipse Public License -- v 2.0 (EPL-2.0)
 |===
 
