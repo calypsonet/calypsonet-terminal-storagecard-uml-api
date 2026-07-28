@@ -428,8 +428,8 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature
 | `getBlocks(` +
-`{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}toBlockAddress: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
 `) -> byte array`
 | Since       | 1.0
 | Description
@@ -516,8 +516,8 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature
 | `createStorageCardTransactionManager(` +
-`{nbsp}{nbsp}reader: CardReader,` +
-`{nbsp}{nbsp}card: StorageCard` +
+`{nbsp}{nbsp}{nbsp}{nbsp}reader: CardReader,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}card: StorageCard` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
@@ -548,9 +548,9 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}blockAddress: integer,` +
-`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}keyNumber: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: integer` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
@@ -575,9 +575,9 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}blockAddress: integer,` +
-`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}key: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: byte array` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
@@ -621,8 +621,8 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 |===
 | Signature
 | `prepareReadBlocks(` +
-`{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}toBlockAddress: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description
@@ -688,9 +688,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}blockAddress: integer,` +
-`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}keyNumber: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: integer` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
@@ -720,9 +720,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}blockAddress: integer,` +
-`{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}key: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: byte array` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
@@ -771,8 +771,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareReadBlocks(` +
-`{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}toBlockAddress: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
@@ -811,8 +811,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareSt25WriteSystemBlock(` +
-`{nbsp}{nbsp}data: byte array,` +
-`{nbsp}{nbsp}idCommand: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: integer` +
 `) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
@@ -865,9 +865,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareWriteBlocks(` +
-`{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}data: byte array,` +
-`{nbsp}{nbsp}idCommand: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: integer` +
 `) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
@@ -898,8 +898,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareWriteBlocks(` +
-`{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}data: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
