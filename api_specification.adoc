@@ -501,7 +501,10 @@ include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=c
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `createStorageCardSelectionExtension(productType: ProductType) -> StorageCardSelectionExtension`
+| Signature
+| `createStorageCardSelectionExtension(` +
+`{nbsp}{nbsp}{nbsp}{nbsp}productType: ProductType` +
+`) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description | Returns a new <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> dedicated to the targeted product type.
 | Parameters  | `productType` (<<type_ProductType,`ProductType`>>) -- the targeted storage card product type.
