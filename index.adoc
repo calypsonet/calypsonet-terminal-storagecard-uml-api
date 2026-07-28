@@ -333,22 +333,9 @@ is backward-compatible per that API's evolution policy.
 === Functional positioning
 
 [plantuml, target=architecture-overview, format=svg]
-....
-@startuml
-skinparam shadowing false
-skinparam roundCorner 8
-
-component "Terminal Application" as App
-component "Terminal Storage Card API\n(this specification)" as TSC #LightYellow
-component "Terminal Reader API\n[CNA-TR-API]" as TR
-component "Reader Driver" as Drv
-
-App --> TSC : uses
-App --> TR : uses
-TSC --> TR : extends
-TR  --> Drv : delegated to
-@enduml
-....
+----
+include::uml/architecture-overview.puml[]
+----
 
 === Logical namespaces
 
@@ -371,9 +358,9 @@ TR  --> Drv : delegated to
 
 The following UML class diagram provides a visual representation of the types and relationships defined by this specification:
 
-[plantuml, target="api_class_diagram", format="svg"]
+[plantuml, target="class-diagram", format="svg"]
 ----
-include::api_class_diagram.puml[Terminal Storage Card API class diagram, align=center]
+include::uml/class-diagram.puml[Terminal Storage Card API class diagram, align=center]
 ----
 
 // =============================================================================

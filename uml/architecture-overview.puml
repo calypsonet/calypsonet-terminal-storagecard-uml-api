@@ -1,0 +1,14 @@
+@startuml
+skinparam shadowing false
+skinparam roundCorner 8
+
+component "Terminal Application" as App
+component "Terminal Storage Card API\n(this specification)" as TSC #LightYellow
+component "Terminal Reader API\n[CNA-TR-API]" as TR
+component "Reader Driver" as Drv
+
+App --> TSC : uses
+App --> TR : uses
+TSC --> TR : extends
+TR  --> Drv : delegated to
+@enduml
