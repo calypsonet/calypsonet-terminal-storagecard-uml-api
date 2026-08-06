@@ -1,0 +1,12 @@
+  - version: "2.0.0-SNAPSHOT"
+    status: snapshot
+    files:
+      diagram:
+        name: "class-diagram.svg"
+        size: "60 kB"
+      html:
+        name: "YYMMDD-SP-CNATerminalAPI-StorageCard_v2.0.0-SNAPSHOT.html"
+        size: "1.4 MB"
+      pdf:
+        name: "YYMMDD-SP-CNATerminalAPI-StorageCard_v2.0.0-SNAPSHOT.pdf"
+        size: "1.2 MB"
