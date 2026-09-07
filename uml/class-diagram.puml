@@ -63,31 +63,31 @@ end legend
 
 package "terminal.storagecard" as root {
     +class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
-        +{static} **final** VERSION: string
+        +{static} **final** VERSION: String
     }
     +interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
-        +createStorageCardSelectionExtension(productType: ProductType) -> StorageCardSelectionExtension
+        +createStorageCardSelectionExtension(productType: ProductType) → StorageCardSelectionExtension
 
-        +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard) -> StorageCardTransactionManager
+        +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard) → StorageCardTransactionManager
     }
 
     package "card" as card {
         +interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
-            +prepareReadBlock(blockAddress: integer) -> StorageCardSelectionExtension
-            +prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardSelectionExtension
+            +prepareReadBlock(blockAddress: Int) → StorageCardSelectionExtension
+            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardSelectionExtension
             .. **ST25 / SRT512** ..
-            +prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension
+            +prepareSt25ReadSystemBlock() → StorageCardSelectionExtension
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardSelectionExtension
-            +prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardSelectionExtension
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → StorageCardSelectionExtension
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → StorageCardSelectionExtension
         }
         +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
-            +getProductType() -> ProductType
-            +getUID() -> byte array
-            +getBlock(blockAddress: integer) -> byte array
-            +getBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> byte array
+            +getProductType() → ProductType
+            +getUID() → ByteArray
+            +getBlock(blockAddress: Int) → ByteArray
+            +getBlocks(fromBlockAddress: Int, toBlockAddress: Int) → ByteArray
             .. **ST25 / SRT512** ..
-            +getSystemBlock() -> byte array?
+            +getSystemBlock() → ByteArray?
         }
         +enum "ProductType" as ProductType <<green>> {
             MIFARE_ULTRALIGHT
@@ -95,11 +95,11 @@ package "terminal.storagecard" as root {
             MIFARE_CLASSIC_4K
             ST25_SRT512
 
-            +getBlockCount() -> integer
-            +getBlockSize() -> integer
-            +hasSystemBlock() -> boolean
-            +hasWriteAcknowledgment() -> boolean
-            +hasAuthentication() -> boolean
+            +getBlockCount() → Int
+            +getBlockSize() → Int
+            +hasSystemBlock() → Boolean
+            +hasWriteAcknowledgment() → Boolean
+            +hasAuthentication() → Boolean
         }
     }
 
@@ -111,23 +111,23 @@ package "terminal.storagecard" as root {
     package "transaction" as transaction {
         +interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
-            +prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager
-            +prepareReadBlocks(fromBlockAddress: integer, toBlockAddress: integer) -> StorageCardTransactionManager
-            +prepareWriteBlocks(fromBlockAddress: integer, data: byte array) -> StorageCardTransactionManager
-            +<color:blue>prepareWriteBlocks(fromBlockAddress: integer, data: byte array, idCommand: integer) -> StorageCardTransactionManager
+            +prepareReadBlock(blockAddress: Int) → StorageCardTransactionManager
+            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardTransactionManager
+            +prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray) → StorageCardTransactionManager
+            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, idCommand: Int) → StorageCardTransactionManager
             .. **ST25 / SRT512** ..
-            +prepareSt25ReadSystemBlock() -> StorageCardTransactionManager
-            +prepareSt25WriteSystemBlock(data: byte array) -> StorageCardTransactionManager
-            +<color:blue>prepareSt25WriteSystemBlock(data: byte array, idCommand: integer) -> StorageCardTransactionManager
+            +prepareSt25ReadSystemBlock() → StorageCardTransactionManager
+            +prepareSt25WriteSystemBlock(data: ByteArray) → StorageCardTransactionManager
+            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, idCommand: Int) → StorageCardTransactionManager
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, key: byte array) -> StorageCardTransactionManager
-            +prepareMifareClassicAuthenticate(blockAddress: integer, mifareClassicKeyType: MifareClassicKeyType, keyNumber: integer) -> StorageCardTransactionManager
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → StorageCardTransactionManager
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → StorageCardTransactionManager
         }
     }
 
     +interface "StorageCardException" as StorageCardException <<green>> {
-        +getBlockAddress() -> integer?
-        +<color:blue>getIdCommand() -> integer?
+        +getBlockAddress() → Int?
+        +<color:blue>getIdCommand() → Int?
     }
     +class "<<<back:yellow>ReaderCommunicationException</back>>>\nSCReaderCommunicationException" as SCReaderCommunicationException <<green>> implements StorageCardException {
     }

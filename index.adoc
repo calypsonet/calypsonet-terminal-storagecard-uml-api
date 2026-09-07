@@ -98,8 +98,9 @@ include::assets/layout/_colophon.adoc[]
 
 This document is the official technical specification of the **{doc-name}** standardised
 by the **{organization}** (CNA).
-It defines, in a language-agnostic way, the interfaces, classes, enumerations, exceptions, structural
-relationships and behavioural requirements that any conforming implementation of the {doc-name} MUST satisfy.
+It defines, in a language-agnostic way (using a notation inspired by the Kotlin language), the interfaces,
+classes, enumerations, exceptions, structural relationships and behavioural requirements that any conforming
+implementation of the {doc-name} MUST satisfy.
 
 The {doc-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
 (MIFARE Ultralight, MIFARE Classic 1K/4K, ST25/SRT512), all contactless cards compliant with <<ref_iso14443,ISO/IEC 14443>>. It exposes a block-oriented memory image, an authentication
@@ -195,17 +196,21 @@ Type names follow `UpperCamelCase`; operation, parameter and enumeration-member 
 except for enumeration values which use `UPPER_SNAKE_CASE`. Names defined by this specification are reproduced
 as-is in the UML class diagram (<<sec_class_diagram>>).
 
-==== Language-agnostic types
+==== Data types
+
+The following type names, whose notation is inspired by the Kotlin language, are used in operation signatures
+and are mapped, in each binding, to the closest equivalent native type. Implementations MUST preserve the
+semantic intent rather than the syntactic form.
 
 [cols="^.^1,.^3,.^3", options="header"]
 |===
-| Symbolic type   | Description                                                     | Typical bindings
-| `string`        | Sequence of characters, UTF-8 encoded by default.                | `String`, `string`, `str`.
-| `boolean`       | Two-state truth value.                                           | `boolean`, `bool`.
-| `integer`       | Signed 32-bit integer.                                           | `int`, `Int32`.
-| `byte array`    | Ordered sequence of octets.                                      | `byte[]`, `[u8]`, `bytes`.
-| `T?`            | Nullable value: either a `T` value or the absence of value (`null`). | `Integer` (boxed), `Optional<T>`, `T?`.
-| `unit`          | Indicates that an operation returns no value.                    | `void`, `Unit`, `None`.
+| Type            | Description                                                     | Typical bindings
+| `String`        | Sequence of characters, UTF-8 encoded by default.                | `String`, `string`, `str`.
+| `Boolean`       | Two-state truth value.                                           | `boolean`, `bool`.
+| `Int`           | Signed 32-bit integer.                                           | `int`, `Int32`, `i32`.
+| `ByteArray`     | Ordered sequence of octets.                                      | `byte[]`, `[u8]`, `bytes`.
+| `T?`            | Nullable value: either a `T` value or the absence of value (`null`). | `Integer` (boxed), `Optional<T>`, `T?`, `Option<T>`.
+| `Unit`          | Indicates that an operation returns no value.                    | `void`, `Unit`, `None`, `()`.
 |===
 
 ==== Type tables
@@ -234,7 +239,7 @@ Each operation defined in this document is described by a table of the form:
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | The operation's language-agnostic signature.
+| Signature   | The operation's signature.
 | Since       | The version of the API in which the operation was introduced.
 | Description | A normative description of the operation's behaviour.
 | Parameters  | A description of each input parameter.
@@ -402,7 +407,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 |===
 | Name      | Type     | Since | Description
 
-| `VERSION` | `string` | 1.0 | String representation of the version of the API implemented by the conforming binding (e.g. `"2.0"`).
+| `VERSION` | `String` | 1.0 | String representation of the version of the API implemented by the conforming binding (e.g. `"2.0"`).
 |===
 
 === API Interfaces
@@ -425,14 +430,14 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlock(blockAddress: integer) -> byte array`
+| Signature   | `getBlock(blockAddress: Int) -> ByteArray`
 | Since       | 1.0
 | Description
 | Returns the data block at the specified block address. If the block has not been previously read, the returned
   array is filled with zeros. A caller cannot distinguish an unread block (returned as zeros) from a block
   whose stored content is genuinely all-zero.
 | Parameters  | `blockAddress` -- the address of the block to retrieve.
-| Returns     | A non-empty `byte array` containing the block data; zero-filled if the block has not been read.
+| Returns     | A non-empty `ByteArray` containing the block data; zero-filled if the block has not been read.
 | Throws      | `IndexOutOfBoundsException` -- if the block address is out of range.
 |===
 
@@ -443,9 +448,9 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 |===
 | Signature
 | `getBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
-`) -> byte array`
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
+`) -> ByteArray`
 | Since       | 1.0
 | Description
 | Returns the data blocks within the specified range from the memory image of the storage card. The returned
@@ -455,7 +460,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | A non-empty `byte array` containing the data blocks in the specified range.
+| Returns     | A non-empty `ByteArray` containing the data blocks in the specified range.
 | Throws      | `IndexOutOfBoundsException` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
 |===
 
@@ -476,14 +481,14 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getSystemBlock() -> byte array?`
+| Signature   | `getSystemBlock() -> ByteArray?`
 | Since       | 1.0
 | Description
 | Returns the system block when it has been read. The system block contains card-specific metadata and
   configuration data. This feature is specific to ST25/SRT512 cards.
 
   The system block MUST have been previously read using `prepareSt25ReadSystemBlock()`.
-| Returns     | A non-empty `byte array` containing the system block data, or `null` if the system block has not been read yet.
+| Returns     | A non-empty `ByteArray` containing the system block data, or `null` if the system block has not been read yet.
 | Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
 |===
 
@@ -492,10 +497,10 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getUID() -> byte array`
+| Signature   | `getUID() -> ByteArray`
 | Since       | 1.0
 | Description | Returns the unique identifier (UID) of the storage card.
-| Returns     | A non-empty `byte array` containing the UID.
+| Returns     | A non-empty `ByteArray` containing the UID.
 | Throws      | None.
 |===
 
@@ -566,9 +571,9 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
@@ -593,9 +598,9 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}key: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.1
 | Description
@@ -621,7 +626,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardSelectionExtension`
+| Signature   | `prepareReadBlock(blockAddress: Int) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
@@ -639,8 +644,8 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 |===
 | Signature
 | `prepareReadBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
 `) -> StorageCardSelectionExtension`
 | Since       | 1.0
 | Description
@@ -706,9 +711,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
@@ -738,9 +743,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: integer,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}key: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
@@ -773,7 +778,7 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlock(blockAddress: integer) -> StorageCardTransactionManager`
+| Signature   | `prepareReadBlock(blockAddress: Int) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
@@ -789,8 +794,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareReadBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
@@ -829,8 +834,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareSt25WriteSystemBlock(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
 `) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
@@ -854,7 +859,7 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareSt25WriteSystemBlock(data: byte array) -> StorageCardTransactionManager`
+| Signature   | `prepareSt25WriteSystemBlock(data: ByteArray) -> StorageCardTransactionManager`
 | Since       | 1.1
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card. This operation is specific to
@@ -883,9 +888,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareWriteBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: integer` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
 `) -> StorageCardTransactionManager`
 | Since       | 2.0
 | Description
@@ -916,8 +921,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareWriteBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: integer,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: byte array` +
+`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
 `) -> StorageCardTransactionManager`
 | Since       | 1.0
 | Description
@@ -995,7 +1000,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockCount() -> integer`
+| Signature   | `getBlockCount() -> Int`
 | Since       | 1.0
 | Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
 | Returns     | The number of blocks.
@@ -1007,7 +1012,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockSize() -> integer`
+| Signature   | `getBlockSize() -> Int`
 | Since       | 1.0
 | Description | Returns the size of each block in bytes.
 | Returns     | The block size.
@@ -1019,7 +1024,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasAuthentication() -> boolean`
+| Signature   | `hasAuthentication() -> Boolean`
 | Since       | 1.1
 | Description
 | Indicates whether the product type requires authentication before read/write operations. When this operation
@@ -1033,7 +1038,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasSystemBlock() -> boolean`
+| Signature   | `hasSystemBlock() -> Boolean`
 | Since       | 1.0
 | Description
 | Indicates whether the product type exposes an accessible system block. For ST25/SRT512 cards, the system block is
@@ -1048,7 +1053,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasWriteAcknowledgment() -> boolean`
+| Signature   | `hasWriteAcknowledgment() -> Boolean`
 | Since       | 1.0
 | Description
 | Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
@@ -1134,7 +1139,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockAddress() -> integer?`
+| Signature   | `getBlockAddress() -> Int?`
 | Since       | 1.0
 | Description | Returns the address of the block involved in the error, when applicable.
 | Returns     | The block address that caused the error, or `null` if not relevant.
@@ -1146,7 +1151,7 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getIdCommand() -> integer?`
+| Signature   | `getIdCommand() -> Int?`
 | Since       | 2.0
 | Description
 | Returns the application-supplied identifier of the command that caused the exception, when the failing command
