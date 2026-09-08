@@ -125,17 +125,11 @@ package "terminal.storagecard" as root {
         }
     }
 
-    +interface "StorageCardError" as StorageCardError <<green>> {
-        +getBlockAddress() → Int?
-        +<color:blue>getIdCommand() → Int?
-    }
-    +class "<<<back:yellow>ReaderCommunication</back>>>\nSCReaderCommunication" as SCReaderCommunication <<green>> implements StorageCardError {
-    }
-    +class "SCAuthenticationFailed" as SCAuthenticationFailed <<green>> implements StorageCardError {
-    }
-    +class "<<<back:yellow>CardCommunication</back>>>\nSCCardCommunication" as SCCardCommunication <<green>> implements StorageCardError {
-    }
-    +class "<<<back:yellow>InvalidCardResponse</back>>>\nSCInvalidCardResponse" as SCInvalidCardResponse <<green>> implements StorageCardError {
+    +exception "<i>«error»\nSCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<purple>>  {
+        +val message: String
+        +val cause: Any?
+        +val blockAddress: Int?
+        +val idCommand: Int?
     }
 }
 
@@ -152,8 +146,7 @@ StorageCardTransactionManager ..> MifareClassicKeyType #C_USE : use >
 
 StorageCardApiFactory -[hidden]- StorageCardSelectionExtension
 StorageCardApiFactory -[hidden]- StorageCardTransactionManager
-ProductType -[hidden]- StorageCardError
-SCReaderCommunication -[hidden]down- SCAuthenticationFailed
+MifareClassicKeyType -[hidden]right- errors
 
 ' == STYLE ==
 
