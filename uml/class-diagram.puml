@@ -58,7 +58,7 @@ legend top
     *** <back:#EBF5FB><color:#3498DB><b>Factory or interface provided by the factory
     *** <back:#FEFECE><color:#D4AC0D><b>Interface that cannot be instantiated directly by the factory
     *** <back:#FDEDEC><color:#E74C3C><b>SPI (Service Provider Interface) to be provided by the end-user
-    *** <back:#E9F7EF><color:#27AE60><b>Class, enum or exception
+    *** <back:#E9F7EF><color:#27AE60><b>Class, enum or error
 end legend
 
 package "terminal.storagecard" as root {
@@ -125,17 +125,17 @@ package "terminal.storagecard" as root {
         }
     }
 
-    +interface "StorageCardException" as StorageCardException <<green>> {
+    +interface "StorageCardError" as StorageCardError <<green>> {
         +getBlockAddress() → Int?
         +<color:blue>getIdCommand() → Int?
     }
-    +class "<<<back:yellow>ReaderCommunicationException</back>>>\nSCReaderCommunicationException" as SCReaderCommunicationException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>ReaderCommunication</back>>>\nSCReaderCommunication" as SCReaderCommunication <<green>> implements StorageCardError {
     }
-    +class "SCAuthenticationFailedException" as SCAuthenticationFailedException <<green>> implements StorageCardException {
+    +class "SCAuthenticationFailed" as SCAuthenticationFailed <<green>> implements StorageCardError {
     }
-    +class "<<<back:yellow>CardCommunicationException</back>>>\nSCCardCommunicationException" as SCCardCommunicationException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>CardCommunication</back>>>\nSCCardCommunication" as SCCardCommunication <<green>> implements StorageCardError {
     }
-    +class "<<<back:yellow>InvalidCardResponseException</back>>>\nSCInvalidCardResponseException" as SCInvalidCardResponseException <<green>> implements StorageCardException {
+    +class "<<<back:yellow>InvalidCardResponse</back>>>\nSCInvalidCardResponse" as SCInvalidCardResponse <<green>> implements StorageCardError {
     }
 }
 
@@ -152,8 +152,8 @@ StorageCardTransactionManager ..> MifareClassicKeyType #C_USE : use >
 
 StorageCardApiFactory -[hidden]- StorageCardSelectionExtension
 StorageCardApiFactory -[hidden]- StorageCardTransactionManager
-ProductType -[hidden]- StorageCardException
-SCReaderCommunicationException -[hidden]down- SCAuthenticationFailedException
+ProductType -[hidden]- StorageCardError
+SCReaderCommunication -[hidden]down- SCAuthenticationFailed
 
 ' == STYLE ==
 

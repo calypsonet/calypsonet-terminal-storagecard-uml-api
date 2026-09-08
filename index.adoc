@@ -99,7 +99,7 @@ include::assets/layout/_colophon.adoc[]
 This document is the official technical specification of the **{doc-name}** standardised
 by the **{organization}** (CNA).
 It defines, in a language-agnostic way (using a notation inspired by the Kotlin language), the interfaces,
-classes, enumerations, exceptions, structural relationships and behavioural requirements that any conforming
+classes, enumerations, errors, structural relationships and behavioural requirements that any conforming
 implementation of the {doc-name} MUST satisfy.
 
 The {doc-name} extends the *Terminal Reader API* with the abstractions required to manipulate *storage cards*
@@ -165,7 +165,7 @@ This specification covers:
 * the abstract representation of a storage card and its product types,
 * the card-selection extension used to enrich a selection scenario with storage-card commands,
 * the transaction manager used to exchange APDUs with the selected card,
-* the family of storage-card-specific exceptions.
+* the family of storage-card-specific errors.
 
 The following topics are *out of scope*:
 
@@ -178,7 +178,7 @@ A software product conforms to this specification if and only if:
 
 . it implements every interface and class defined in <<sec_specification>> with the operations and semantics
   prescribed in this document,
-. it raises exceptions exclusively of the types defined in <<sec_exceptions>> for the situations described,
+. it raises errors exclusively of the types defined in <<sec_errors>> for the situations described,
 . it preserves the structural relationships described in <<sec_architecture>>.
 
 Throughout this specification, the key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**,
@@ -215,12 +215,12 @@ semantic intent rather than the syntactic form.
 
 ==== Type tables
 
-Each interface, class, enumeration and exception defined in this document is described by a table of the form:
+Each interface, class, enumeration and error defined in this document is described by a table of the form:
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Name       | The type's normalized name.
-| Kind       | The category of the type (interface, class, enumeration, exception, etc.).
+| Kind       | The category of the type (interface, class, enumeration, error, etc.).
 | Namespace  | The namespace in which the type is defined.
 | Extends    | The type extended by this type, when applicable.
 | Implements | The interface implemented by this type, when applicable.
@@ -244,7 +244,7 @@ Each operation defined in this document is described by a table of the form:
 | Description | A normative description of the operation's behaviour.
 | Parameters  | A description of each input parameter.
 | Returns     | A description of the returned value, if any.
-| Throws      | A list of exceptional conditions, each mapped to a specific exception type.
+| Throws      | A list of error conditions, each mapped to a specific error type.
 | See also    | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
 |===
 
@@ -254,8 +254,8 @@ To avoid repetition, the following rules apply to every operation table in <<sec
 not restated for each operation:
 
 * *Non-`null` arguments.* Unless explicitly stated otherwise, every input parameter MUST be non-`null`. An
-  implementation MUST raise `IllegalArgumentException` if a `null` value is supplied. This implicit `null` check is
-  not repeated in the *Throws* row, which states `None.` when no other exception can occur.
+  implementation MUST raise `IllegalArgumentError` if a `null` value is supplied. This implicit `null` check is
+  not repeated in the *Throws* row, which states `None.` when no other error can occur.
 * *Non-`null` results.* Unless the return type is marked nullable (`T?`) or the *Returns* row states otherwise, an
   operation returns a non-`null` value.
 * *Fluent composition.* Builder-style operations return the current instance so that calls can be chained.
@@ -363,7 +363,7 @@ include::uml/architecture-overview.puml[]
 | Namespace                  | Role     | Summary
 
 | `storagecard`            | Public API
-| Factory, properties, key types and exceptions.
+| Factory, properties, key types and errors.
 
 | `storagecard.card`       | Public API
 | Storage card abstraction, product type enumeration and selection extension.
@@ -438,7 +438,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
   whose stored content is genuinely all-zero.
 | Parameters  | `blockAddress` -- the address of the block to retrieve.
 | Returns     | A non-empty `ByteArray` containing the block data; zero-filled if the block has not been read.
-| Throws      | `IndexOutOfBoundsException` -- if the block address is out of range.
+| Throws      | `IndexOutOfBoundsError` -- if the block address is out of range.
 |===
 
 [[op_StorageCard_getBlocks]]
@@ -461,7 +461,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
 | Returns     | A non-empty `ByteArray` containing the data blocks in the specified range.
-| Throws      | `IndexOutOfBoundsException` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
+| Throws      | `IndexOutOfBoundsError` -- if `fromBlockAddress` is greater than `toBlockAddress`, if either is negative, or if they exceed the memory image range.
 |===
 
 [[op_StorageCard_getProductType]]
@@ -489,7 +489,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
   The system block MUST have been previously read using `prepareSt25ReadSystemBlock()`.
 | Returns     | A non-empty `ByteArray` containing the system block data, or `null` if the system block has not been read yet.
-| Throws      | `UnsupportedOperationException` -- if the current card type does not support system block access.
+| Throws      | `UnsupportedOperationError` -- if the current card type does not support system block access.
 |===
 
 [[op_StorageCard_getUID]]
@@ -587,8 +587,8 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
   `keyNumber`            -- the index of the key in the reader's key storage.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
-  `UnsupportedOperationException` -- if the current card type does not support authentication.
+| `IllegalArgumentError` -- if the block address is out of range, or if the key number is invalid. +
+  `UnsupportedOperationError` -- if the current card type does not support authentication.
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
@@ -617,8 +617,8 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
   `key`                  -- the 6-byte key data for authentication.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
-  `UnsupportedOperationException` -- if the current card type does not support authentication.
+| `IllegalArgumentError` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
+  `UnsupportedOperationError` -- if the current card type does not support authentication.
 |===
 
 [[op_StorageCardSelectionExtension_prepareReadBlock]]
@@ -633,7 +633,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
   Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
-| Throws      | `IllegalArgumentException` -- if the block address is out of range.
+| Throws      | `IllegalArgumentError` -- if the block address is out of range.
 | See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
@@ -657,7 +657,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
-| Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+| Throws      | `IllegalArgumentError` -- if one of the arguments is out of range.
 | See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
@@ -674,7 +674,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
 | Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
-| Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| Throws      | `UnsupportedOperationError` -- if the current card type is not ST25/SRT512.
 | See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
@@ -732,8 +732,8 @@ automatic verification read, and the memory image is updated only if this verifi
   `keyNumber`            -- the index of the key in the reader's key storage.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key number is invalid. +
-  `UnsupportedOperationException` -- if the current card type does not support authentication.
+| `IllegalArgumentError` -- if the block address is out of range, or if the key number is invalid. +
+  `UnsupportedOperationError` -- if the current card type does not support authentication.
 |===
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
@@ -769,8 +769,8 @@ automatic verification read, and the memory image is updated only if this verifi
   `key`                  -- the 6-byte key data for authentication.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws
-| `IllegalArgumentException` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
-  `UnsupportedOperationException` -- if the current card type does not support authentication.
+| `IllegalArgumentError` -- if the block address is out of range, or if the key is not exactly 6 bytes long. +
+  `UnsupportedOperationError` -- if the current card type does not support authentication.
 |===
 
 [[op_StorageCardTransactionManager_prepareReadBlock]]
@@ -783,7 +783,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters  | `blockAddress` -- the address of the block to be read.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | `IllegalArgumentException` -- if the block address is out of range.
+| Throws      | `IllegalArgumentError` -- if the block address is out of range.
 | See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
@@ -806,7 +806,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | `IllegalArgumentException` -- if one of the arguments is out of range.
+| Throws      | `IllegalArgumentError` -- if one of the arguments is out of range.
 | See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
@@ -823,7 +823,7 @@ automatic verification read, and the memory image is updated only if this verifi
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| Throws      | `UnsupportedOperationError` -- if the current card type is not ST25/SRT512.
 | See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
@@ -844,14 +844,14 @@ automatic verification read, and the memory image is updated only if this verifi
   data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_StorageCardException_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
+  <<op_StorageCardError_getIdCommand,`StorageCardError.getIdCommand`>> if this specific command causes an error to be raised.
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws
-| `IllegalArgumentException` -- if the length of `data` does not match the block size. +
-  `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| `IllegalArgumentError` -- if the length of `data` does not match the block size. +
+  `UnsupportedOperationError` -- if the current card type is not ST25/SRT512.
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
@@ -876,8 +876,8 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters  | `data` -- the data to be written to the system block (expected final state).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Throws
-| `IllegalArgumentException` -- if the length of `data` does not match the block size. +
-  `UnsupportedOperationException` -- if the current card type is not ST25/SRT512.
+| `IllegalArgumentError` -- if the length of `data` does not match the block size. +
+  `UnsupportedOperationError` -- if the current card type is not ST25/SRT512.
 | See also    | <<op_ProductType_getBlockSize,`ProductType.getBlockSize`>>
 |===
 
@@ -905,13 +905,13 @@ automatic verification read, and the memory image is updated only if this verifi
   For cards that do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_StorageCardException_getIdCommand,`StorageCardException.getIdCommand`>> if this specific command causes an exception to be raised.
+  <<op_StorageCardError_getIdCommand,`StorageCardError.getIdCommand`>> if this specific command causes an error to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
+| Throws      | `IllegalArgumentError` -- if the length of `data` is not a multiple of the block size.
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks]]
@@ -939,7 +939,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
 | Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
-| Throws      | `IllegalArgumentException` -- if the length of `data` is not a multiple of the block size.
+| Throws      | `IllegalArgumentError` -- if the length of `data` is not a multiple of the block size.
 | See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
@@ -1063,78 +1063,78 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
-[[sec_exceptions]]
-=== Exceptions
+[[sec_errors]]
+=== Errors
 
-[[type_SCAuthenticationFailedException]]
-==== SC Authentication Failed Exception
+[[type_SCAuthenticationFailed]]
+==== SC Authentication Failed
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCAuthenticationFailedException`
-| Kind     | Runtime exception
+| Name     | `SCAuthenticationFailed`
+| Kind     | Error
 | Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Extends  | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Implements | <<type_StorageCardError,`StorageCardError`>>
 | Since    | 1.1
 | Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
 |===
 
-[[type_SCCardCommunicationException]]
-==== SC Card Communication Exception
+[[type_SCCardCommunication]]
+==== SC Card Communication
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCCardCommunicationException`
-| Kind     | Runtime exception
+| Name     | `SCCardCommunication`
+| Kind     | Error
 | Namespace  | `storagecard`
-| Extends  | `CardCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Extends  | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Implements | <<type_StorageCardError,`StorageCardError`>>
 | Since    | 1.0
 | Purpose  | Indicates an input/output error during the dialog with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
 |===
 
-[[type_SCInvalidCardResponseException]]
-==== SC Invalid Card Response Exception
+[[type_SCInvalidCardResponse]]
+==== SC Invalid Card Response
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCInvalidCardResponseException`
-| Kind     | Runtime exception
+| Name     | `SCInvalidCardResponse`
+| Kind     | Error
 | Namespace  | `storagecard`
-| Extends  | `InvalidCardResponseException` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Extends  | `InvalidCardResponse` (<<ref_cna_tr,CNA-TR-API>>)
+| Implements | <<type_StorageCardError,`StorageCardError`>>
 | Since    | 1.0
 | Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
 |===
 
-[[type_SCReaderCommunicationException]]
-==== SC Reader Communication Exception
+[[type_SCReaderCommunication]]
+==== SC Reader Communication
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCReaderCommunicationException`
-| Kind     | Runtime exception
+| Name     | `SCReaderCommunication`
+| Kind     | Error
 | Namespace  | `storagecard`
-| Extends  | `ReaderCommunicationException` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardException,`StorageCardException`>>
+| Extends  | `ReaderCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Implements | <<type_StorageCardError,`StorageCardError`>>
 | Since    | 1.0
 | Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
 |===
 
-[[type_StorageCardException]]
-==== Storage Card Exception
+[[type_StorageCardError]]
+==== Storage Card
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCardException`
-| Kind     | Interface (marker for exceptions)
+| Name     | `StorageCardError`
+| Kind     | Error
 | Namespace  | `storagecard`
 | Since    | 1.0
-| Purpose  | Interface implemented by every exception raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
+| Purpose  | Interface implemented by every error raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
 |===
 
-[[op_StorageCardException_getBlockAddress]]
+[[op_StorageCardError_getBlockAddress]]
 ===== Get Block Address
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
@@ -1146,7 +1146,7 @@ keys, allowing fine-grained access control.
 | Throws      | None.
 |===
 
-[[op_StorageCardException_getIdCommand]]
+[[op_StorageCardError_getIdCommand]]
 ===== Get ID Command
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
@@ -1154,8 +1154,8 @@ keys, allowing fine-grained access control.
 | Signature   | `getIdCommand() -> Int?`
 | Since       | 2.0
 | Description
-| Returns the application-supplied identifier of the command that caused the exception, when the failing command
+| Returns the application-supplied identifier of the command that caused the error, when the failing command
   was prepared with an `idCommand` overload.
-| Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the exception is not attached to a specific command.
+| Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the error is not attached to a specific command.
 | Throws      | None.
 |===
