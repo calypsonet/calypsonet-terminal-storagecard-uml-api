@@ -244,7 +244,7 @@ Each operation defined in this document is described by a table of the form:
 | Description | A normative description of the operation's behaviour.
 | Parameters  | A description of each input parameter.
 | Returns     | A description of the returned value, if any.
-| Pre-conditions | The conditions the caller MUST satisfy before invoking the operation, each prefixed by its nature. Present only when applicable.
+| Pre-conditions | The conditions the caller MUST satisfy before invoking the operation, each prefixed by its nature.
 | Errors      | A list of error conditions a correct caller must handle, each mapped to a specific error type.
 | See also    | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
 |===
@@ -483,6 +483,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Since       | 1.0
 | Description | Returns the product type of the storage card.
 | Returns     | A <<type_ProductType,`ProductType`>>.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -512,6 +513,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Since       | 1.0
 | Description | Returns the unique identifier (UID) of the storage card.
 | Returns     | A non-empty `ByteArray` containing the UID.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1037,6 +1039,7 @@ keys, allowing fine-grained access control.
 | Since       | 1.0
 | Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
 | Returns     | The number of blocks.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1049,6 +1052,7 @@ keys, allowing fine-grained access control.
 | Since       | 1.0
 | Description | Returns the size of each block in bytes.
 | Returns     | The block size.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1063,6 +1067,7 @@ keys, allowing fine-grained access control.
 | Indicates whether the product type requires authentication before read/write operations. When this operation
   returns `true`, the application MUST authenticate the targeted sector before issuing read or write commands.
 | Returns     | `true` if the card requires authentication, `false` otherwise.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1078,6 +1083,7 @@ keys, allowing fine-grained access control.
   accessible at address 255. When a system block is available, it MAY be read using the appropriate `prepare*`
   operations during selection or transaction processing.
 | Returns     | `true` if the product type exposes a system block, `false` otherwise.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1093,6 +1099,7 @@ keys, allowing fine-grained access control.
   returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
   `false`, a verification read is performed to confirm the write.
 | Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1176,6 +1183,7 @@ keys, allowing fine-grained access control.
 | Since       | 1.0
 | Description | Returns the address of the block involved in the error, when applicable.
 | Returns     | The block address that caused the error, or `null` if not relevant.
+| Pre-conditions | None.
 | Errors      | None.
 |===
 
@@ -1190,5 +1198,6 @@ keys, allowing fine-grained access control.
 | Returns the application-supplied identifier of the command that caused the error, when the failing command
   was prepared with an `idCommand` overload.
 | Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the error is not attached to a specific command.
+| Pre-conditions | None.
 | Errors      | None.
 |===
