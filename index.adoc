@@ -239,14 +239,14 @@ Each operation defined in this document is described by a table of the form:
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | The operation's signature.
-| Since       | The version of the API in which the operation was introduced.
-| Description | A normative description of the operation's behaviour.
-| Parameters  | A description of each input parameter.
-| Returns     | A description of the returned value, if any.
+| Signature      | The operation's signature.
+| Since          | The version of the API in which the operation was introduced.
+| Description    | A normative description of the operation's behaviour.
+| Parameters     | A description of each input parameter.
+| Returns        | A description of the returned value, if any.
 | Pre-conditions | The conditions the caller MUST satisfy before invoking the operation, each prefixed by its nature.
-| Errors      | A list of error conditions a correct caller must handle, each mapped to a specific error type.
-| See also    | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
+| Errors         | A list of error conditions a correct caller must handle, each mapped to a specific error type.
+| See also       | Cross-references to related operations or types, each a hyperlink to the corresponding table. Present only when applicable.
 |===
 
 ==== Operation contracts
@@ -436,17 +436,17 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlock(blockAddress: Int) -> ByteArray`
-| Since       | 1.0
+| Signature      | `getBlock(blockAddress: Int) -> ByteArray`
+| Since          | 1.0
 | Description
 | Returns the data block at the specified block address. If the block has not been previously read, the returned
   array is filled with zeros. A caller cannot distinguish an unread block (returned as zeros) from a block
   whose stored content is genuinely all-zero.
-| Parameters  | `blockAddress` -- the address of the block to retrieve.
-| Returns     | A non-empty `ByteArray` containing the block data; zero-filled if the block has not been read.
+| Parameters     | `blockAddress` -- the address of the block to retrieve.
+| Returns        | A non-empty `ByteArray` containing the block data; zero-filled if the block has not been read.
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Range* -- the block address is within range.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCard_getBlocks]]
@@ -459,7 +459,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
 `) -> ByteArray`
-| Since       | 1.0
+| Since          | 1.0
 | Description
 | Returns the data blocks within the specified range from the memory image of the storage card. The returned
   array contains the blocks in order, from `fromBlockAddress` to `toBlockAddress` (both inclusive). Blocks that
@@ -468,10 +468,10 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | A non-empty `ByteArray` containing the data blocks in the specified range.
+| Returns        | A non-empty `ByteArray` containing the data blocks in the specified range.
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Range* -- `fromBlockAddress` is not greater than `toBlockAddress`, neither is negative, and both stay within the memory image range.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCard_getProductType]]
@@ -479,12 +479,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getProductType() -> ProductType`
-| Since       | 1.0
-| Description | Returns the product type of the storage card.
-| Returns     | A <<type_ProductType,`ProductType`>>.
+| Signature      | `getProductType() -> ProductType`
+| Since          | 1.0
+| Description    | Returns the product type of the storage card.
+| Returns        | A <<type_ProductType,`ProductType`>>.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCard_getSystemBlock]]
@@ -492,16 +492,16 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getSystemBlock() -> ByteArray?`
-| Since       | 1.0
+| Signature      | `getSystemBlock() -> ByteArray?`
+| Since          | 1.0
 | Description
 | Returns the system block when it has been read. The system block contains card-specific metadata and
   configuration data. This feature is specific to ST25/SRT512 cards.
 
   The system block MUST have been previously read using `prepareSt25ReadSystemBlock()`.
-| Returns     | A non-empty `ByteArray` containing the system block data, or `null` if the system block has not been read yet.
+| Returns        | A non-empty `ByteArray` containing the system block data, or `null` if the system block has not been read yet.
 | Pre-conditions | *Capability* -- the current card type supports system block access.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCard_getUID]]
@@ -509,12 +509,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getUID() -> ByteArray`
-| Since       | 1.0
-| Description | Returns the unique identifier (UID) of the storage card.
-| Returns     | A non-empty `ByteArray` containing the UID.
+| Signature      | `getUID() -> ByteArray`
+| Since          | 1.0
+| Description    | Returns the unique identifier (UID) of the storage card.
+| Returns        | A non-empty `ByteArray` containing the UID.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[type_StorageCardApiFactory]]
@@ -538,12 +538,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `createStorageCardSelectionExtension(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}productType: ProductType` +
 `) -> StorageCardSelectionExtension`
-| Since       | 1.0
-| Description | Returns a new <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> dedicated to the targeted product type.
-| Parameters  | `productType` (<<type_ProductType,`ProductType`>>) -- the targeted storage card product type.
-| Returns     | A <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>.
+| Since          | 1.0
+| Description    | Returns a new <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>> dedicated to the targeted product type.
+| Parameters     | `productType` (<<type_ProductType,`ProductType`>>) -- the targeted storage card product type.
+| Returns        | A <<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>.
 | Pre-conditions | *Argument* -- every parameter is non-`null`.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardApiFactory_createStorageCardTransactionManager]]
@@ -556,14 +556,14 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}reader: CardReader,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}card: StorageCard` +
 `) -> StorageCardTransactionManager`
-| Since       | 1.0
-| Description | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
+| Since          | 1.0
+| Description    | Returns a new <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>> bound to the supplied reader and to the initial card data provided by the selection process.
 | Parameters
 | `reader` (`CardReader` (<<ref_cna_tr,CNA-TR-API>>)) -- the reader through which the card is reached. +
   `card` (<<type_StorageCard,`StorageCard`>>)   -- the initial card data provided by the selection process.
-| Returns     | A <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
+| Returns        | A <<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>.
 | Pre-conditions | *Argument* -- every parameter is non-`null`.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[type_StorageCardSelectionExtension]]
@@ -590,7 +590,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
 `) -> StorageCardSelectionExtension`
-| Since       | 1.1
+| Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
   storage. This avoids transmitting the key value over the communication channel. This operation is specific to
@@ -600,11 +600,11 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key number is valid. +
   *Capability* -- the current card type supports authentication.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
@@ -618,7 +618,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
 `) -> StorageCardSelectionExtension`
-| Since       | 1.1
+| Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication applies to the entire sector containing the specified block address.
 
@@ -631,11 +631,11 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardSelectionExtension_prepareReadBlock]]
@@ -643,17 +643,17 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlock(blockAddress: Int) -> StorageCardSelectionExtension`
-| Since       | 1.0
+| Signature      | `prepareReadBlock(blockAddress: Int) -> StorageCardSelectionExtension`
+| Since          | 1.0
 | Description
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
   Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
-| Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Parameters     | `blockAddress` -- the address of the block to be read.
+| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardSelectionExtension_prepareReadBlocks]]
@@ -666,7 +666,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
 `) -> StorageCardSelectionExtension`
-| Since       | 1.0
+| Since          | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
   <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>> - 1. Once processed, the result is available in
@@ -675,11 +675,11 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- every argument is within range.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardSelectionExtension_prepareSt25ReadSystemBlock]]
@@ -687,17 +687,17 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
-| Since       | 1.2
+| Signature      | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
+| Since          | 1.2
 | Description
 | Prepares the reading of the system block of an ST25/SRT512 storage card. This operation is specific to the ST25
   and SRT512 card types, which expose a system block at address 255 carrying card-specific metadata and
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
-| Returns     | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
 | Pre-conditions | *Capability* -- the current card type is ST25/SRT512.
-| Errors      | None.
-| See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
+| Errors         | None.
+| See also       | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
 [[type_StorageCardTransactionManager]]
@@ -737,7 +737,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
 `) -> StorageCardTransactionManager`
-| Since       | 1.1
+| Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
   storage. This operation is specific to MIFARE Classic cards and MUST be prepared before reading from or writing
@@ -752,11 +752,11 @@ automatic verification read, and the memory image is updated only if this verifi
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key number is valid. +
   *Capability* -- the current card type supports authentication.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
@@ -770,7 +770,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
 `) -> StorageCardTransactionManager`
-| Since       | 1.1
+| Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific to
   MIFARE Classic cards and MUST be prepared before reading from or writing to protected sectors. The
@@ -790,11 +790,11 @@ automatic verification read, and the memory image is updated only if this verifi
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardTransactionManager_prepareReadBlock]]
@@ -802,15 +802,15 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareReadBlock(blockAddress: Int) -> StorageCardTransactionManager`
-| Since       | 1.0
-| Description | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
-| Parameters  | `blockAddress` -- the address of the block to be read.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Signature      | `prepareReadBlock(blockAddress: Int) -> StorageCardTransactionManager`
+| Since          | 1.0
+| Description    | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
+| Parameters     | `blockAddress` -- the address of the block to be read.
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareReadBlocks]]
@@ -823,7 +823,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
 `) -> StorageCardTransactionManager`
-| Since       | 1.0
+| Since          | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
   <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>> - 1. Once processed, the result is available in
@@ -831,11 +831,11 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- every argument is within range.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25ReadSystemBlock]]
@@ -843,17 +843,17 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
-| Since       | 1.1
+| Signature      | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
+| Since          | 1.1
 | Description
 | Prepares the reading of the system block of an ST25/SRT512 storage card. This operation is specific to the
   ST25 and SRT512 card types, which expose a system block at address 255 carrying card-specific metadata and
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Capability* -- the current card type is ST25/SRT512.
-| Errors      | None.
-| See also    | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
+| Errors         | None.
+| See also       | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
@@ -866,7 +866,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
 `) -> StorageCardTransactionManager`
-| Since       | 2.0
+| Since          | 2.0
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card, and attaches an
   application-supplied identifier to the prepared command. The data length MUST match the block size. The provided
@@ -877,11 +877,11 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
@@ -889,8 +889,8 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `prepareSt25WriteSystemBlock(data: ByteArray) -> StorageCardTransactionManager`
-| Since       | 1.1
+| Signature      | `prepareSt25WriteSystemBlock(data: ByteArray) -> StorageCardTransactionManager`
+| Since          | 1.1
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card. This operation is specific to
   the ST25 and SRT512 card types, which expose a system block at address 255 carrying card-specific metadata and
@@ -903,13 +903,13 @@ automatic verification read, and the memory image is updated only if this verifi
 
   Because ST25/SRT512 cards do not provide reliable status codes, an automatic verification read is performed and
   the transaction fails if the physical state does not match the provided data.
-| Parameters  | `data` -- the data to be written to the system block (expected final state).
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Parameters     | `data` -- the data to be written to the system block (expected final state).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockSize,`ProductType.getBlockSize`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockSize,`ProductType.getBlockSize`>>
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks_withId]]
@@ -923,7 +923,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
 `) -> StorageCardTransactionManager`
-| Since       | 2.0
+| Since          | 2.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset, and attaches an
   application-supplied identifier to the prepared command. The number of blocks written is determined by the
@@ -941,10 +941,10 @@ automatic verification read, and the memory image is updated only if this verifi
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardTransactionManager_prepareWriteBlocks]]
@@ -957,7 +957,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
 `) -> StorageCardTransactionManager`
-| Since       | 1.0
+| Since          | 1.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset. The number of blocks
   written is determined by the length of `data` divided by the block size of the card.
@@ -971,11 +971,11 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
-| Returns     | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
-| Errors      | None.
-| See also    | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
+| Errors         | None.
+| See also       | <<op_ProductType_getBlockCount,`ProductType.getBlockCount`>>
 |===
 
 === Enumerations
@@ -1035,12 +1035,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockCount() -> Int`
-| Since       | 1.0
-| Description | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
-| Returns     | The number of blocks.
+| Signature      | `getBlockCount() -> Int`
+| Since          | 1.0
+| Description    | Returns the number of blocks in the main memory area of the card. Additional *system* blocks MAY exist and are not included in this count.
+| Returns        | The number of blocks.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_ProductType_getBlockSize]]
@@ -1048,12 +1048,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockSize() -> Int`
-| Since       | 1.0
-| Description | Returns the size of each block in bytes.
-| Returns     | The block size.
+| Signature      | `getBlockSize() -> Int`
+| Since          | 1.0
+| Description    | Returns the size of each block in bytes.
+| Returns        | The block size.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_ProductType_hasAuthentication]]
@@ -1061,14 +1061,14 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasAuthentication() -> Boolean`
-| Since       | 1.1
+| Signature      | `hasAuthentication() -> Boolean`
+| Since          | 1.1
 | Description
 | Indicates whether the product type requires authentication before read/write operations. When this operation
   returns `true`, the application MUST authenticate the targeted sector before issuing read or write commands.
-| Returns     | `true` if the card requires authentication, `false` otherwise.
+| Returns        | `true` if the card requires authentication, `false` otherwise.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_ProductType_hasSystemBlock]]
@@ -1076,15 +1076,15 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasSystemBlock() -> Boolean`
-| Since       | 1.0
+| Signature      | `hasSystemBlock() -> Boolean`
+| Since          | 1.0
 | Description
 | Indicates whether the product type exposes an accessible system block. For ST25/SRT512 cards, the system block is
   accessible at address 255. When a system block is available, it MAY be read using the appropriate `prepare*`
   operations during selection or transaction processing.
-| Returns     | `true` if the product type exposes a system block, `false` otherwise.
+| Returns        | `true` if the product type exposes a system block, `false` otherwise.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_ProductType_hasWriteAcknowledgment]]
@@ -1092,15 +1092,15 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `hasWriteAcknowledgment() -> Boolean`
-| Since       | 1.0
+| Signature      | `hasWriteAcknowledgment() -> Boolean`
+| Since          | 1.0
 | Description
 | Indicates whether the product type provides a reliable acknowledgment after write operations. When this operation
   returns `true`, a successful write response guarantees that the data has been correctly stored. When it returns
   `false`, a verification read is performed to confirm the write.
-| Returns     | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
+| Returns        | `true` if the card provides a reliable write acknowledgment, `false` otherwise.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[sec_errors]]
@@ -1179,12 +1179,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getBlockAddress() -> Int?`
-| Since       | 1.0
-| Description | Returns the address of the block involved in the error, when applicable.
-| Returns     | The block address that caused the error, or `null` if not relevant.
+| Signature      | `getBlockAddress() -> Int?`
+| Since          | 1.0
+| Description    | Returns the address of the block involved in the error, when applicable.
+| Returns        | The block address that caused the error, or `null` if not relevant.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
 
 [[op_StorageCardError_getIdCommand]]
@@ -1192,12 +1192,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature   | `getIdCommand() -> Int?`
-| Since       | 2.0
+| Signature      | `getIdCommand() -> Int?`
+| Since          | 2.0
 | Description
 | Returns the application-supplied identifier of the command that caused the error, when the failing command
   was prepared with an `idCommand` overload.
-| Returns     | The command identifier, or `null` if no identifier was supplied for the failing command or if the error is not attached to a specific command.
+| Returns        | The command identifier, or `null` if no identifier was supplied for the failing command or if the error is not attached to a specific command.
 | Pre-conditions | None.
-| Errors      | None.
+| Errors         | None.
 |===
