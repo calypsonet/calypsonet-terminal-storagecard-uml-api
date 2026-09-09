@@ -62,17 +62,17 @@ legend top
 end legend
 
 package "terminal.storagecard" as root {
-    +class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
+    class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
         +{static} **final** VERSION: String
     }
-    +interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
+    interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
         +createStorageCardSelectionExtension(productType: ProductType) → StorageCardSelectionExtension
 
         +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard) → StorageCardTransactionManager
     }
 
     package "card" as card {
-        +interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
+        interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
             +prepareReadBlock(blockAddress: Int) → StorageCardSelectionExtension
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardSelectionExtension
             .. **ST25 / SRT512** ..
@@ -81,7 +81,7 @@ package "terminal.storagecard" as root {
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → StorageCardSelectionExtension
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → StorageCardSelectionExtension
         }
-        +interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
+        interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +getProductType() → ProductType
             +getUID() → ByteArray
             +getBlock(blockAddress: Int) → ByteArray
@@ -89,7 +89,7 @@ package "terminal.storagecard" as root {
             .. **ST25 / SRT512** ..
             +getSystemBlock() → ByteArray?
         }
-        +enum "ProductType" as ProductType <<green>> {
+        enum "ProductType" as ProductType <<green>> {
             MIFARE_ULTRALIGHT
             MIFARE_CLASSIC_1K
             MIFARE_CLASSIC_4K
@@ -103,13 +103,13 @@ package "terminal.storagecard" as root {
         }
     }
 
-    +enum "MifareClassicKeyType" as MifareClassicKeyType <<green>> {
+    enum "MifareClassicKeyType" as MifareClassicKeyType <<green>> {
         KEY_A
         KEY_B
     }
 
     package "transaction" as transaction {
-        +interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
+        interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
             +prepareReadBlock(blockAddress: Int) → StorageCardTransactionManager
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardTransactionManager
@@ -125,7 +125,7 @@ package "terminal.storagecard" as root {
         }
     }
 
-    +exception "SCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<purple>> <<error>> {
+    exception "SCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<green>> <<error>> {
         +val message: String
         +val cause: Any?
         +val blockAddress: Int?
