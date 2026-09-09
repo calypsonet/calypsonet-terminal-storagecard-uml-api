@@ -400,11 +400,11 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCardApiProperties`
-| Kind     | Final class
+| Name       | `StorageCardApiProperties`
+| Kind       | Final class
 | Namespace  | `storagecard`
-| Since    | 1.0
-| Purpose  | Exposes the immutable properties of the {doc-name}.
+| Since      | 1.0
+| Purpose    | Exposes the immutable properties of the {doc-name}.
 |===
 
 ===== Constants
@@ -423,12 +423,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCard`
-| Kind     | Interface
+| Name       | `StorageCard`
+| Kind       | Interface
 | Namespace  | `storagecard.card`
-| Extends  | `SmartCard` (<<ref_cna_tr,CNA-TR-API>>)
-| Since    | 1.0
-| Purpose  | Represents a storage card and exposes operations to retrieve its memory image and metadata.
+| Extends    | `SmartCard` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Represents a storage card and exposes operations to retrieve its memory image and metadata.
 |===
 
 [[op_StorageCard_getBlock]]
@@ -522,11 +522,11 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCardApiFactory`
-| Kind     | Interface
+| Name       | `StorageCardApiFactory`
+| Kind       | Interface
 | Namespace  | `storagecard`
-| Since    | 1.0
-| Purpose  | Factory used by the application to obtain instances of the public types provided by the API.
+| Since      | 1.0
+| Purpose    | Factory used by the application to obtain instances of the public types provided by the API.
 |===
 
 [[op_StorageCardApiFactory_createStorageCardSelectionExtension]]
@@ -571,12 +571,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCardSelectionExtension`
-| Kind     | Interface
+| Name       | `StorageCardSelectionExtension`
+| Kind       | Interface
 | Namespace  | `storagecard.card`
-| Extends  | `CardSelectionExtension` (<<ref_cna_tr,CNA-TR-API>>)
-| Since    | 1.0
-| Purpose  | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardSelectionExtension,`StorageCardApiFactory.createStorageCardSelectionExtension`>>.
+| Extends    | `CardSelectionExtension` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardSelectionExtension,`StorageCardApiFactory.createStorageCardSelectionExtension`>>.
 |===
 
 [[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
@@ -705,12 +705,12 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `StorageCardTransactionManager`
-| Kind     | Interface
+| Name       | `StorageCardTransactionManager`
+| Kind       | Interface
 | Namespace  | `storagecard.transaction`
-| Extends  | `CardTransactionManager<StorageCardTransactionManager>` (<<ref_cna_tr,CNA-TR-API>>)
-| Since    | 1.0
-| Purpose  | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardTransactionManager,`StorageCardApiFactory.createStorageCardTransactionManager`>>.
+| Extends    | `CardTransactionManager<StorageCardTransactionManager>` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Manages APDU exchanges with a storage card. It allows the application to prepare read and write operations, batch them into a single transaction, and control the underlying communication channel. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardTransactionManager,`StorageCardApiFactory.createStorageCardTransactionManager`>>.
 |===
 
 The inherited `processCommands()` operation sends every APDU corresponding to a prepared command, in the order in
@@ -873,7 +873,7 @@ automatic verification read, and the memory image is updated only if this verifi
   data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_StorageCardError_getIdCommand,`StorageCardError.getIdCommand`>> if this specific command causes an error to be raised.
+  the `idCommand` property of the error, if this specific command causes one to be raised.
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
@@ -936,7 +936,7 @@ automatic verification read, and the memory image is updated only if this verifi
   For cards that do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  <<op_StorageCardError_getIdCommand,`StorageCardError.getIdCommand`>> if this specific command causes an error to be raised.
+  the `idCommand` property of the error, if this specific command causes one to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
@@ -985,11 +985,11 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `MifareClassicKeyType`
-| Kind     | Enumeration
+| Name       | `MifareClassicKeyType`
+| Kind       | Enumeration
 | Namespace  | `storagecard`
-| Since    | 1.1
-| Purpose  | Enumerates the MIFARE Classic key types used for authentication.
+| Since      | 1.1
+| Purpose    | Enumerates the MIFARE Classic key types used for authentication.
 |===
 
 MIFARE Classic cards support two types of keys per sector. Each sector can be protected independently by these
@@ -1013,11 +1013,11 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `ProductType`
-| Kind     | Enumeration
+| Name       | `ProductType`
+| Kind       | Enumeration
 | Namespace  | `storagecard.card`
-| Since    | 1.0
-| Purpose  | Enumerates the storage card products supported by the API and exposes their structural properties.
+| Since      | 1.0
+| Purpose    | Enumerates the storage card products supported by the API and exposes their structural properties.
 |===
 
 [cols="^.^2,^.^1,.^6", options="header"]
@@ -1106,18 +1106,27 @@ keys, allowing fine-grained access control.
 [[sec_errors]]
 === Errors
 
+Every error defined below carries two properties: `message` (`String`), which describes the condition, and
+`cause` (`Any?`), the underlying error that triggered it, `null` when there is none. They are not
+restated for each error.
+
+The storage-card errors -- <<type_SCReaderCommunication,`SCReaderCommunication`>>,
+<<type_SCCardCommunication,`SCCardCommunication`>>, <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>
+and <<type_SCAuthenticationFailed,`SCAuthenticationFailed`>> -- additionally carry `blockAddress` (`Int?`),
+the block address involved in the error, and `idCommand` (`Int?`), the application-supplied identifier of
+the failing command. Both are `null` when the information is not available.
+
 [[type_SCAuthenticationFailed]]
 ==== SC Authentication Failed
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCAuthenticationFailed`
-| Kind     | Error
+| Name       | `SCAuthenticationFailed`
+| Kind       | Error
 | Namespace  | `storagecard`
-| Extends  | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardError,`StorageCardError`>>
-| Since    | 1.1
-| Purpose  | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
+| Extends    | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.1
+| Purpose    | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
 |===
 
 [[type_SCCardCommunication]]
@@ -1125,13 +1134,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCCardCommunication`
-| Kind     | Error
+| Name       | `SCCardCommunication`
+| Kind       | Error
 | Namespace  | `storagecard`
-| Extends  | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardError,`StorageCardError`>>
-| Since    | 1.0
-| Purpose  | Indicates an input/output error during the dialog with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
+| Extends    | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Indicates an input/output error during the dialog with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
 |===
 
 [[type_SCInvalidCardResponse]]
@@ -1139,13 +1147,12 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCInvalidCardResponse`
-| Kind     | Error
+| Name       | `SCInvalidCardResponse`
+| Kind       | Error
 | Namespace  | `storagecard`
-| Extends  | `InvalidCardResponse` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardError,`StorageCardError`>>
-| Since    | 1.0
-| Purpose  | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
+| Extends    | `InvalidCardResponse` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
 |===
 
 [[type_SCReaderCommunication]]
@@ -1153,51 +1160,10 @@ keys, allowing fine-grained access control.
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name     | `SCReaderCommunication`
-| Kind     | Error
+| Name       | `SCReaderCommunication`
+| Kind       | Error
 | Namespace  | `storagecard`
-| Extends  | `ReaderCommunication` (<<ref_cna_tr,CNA-TR-API>>)
-| Implements | <<type_StorageCardError,`StorageCardError`>>
-| Since    | 1.0
-| Purpose  | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
-|===
-
-[[type_StorageCardError]]
-==== Storage Card
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Name     | `StorageCardError`
-| Kind     | Error
-| Namespace  | `storagecard`
-| Since    | 1.0
-| Purpose  | Interface implemented by every error raised during the execution of a command on a <<type_StorageCard,`StorageCard`>>. Provides additional context about the block address involved in the error.
-|===
-
-[[op_StorageCardError_getBlockAddress]]
-===== Get Block Address
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature      | `getBlockAddress() -> Int?`
-| Since          | 1.0
-| Description    | Returns the address of the block involved in the error, when applicable.
-| Returns        | The block address that caused the error, or `null` if not relevant.
-| Pre-conditions | None.
-| Errors         | None.
-|===
-
-[[op_StorageCardError_getIdCommand]]
-===== Get ID Command
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature      | `getIdCommand() -> Int?`
-| Since          | 2.0
-| Description
-| Returns the application-supplied identifier of the command that caused the error, when the failing command
-  was prepared with an `idCommand` overload.
-| Returns        | The command identifier, or `null` if no identifier was supplied for the failing command or if the error is not attached to a specific command.
-| Pre-conditions | None.
-| Errors         | None.
+| Extends    | `ReaderCommunication` (<<ref_cna_tr,CNA-TR-API>>)
+| Since      | 1.0
+| Purpose    | Indicates a low-level reader communication failure (lost connection, hardware malfunction, driver issue) preventing the command from being transmitted to the storage card.
 |===
