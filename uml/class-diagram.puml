@@ -16,6 +16,14 @@ end title
 !define C_GREY6 BDC3C7
 !define C_LINK 3498DB
 !define C_USE 27AE60
+!define C_THROW 2C3E50
+
+' -- Styles that don't work with new version of plantuml --
+skinparam stereotypeABorderColor #A9DCDF
+skinparam stereotypeIBorderColor #B4A7E5
+skinparam stereotypeCBorderColor #ADD1B2
+skinparam stereotypeEBorderColor #EB937F
+' -- END --
 
 skinparam ClassBorderThickness 2
 skinparam ArrowThickness 2
@@ -62,8 +70,8 @@ legend top
 end legend
 
 package "terminal.storagecard" as root {
-    class "**final** StorageCardApiProperties" as ApiProperties <<green>> {
-        +{static} **final** VERSION: String
+    class "StorageCardApiProperties" as ApiProperties <<green>> <<constants>> {
+        +const VERSION: String = "2.0"
     }
     interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
         +createStorageCardSelectionExtension(productType: ProductType) → StorageCardSelectionExtension
