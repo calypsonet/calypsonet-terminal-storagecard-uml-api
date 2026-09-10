@@ -70,7 +70,7 @@ legend top
 end legend
 
 package "terminal.storagecard" as root {
-    class "StorageCardApiProperties" as ApiProperties <<green>> <<constants>> {
+    class "StorageCardApiProperties" as ApiProperties <<constants>> <<green>> {
         +const VERSION: String = "2.0"
     }
     interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
@@ -133,7 +133,7 @@ package "terminal.storagecard" as root {
         }
     }
 
-    exception "SCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<green>> <<error>> {
+    exception "SCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<error>> <<green>> {
         +val message: String
         +val cause: Any?
         +val blockAddress: Int?
