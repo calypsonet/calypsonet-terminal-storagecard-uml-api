@@ -81,13 +81,13 @@ package "terminal.storagecard" as root {
 
     package "card" as card {
         interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
-            +prepareReadBlock(blockAddress: Int) → StorageCardSelectionExtension
-            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardSelectionExtension
+            +prepareReadBlock(blockAddress: Int) → Self
+            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
             .. **ST25 / SRT512** ..
-            +prepareSt25ReadSystemBlock() → StorageCardSelectionExtension
+            +prepareSt25ReadSystemBlock() → Self
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → StorageCardSelectionExtension
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → StorageCardSelectionExtension
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
         interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
             +getProductType() → ProductType
@@ -119,17 +119,17 @@ package "terminal.storagecard" as root {
     package "transaction" as transaction {
         interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
-            +prepareReadBlock(blockAddress: Int) → StorageCardTransactionManager
-            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → StorageCardTransactionManager
-            +prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray) → StorageCardTransactionManager
-            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, idCommand: Int) → StorageCardTransactionManager
+            +prepareReadBlock(blockAddress: Int) → Self
+            +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
+            +prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray) → Self
+            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, idCommand: Int) → Self
             .. **ST25 / SRT512** ..
-            +prepareSt25ReadSystemBlock() → StorageCardTransactionManager
-            +prepareSt25WriteSystemBlock(data: ByteArray) → StorageCardTransactionManager
-            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, idCommand: Int) → StorageCardTransactionManager
+            +prepareSt25ReadSystemBlock() → Self
+            +prepareSt25WriteSystemBlock(data: ByteArray) → Self
+            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, idCommand: Int) → Self
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → StorageCardTransactionManager
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → StorageCardTransactionManager
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
+            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
     }
 

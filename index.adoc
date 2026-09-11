@@ -206,14 +206,15 @@ semantic intent rather than the syntactic form.
 
 [cols="^.^1,.^3,.^3", options="header"]
 |===
-| Type        | Description                                                | Typical bindings
-| `String`    | Sequence of characters, UTF-8 encoded by default.          | `String`, `string`, `str`.
-| `Boolean`   | Two-state truth value.                                     | `boolean`, `bool`.
-| `Int`       | Signed 32-bit integer.                                     | `int`, `Int32`, `i32`.
-| `ByteArray` | Ordered sequence of octets.                                | `byte[]`, `[u8]`, `bytes`.
-| `T?`        | Nullable value: either a `T` value or `null`.              | `Integer` (boxed), `Optional<T>`, `T?`, `Option<T>`.
-| `null`      | Absence of value, the alternative held by a nullable type. | `null`, `nil`, `None`.
-| `Unit`      | Indicates that an operation returns no value.              | `void`, `Unit`, `()`.
+| Type        | Description                                                                         | Typical bindings
+| `String`    | Sequence of characters, UTF-8 encoded by default.                                   | `String`, `string`, `str`.
+| `Boolean`   | Two-state truth value.                                                              | `boolean`, `bool`.
+| `Int`       | Signed 32-bit integer.                                                              | `int`, `Int32`, `i32`.
+| `ByteArray` | Ordered sequence of octets.                                                         | `byte[]`, `[u8]`, `bytes`.
+| `T?`        | Nullable value: either a `T` value or `null`.                                       | `Integer` (boxed), `Optional<T>`, `T?`, `Option<T>`.
+| `null`      | Absence of value, the alternative held by a nullable type.                          | `null`, `nil`, `None`.
+| `Self`      | Own type of the receiver: a fluent operation returns the instance it was called on. | `Self`, `T` (recursive generic).
+| `Unit`      | Indicates that an operation returns no value.                                       | `void`, `Unit`, `()`.
 |===
 
 ==== Type tables
@@ -591,7 +592,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
-`) -> StorageCardSelectionExtension`
+`) -> Self`
 | Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
@@ -602,7 +603,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key number is valid. +
   *Capability* -- the current card type supports authentication.
@@ -619,7 +620,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
-`) -> StorageCardSelectionExtension`
+`) -> Self`
 | Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. The authentication applies to the entire sector containing the specified block address.
@@ -633,7 +634,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
@@ -645,13 +646,13 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature      | `prepareReadBlock(blockAddress: Int) -> StorageCardSelectionExtension`
+| Signature      | `prepareReadBlock(blockAddress: Int) -> Self`
 | Since          | 1.0
 | Description
 | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`.
   Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters     | `blockAddress` -- the address of the block to be read.
-| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range.
 | Errors         | None.
@@ -667,7 +668,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | `prepareReadBlocks(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
-`) -> StorageCardSelectionExtension`
+`) -> Self`
 | Since          | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
@@ -677,7 +678,7 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- every argument is within range.
 | Errors         | None.
@@ -689,14 +690,14 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature      | `prepareSt25ReadSystemBlock() -> StorageCardSelectionExtension`
+| Signature      | `prepareSt25ReadSystemBlock() -> Self`
 | Since          | 1.2
 | Description
 | Prepares the reading of the system block of an ST25/SRT512 storage card. This operation is specific to the ST25
   and SRT512 card types, which expose a system block at address 255 carrying card-specific metadata and
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
-| Returns        | The current instance (<<type_StorageCardSelectionExtension,`StorageCardSelectionExtension`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Capability* -- the current card type is ST25/SRT512.
 | Errors         | None.
 | See also       | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
@@ -738,7 +739,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using a key referenced by its storage index in the reader's key
@@ -754,7 +755,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `keyNumber`            -- the index of the key in the reader's key storage.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key number is valid. +
   *Capability* -- the current card type supports authentication.
@@ -771,7 +772,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 1.1
 | Description
 | Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific to
@@ -792,7 +793,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `blockAddress`         -- the address of any block within the sector to authenticate. +
   `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
   `key`                  -- the 6-byte key data for authentication.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range and the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
@@ -804,11 +805,11 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature      | `prepareReadBlock(blockAddress: Int) -> StorageCardTransactionManager`
+| Signature      | `prepareReadBlock(blockAddress: Int) -> Self`
 | Since          | 1.0
 | Description    | Prepares the reading of a specific block. Block addresses start at `0`; the maximum value is `getBlockCount() - 1`. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>>.
 | Parameters     | `blockAddress` -- the address of the block to be read.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the block address is within range.
 | Errors         | None.
@@ -824,7 +825,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `prepareReadBlocks(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}toBlockAddress: Int` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 1.0
 | Description
 | Prepares the reading of a range of blocks. Block addresses start at `0`; the maximum value is
@@ -833,7 +834,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- every argument is within range.
 | Errors         | None.
@@ -845,14 +846,14 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature      | `prepareSt25ReadSystemBlock() -> StorageCardTransactionManager`
+| Signature      | `prepareSt25ReadSystemBlock() -> Self`
 | Since          | 1.1
 | Description
 | Prepares the reading of the system block of an ST25/SRT512 storage card. This operation is specific to the
   ST25 and SRT512 card types, which expose a system block at address 255 carrying card-specific metadata and
   configuration data. Once processed, the result is available in the <<type_StorageCard,`StorageCard`>> via
   <<op_StorageCard_getSystemBlock,`getSystemBlock`>>.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Capability* -- the current card type is ST25/SRT512.
 | Errors         | None.
 | See also       | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
@@ -867,7 +868,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `prepareSt25WriteSystemBlock(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 2.0
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card, and attaches an
@@ -879,7 +880,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `data` -- the data to be written. +
   `idCommand` -- the application-supplied identifier of this command.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
@@ -891,7 +892,7 @@ automatic verification read, and the memory image is updated only if this verifi
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Signature      | `prepareSt25WriteSystemBlock(data: ByteArray) -> StorageCardTransactionManager`
+| Signature      | `prepareSt25WriteSystemBlock(data: ByteArray) -> Self`
 | Since          | 1.1
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card. This operation is specific to
@@ -906,7 +907,7 @@ automatic verification read, and the memory image is updated only if this verifi
   Because ST25/SRT512 cards do not provide reliable status codes, an automatic verification read is performed and
   the transaction fails if the physical state does not match the provided data.
 | Parameters     | `data` -- the data to be written to the system block (expected final state).
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
@@ -924,7 +925,7 @@ automatic verification read, and the memory image is updated only if this verifi
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 2.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset, and attaches an
@@ -943,7 +944,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
   `idCommand`        -- the application-supplied identifier of this command.
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
 | Errors         | None.
@@ -958,7 +959,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `prepareWriteBlocks(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
-`) -> StorageCardTransactionManager`
+`) -> Self`
 | Since          | 1.0
 | Description
 | Prepares the writing of one or more blocks starting from the specified block offset. The number of blocks
@@ -973,7 +974,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written (expected final state).
-| Returns        | The current instance (<<type_StorageCardTransactionManager,`StorageCardTransactionManager`>>).
+| Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
 | Errors         | None.
