@@ -98,10 +98,10 @@ package "terminal.storagecard" as root {
             +getSystemBlock() → ByteArray?
         }
         enum "ProductType" as ProductType <<green>> {
-            MIFARE_ULTRALIGHT
-            MIFARE_CLASSIC_1K
-            MIFARE_CLASSIC_4K
-            ST25_SRT512
+            +MIFARE_ULTRALIGHT
+            +MIFARE_CLASSIC_1K
+            +MIFARE_CLASSIC_4K
+            +ST25_SRT512
 
             +getBlockCount() → Int
             +getBlockSize() → Int
@@ -112,8 +112,8 @@ package "terminal.storagecard" as root {
     }
 
     enum "MifareClassicKeyType" as MifareClassicKeyType <<green>> {
-        KEY_A
-        KEY_B
+        +KEY_A
+        +KEY_B
     }
 
     package "transaction" as transaction {
