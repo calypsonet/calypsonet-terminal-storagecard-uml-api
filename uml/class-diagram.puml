@@ -80,7 +80,7 @@ package "terminal.storagecard" as root {
     }
 
     package "card" as card {
-        interface "<<<back:yellow>CardSelectionExtension</back>>>\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
+        interface "«<back:yellow>CardSelectionExtension</back>»\nStorageCardSelectionExtension" as StorageCardSelectionExtension <<blue>> {
             +prepareReadBlock(blockAddress: Int) → Self
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
             .. **ST25 / SRT512** ..
@@ -89,7 +89,7 @@ package "terminal.storagecard" as root {
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
-        interface "<<<back:yellow>SmartCard</back>>>\nStorageCard" as StorageCard {
+        interface "«<back:yellow>SmartCard</back>»\nStorageCard" as StorageCard {
             +getProductType() → ProductType
             +getUID() → ByteArray
             +getBlock(blockAddress: Int) → ByteArray
@@ -117,7 +117,7 @@ package "terminal.storagecard" as root {
     }
 
     package "transaction" as transaction {
-        interface "<<<back:yellow>CardTransactionManager</back>>>\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
+        interface "«<back:yellow>CardTransactionManager</back>»\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
             +prepareReadBlock(blockAddress: Int) → Self
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
