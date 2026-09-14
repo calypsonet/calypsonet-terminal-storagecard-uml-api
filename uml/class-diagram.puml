@@ -74,7 +74,7 @@ package "terminal.storagecard" as root {
         +const VERSION: String = "2.0"
     }
     interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
-        +createStorageCardSelectionExtension(productType: ProductType) → StorageCardSelectionExtension
+        +createStorageCardSelectionExtension(productType: StorageCardProductType) → StorageCardSelectionExtension
 
         +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard) → StorageCardTransactionManager
     }
@@ -90,24 +90,24 @@ package "terminal.storagecard" as root {
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
         interface "«<back:yellow>SmartCard</back>»\nStorageCard" as StorageCard {
-            +getProductType() → ProductType
-            +getUID() → ByteArray
-            +getBlock(blockAddress: Int) → ByteArray
-            +getBlocks(fromBlockAddress: Int, toBlockAddress: Int) → ByteArray
+            +getProductType() → StorageCardProductType
+            +getUid() → ByteArray
+            +getBlock(blockAddress: Int) → ByteArray?
+            +getBlocks(fromBlockAddress: Int, toBlockAddress: Int) → ByteArray?
             .. **ST25 / SRT512** ..
             +getSystemBlock() → ByteArray?
         }
-        enum "ProductType" as ProductType <<green>> {
+        enum "StorageCardProductType" as StorageCardProductType <<green>> {
             +MIFARE_ULTRALIGHT
             +MIFARE_CLASSIC_1K
             +MIFARE_CLASSIC_4K
             +ST25_SRT512
 
-            +getBlockCount() → Int
-            +getBlockSize() → Int
-            +hasSystemBlock() → Boolean
-            +hasWriteAcknowledgment() → Boolean
-            +hasAuthentication() → Boolean
+            +val blockCount: Int
+            +val blockSize: Int
+            +val hasSystemBlock: Boolean
+            +val hasWriteAcknowledgment: Boolean
+            +val hasAuthentication: Boolean
         }
     }
 
@@ -145,8 +145,8 @@ package "terminal.storagecard" as root {
 StorageCardApiFactory ..> StorageCardSelectionExtension #C_LINK : create >
 StorageCardApiFactory ..> StorageCardTransactionManager #C_LINK : create >
 StorageCardApiFactory .right.> StorageCard #C_USE : use >
-StorageCardApiFactory .right.> ProductType #C_USE : use >
-StorageCard ..> ProductType #C_USE : provide >
+StorageCardApiFactory .right.> StorageCardProductType #C_USE : use >
+StorageCard ..> StorageCardProductType #C_LINK : provide >
 StorageCardSelectionExtension ..> MifareClassicKeyType #C_USE : use >
 StorageCardTransactionManager ..> MifareClassicKeyType #C_USE : use >
 
