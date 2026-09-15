@@ -211,6 +211,7 @@ semantic intent rather than the syntactic form.
 | `Boolean`   | Two-state truth value.                                                              | `boolean`, `bool`.
 | `Int`       | Signed 32-bit integer.                                                              | `int`, `Int32`, `i32`.
 | `ByteArray` | Ordered sequence of octets.                                                         | `byte[]`, `[u8]`, `bytes`.
+| `Any`       | Value of any type, root of the type hierarchy.                                      | `Object`, `Any`, `object`, `Box<dyn Any>`.
 | `T?`        | Nullable value: either a `T` value or `null`.                                       | `Integer` (boxed), `Optional<T>`, `T?`, `Option<T>`.
 | `null`      | Absence of value, the alternative held by a nullable type.                          | `null`, `nil`, `None`.
 | `Self`      | Own type of the receiver: a fluent operation returns the instance it was called on. | `Self`, `T` (recursive generic).
