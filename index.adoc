@@ -877,7 +877,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | Signature
 | `prepareSt25WriteSystemBlock(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int` +
 `) -> Self`
 | Since          | 2.0
 | Description
@@ -886,10 +886,10 @@ automatic verification read, and the memory image is updated only if this verifi
   data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  the `idCommand` property of the error, if this specific command causes one to be raised.
+  the `commandId` property of the error, if this specific command causes one to be raised.
 | Parameters
 | `data` -- the data to be written. +
-  `idCommand` -- the application-supplied identifier of this command.
+  `commandId` -- the application-supplied identifier of this command.
 | Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
@@ -934,7 +934,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `prepareWriteBlocks(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}idCommand: Int` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int` +
 `) -> Self`
 | Since          | 2.0
 | Description
@@ -949,11 +949,11 @@ automatic verification read, and the memory image is updated only if this verifi
   For cards that do not provide
   reliable status codes, an automatic verification read is performed and the transaction fails if the physical
   state does not match the provided data. The identifier MAY later be obtained via
-  the `idCommand` property of the error, if this specific command causes one to be raised.
+  the `commandId` property of the error, if this specific command causes one to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
   `data`             -- the data to be written. +
-  `idCommand`        -- the application-supplied identifier of this command.
+  `commandId`        -- the application-supplied identifier of this command.
 | Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
@@ -1088,7 +1088,7 @@ restated for each error.
 The storage-card errors -- <<type_SCReaderCommunication,`SCReaderCommunication`>>,
 <<type_SCCardCommunication,`SCCardCommunication`>>, <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>
 and <<type_SCAuthenticationFailed,`SCAuthenticationFailed`>> -- additionally carry `blockAddress` (`Int?`),
-the block address involved in the error, and `idCommand` (`Int?`), the application-supplied identifier of
+the block address involved in the error, and `commandId` (`Int?`), the application-supplied identifier of
 the failing command. Both are `null` when the information is not available.
 
 [[type_SCAuthenticationFailed]]

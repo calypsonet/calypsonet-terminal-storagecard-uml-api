@@ -122,11 +122,11 @@ package "terminal.storagecard" as root {
             +prepareReadBlock(blockAddress: Int) → Self
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
             +prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray) → Self
-            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, idCommand: Int) → Self
+            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, commandId: Int) → Self
             .. **ST25 / SRT512** ..
             +prepareSt25ReadSystemBlock() → Self
             +prepareSt25WriteSystemBlock(data: ByteArray) → Self
-            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, idCommand: Int) → Self
+            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, commandId: Int) → Self
             .. **Mifare Classic** ..
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
             +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
@@ -137,7 +137,7 @@ package "terminal.storagecard" as root {
         +val message: String
         +val cause: Any?
         +val blockAddress: Int?
-        +val idCommand: Int?
+        +val commandId: Int?
     }
 }
 
