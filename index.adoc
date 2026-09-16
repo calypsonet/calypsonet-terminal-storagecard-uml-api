@@ -581,13 +581,49 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Purpose    | Allows the application to enrich the selection scenario with optional read and authentication commands executed during the selection phase. An instance is obtained via <<op_StorageCardApiFactory_createStorageCardSelectionExtension,`StorageCardApiFactory.createStorageCardSelectionExtension`>>.
 |===
 
-[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber]]
-===== Prepare MIFARE Classic Authenticate (Key Number)
+[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticateWithKey]]
+===== Prepare MIFARE Classic Authenticate With Key
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature
-| `prepareMifareClassicAuthenticate(` +
+| `prepareMifareClassicAuthenticateWithKey(` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
+`) -> Self`
+| Since          | 1.1
+| Description
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific
+  to MIFARE Classic cards and MUST be prepared before reading from or writing to protected sectors. The
+  authentication applies to the entire sector containing the supplied block address. Once authenticated,
+  subsequent read and write operations within the same sector MAY be performed without re-authentication,
+  until the card is removed from the field or another sector is accessed. When the key value is supplied this
+  way, it is forwarded to the reader to be stored as a *volatile* key at index 0 (see <<ref_pcsc,PC/SC>>
+  *Load Key* command). The volatile key is temporary and is erased after usage, when the reader is powered
+  off. *Security note:* this operation transmits the key value over the application-reader communication
+  channel. For production environments and security-sensitive applications, it is RECOMMENDED to use the
+  <<op_StorageCardSelectionExtension_prepareMifareClassicAuthenticateWithKeyNumber,`prepareMifareClassicAuthenticateWithKeyNumber`>>
+  instead, which references a key already stored in the reader without transmitting its value.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
+  `key`                  -- the 6-byte key data for authentication.
+| Returns        | The current instance (`Self`).
+| Pre-conditions | *Argument* -- every parameter is non-`null`. +
+  *Range* -- the block address is within range. +
+  *Argument* -- the key is exactly 6 bytes long. +
+  *Capability* -- the current card type supports authentication.
+| Errors         | None.
+|===
+
+[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticateWithKeyNumber]]
+===== Prepare MIFARE Classic Authenticate With Key Number
+
+[cols="^.^1h,.^5", grid=rows, frame=all]
+|===
+| Signature
+| `prepareMifareClassicAuthenticateWithKeyNumber(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
@@ -609,42 +645,6 @@ include::uml/class-diagram.puml[Terminal Storage Card API class diagram]
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Range* -- the block address is within range. +
   *Argument* -- the key number is valid. +
-  *Capability* -- the current card type supports authentication.
-| Errors         | None.
-|===
-
-[[op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKey]]
-===== Prepare MIFARE Classic Authenticate (Key)
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature
-| `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
-`) -> Self`
-| Since          | 1.1
-| Description
-| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific
-  to MIFARE Classic cards and MUST be prepared before reading from or writing to protected sectors. The
-  authentication applies to the entire sector containing the supplied block address. Once authenticated,
-  subsequent read and write operations within the same sector MAY be performed without re-authentication,
-  until the card is removed from the field or another sector is accessed. When the key value is supplied this
-  way, it is forwarded to the reader to be stored as a *volatile* key at index 0 (see <<ref_pcsc,PC/SC>>
-  *Load Key* command). The volatile key is temporary and is erased after usage, when the reader is powered
-  off. *Security note:* this overload transmits the key value over the application-reader communication
-  channel. For production environments and security-sensitive applications, it is RECOMMENDED to use the
-  <<op_StorageCardSelectionExtension_prepareMifareClassicAuthenticate_withKeyNumber,`keyNumber` overload>>
-  instead, which references a key already stored in the reader without transmitting its value.
-| Parameters
-| `blockAddress`         -- the address of any block within the sector to authenticate. +
-  `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
-  `key`                  -- the 6-byte key data for authentication.
-| Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
-  *Range* -- the block address is within range. +
-  *Argument* -- the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
 | Errors         | None.
 |===
@@ -738,13 +738,49 @@ For card
 technologies that do not provide reliable status codes (e.g. ST25/SRT512), confirmation is obtained via an
 automatic verification read, and the memory image is updated only if this verification passes.
 
-[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber]]
-===== Prepare MIFARE Classic Authenticate (Key Number)
+[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticateWithKey]]
+===== Prepare MIFARE Classic Authenticate With Key
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature
-| `prepareMifareClassicAuthenticate(` +
+| `prepareMifareClassicAuthenticateWithKey(` +
+`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
+`) -> Self`
+| Since          | 1.1
+| Description
+| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific
+  to MIFARE Classic cards and MUST be prepared before reading from or writing to protected sectors. The
+  authentication applies to the entire sector containing the supplied block address. Once authenticated,
+  subsequent read and write operations within the same sector MAY be performed without re-authentication,
+  until the card is removed from the field or another sector is accessed. When the key value is supplied this
+  way, it is forwarded to the reader to be stored as a *volatile* key at index 0 (see <<ref_pcsc,PC/SC>>
+  *Load Key* command). The volatile key is temporary and is erased after usage, when the reader is powered
+  off. *Security note:* this operation transmits the key value over the application-reader communication
+  channel. For production environments and security-sensitive applications, it is RECOMMENDED to use the
+  <<op_StorageCardTransactionManager_prepareMifareClassicAuthenticateWithKeyNumber,`prepareMifareClassicAuthenticateWithKeyNumber`>>
+  instead, which references a key already stored in the reader without transmitting its value.
+| Parameters
+| `blockAddress`         -- the address of any block within the sector to authenticate. +
+  `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
+  `key`                  -- the 6-byte key data for authentication.
+| Returns        | The current instance (`Self`).
+| Pre-conditions | *Argument* -- every parameter is non-`null`. +
+  *Range* -- the block address is within range. +
+  *Argument* -- the key is exactly 6 bytes long. +
+  *Capability* -- the current card type supports authentication.
+| Errors         | None.
+|===
+
+[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticateWithKeyNumber]]
+===== Prepare MIFARE Classic Authenticate With Key Number
+
+[cols="^.^1h,.^5", grid=rows, frame=all]
+|===
+| Signature
+| `prepareMifareClassicAuthenticateWithKeyNumber(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}keyNumber: Int` +
@@ -766,42 +802,6 @@ automatic verification read, and the memory image is updated only if this verifi
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Range* -- the block address is within range. +
   *Argument* -- the key number is valid. +
-  *Capability* -- the current card type supports authentication.
-| Errors         | None.
-|===
-
-[[op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKey]]
-===== Prepare MIFARE Classic Authenticate (Key)
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature
-| `prepareMifareClassicAuthenticate(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}blockAddress: Int,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}mifareClassicKeyType: MifareClassicKeyType,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}key: ByteArray` +
-`) -> Self`
-| Since          | 1.1
-| Description
-| Prepares a MIFARE Classic authentication command using the supplied 6-byte key. This operation is specific
-  to MIFARE Classic cards and MUST be prepared before reading from or writing to protected sectors. The
-  authentication applies to the entire sector containing the supplied block address. Once authenticated,
-  subsequent read and write operations within the same sector MAY be performed without re-authentication,
-  until the card is removed from the field or another sector is accessed. When the key value is supplied this
-  way, it is forwarded to the reader to be stored as a *volatile* key at index 0 (see <<ref_pcsc,PC/SC>>
-  *Load Key* command). The volatile key is temporary and is erased after usage, when the reader is powered
-  off. *Security note:* this overload transmits the key value over the application-reader communication
-  channel. For production environments and security-sensitive applications, it is RECOMMENDED to use the
-  <<op_StorageCardTransactionManager_prepareMifareClassicAuthenticate_withKeyNumber,`keyNumber` overload>>
-  instead, which references a key already stored in the reader without transmitting its value.
-| Parameters
-| `blockAddress`         -- the address of any block within the sector to authenticate. +
-  `mifareClassicKeyType` (<<type_MifareClassicKeyType,`MifareClassicKeyType`>>) -- the type of key to use (Key A or Key B). +
-  `key`                  -- the 6-byte key data for authentication.
-| Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
-  *Range* -- the block address is within range. +
-  *Argument* -- the key is exactly 6 bytes long. +
   *Capability* -- the current card type supports authentication.
 | Errors         | None.
 |===

@@ -86,8 +86,8 @@ package "terminal.storagecard" as root {
             .. **ST25 / SRT512** ..
             +prepareSt25ReadSystemBlock() → Self
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
+            +<color:blue>prepareMifareClassicAuthenticateWithKey(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
+            +<color:blue>prepareMifareClassicAuthenticateWithKeyNumber(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
         interface "«<back:yellow>SmartCard</back>»\nStorageCard" as StorageCard {
             +getProductType() → StorageCardProductType
@@ -128,8 +128,8 @@ package "terminal.storagecard" as root {
             +prepareSt25WriteSystemBlock(data: ByteArray) → Self
             +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, commandId: Int) → Self
             .. **Mifare Classic** ..
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
-            +prepareMifareClassicAuthenticate(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
+            +<color:blue>prepareMifareClassicAuthenticateWithKey(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
+            +<color:blue>prepareMifareClassicAuthenticateWithKeyNumber(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self
         }
     }
 
