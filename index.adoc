@@ -270,6 +270,8 @@ not restated for each operation:
 * *Non-`null` results.* Unless the return type is marked nullable (`T?`) or the *Returns* row states otherwise, an
   operation returns a non-`null` value.
 * *Fluent composition.* Builder-style operations return the current instance so that calls can be chained.
+* *Default values.* A parameter declared with a default value (for example `commandId: Int? = null`) MAY be
+  omitted by the caller, in which case the default value applies; the *Parameters* row states its meaning.
 
 ==== Concurrency
 
@@ -869,40 +871,16 @@ automatic verification read, and the memory image is updated only if this verifi
 | See also       | <<op_StorageCard_getSystemBlock,`StorageCard.getSystemBlock`>>
 |===
 
-[[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock_withId]]
-===== Prepare ST25 Write System Block (ID Command)
+[[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
+===== Prepare ST25 Write System Block
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
 | Signature
 | `prepareSt25WriteSystemBlock(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int? = null` +
 `) -> Self`
-| Since          | 2.0
-| Description
-| Prepares the writing of data to the system block of an ST25/SRT512 storage card, and attaches an
-  application-supplied identifier to the prepared command. The data length MUST match the block size. The provided
-  data MUST represent the *expected final state* of the system block. Because ST25/SRT512 cards do not provide
-  reliable status codes, an automatic verification read is performed and the transaction fails if the physical
-  state does not match the provided data. The identifier MAY later be obtained via
-  the `commandId` property of the error, if this specific command causes one to be raised.
-| Parameters
-| `data` -- the data to be written. +
-  `commandId` -- the application-supplied identifier of this command.
-| Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
-  *Argument* -- the length of `data` matches the block size. +
-  *Capability* -- the current card type is ST25/SRT512.
-| Errors         | None.
-|===
-
-[[op_StorageCardTransactionManager_prepareSt25WriteSystemBlock]]
-===== Prepare ST25 Write System Block (No ID Command)
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature      | `prepareSt25WriteSystemBlock(data: ByteArray) -> Self`
 | Since          | 1.1
 | Description
 | Prepares the writing of data to the system block of an ST25/SRT512 storage card. This operation is specific to
@@ -915,18 +893,21 @@ automatic verification read, and the memory image is updated only if this verifi
   block after the write.
 
   Because ST25/SRT512 cards do not provide reliable status codes, an automatic verification read is performed and
-  the transaction fails if the physical state does not match the provided data.
-| Parameters     | `data` -- the data to be written to the system block (expected final state).
+  the transaction fails if the physical state does not match the provided data. When a `commandId` is supplied, it
+  MAY later be obtained via the `commandId` property of the error, if this specific command causes one to be raised.
+| Parameters
+| `data`      -- the data to be written to the system block (expected final state). +
+  `commandId` -- the application-supplied identifier of this command, or `null` if none.
 | Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
+| Pre-conditions | *Argument* -- every non-nullable parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
 | Errors         | None.
 | See also       | <<type_StorageCardProductType,`StorageCardProductType.blockSize`>>
 |===
 
-[[op_StorageCardTransactionManager_prepareWriteBlocks_withId]]
-===== Prepare Write Blocks (ID Command)
+[[op_StorageCardTransactionManager_prepareWriteBlocks]]
+===== Prepare Write Blocks
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
@@ -934,41 +915,7 @@ automatic verification read, and the memory image is updated only if this verifi
 | `prepareWriteBlocks(` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int` +
-`) -> Self`
-| Since          | 2.0
-| Description
-| Prepares the writing of one or more blocks starting from the specified block offset, and attaches an
-  application-supplied identifier to the prepared command. The number of blocks written is determined by the
-  length of `data` divided by the block size of the card.
-
-  *Important:* the application is responsible for ensuring
-  that the write operations are coherent with the target card's technology (e.g. OTP bits, counters). The provided
-  data MUST represent the *expected final state* of the blocks after the write.
-
-  For cards that do not provide
-  reliable status codes, an automatic verification read is performed and the transaction fails if the physical
-  state does not match the provided data. The identifier MAY later be obtained via
-  the `commandId` property of the error, if this specific command causes one to be raised.
-| Parameters
-| `fromBlockAddress` -- the offset at which the blocks are written. +
-  `data`             -- the data to be written. +
-  `commandId`        -- the application-supplied identifier of this command.
-| Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
-  *Argument* -- the length of `data` is a multiple of the block size.
-| Errors         | None.
-|===
-
-[[op_StorageCardTransactionManager_prepareWriteBlocks]]
-===== Prepare Write Blocks (No ID Command)
-
-[cols="^.^1h,.^5", grid=rows, frame=all]
-|===
-| Signature
-| `prepareWriteBlocks(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int? = null` +
 `) -> Self`
 | Since          | 1.0
 | Description
@@ -980,12 +927,14 @@ automatic verification read, and the memory image is updated only if this verifi
   blocks after the write.
 
   For cards that do not provide reliable status codes, an automatic verification read is performed and the
-  transaction fails if the physical state does not match the provided data.
+  transaction fails if the physical state does not match the provided data. When a `commandId` is supplied, it MAY
+  later be obtained via the `commandId` property of the error, if this specific command causes one to be raised.
 | Parameters
 | `fromBlockAddress` -- the offset at which the blocks are written. +
-  `data`             -- the data to be written (expected final state).
+  `data`             -- the data to be written (expected final state). +
+  `commandId`        -- the application-supplied identifier of this command, or `null` if none.
 | Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every parameter is non-`null`. +
+| Pre-conditions | *Argument* -- every non-nullable parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
 | Errors         | None.
 | See also       | <<type_StorageCardProductType,`StorageCardProductType.blockCount`>>
