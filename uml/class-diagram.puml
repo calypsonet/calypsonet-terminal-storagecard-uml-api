@@ -121,10 +121,10 @@ package "terminal.storagecard" as root {
             ' Standard Read/Write
             +prepareReadBlock(blockAddress: Int) → Self
             +prepareReadBlocks(fromBlockAddress: Int, toBlockAddress: Int) → Self
-            +<color:blue>prepareWriteBlocks(fromBlockAddress: Int, data: ByteArray, commandId: Int? = null) → Self
+            +<color:blue>prepareWriteBlocks(commandId: Int, fromBlockAddress: Int, data: ByteArray) → Self
             .. **ST25 / SRT512** ..
             +prepareSt25ReadSystemBlock() → Self
-            +<color:blue>prepareSt25WriteSystemBlock(data: ByteArray, commandId: Int? = null) → Self
+            +<color:blue>prepareSt25WriteSystemBlock(commandId: Int, data: ByteArray) → Self
             .. **Mifare Classic** ..
             +<color:blue>prepareMifareClassicAuthenticateWithKey(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, key: ByteArray) → Self
             +<color:blue>prepareMifareClassicAuthenticateWithKeyNumber(blockAddress: Int, mifareClassicKeyType: MifareClassicKeyType, keyNumber: Int) → Self

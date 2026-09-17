@@ -270,8 +270,6 @@ not restated for each operation:
 * *Non-`null` results.* Unless the return type is marked nullable (`T?`) or the *Returns* row states otherwise, an
   operation returns a non-`null` value.
 * *Fluent composition.* Builder-style operations return the current instance so that calls can be chained.
-* *Default values.* A parameter declared with a default value (for example `commandId: Int? = null`) MAY be
-  omitted by the caller, in which case the default value applies; the *Parameters* row states its meaning.
 
 ==== Concurrency
 
@@ -878,8 +876,8 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareSt25WriteSystemBlock(` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int? = null` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int,` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
 `) -> Self`
 | Since          | 1.1
 | Description
@@ -893,13 +891,13 @@ automatic verification read, and the memory image is updated only if this verifi
   block after the write.
 
   Because ST25/SRT512 cards do not provide reliable status codes, an automatic verification read is performed and
-  the transaction fails if the physical state does not match the provided data. When a `commandId` is supplied, it
-  MAY later be obtained via the `commandId` property of the error, if this specific command causes one to be raised.
+  the transaction fails if the physical state does not match the provided data. The `commandId` MAY later be
+  obtained via the `commandId` property of the error, if this specific command causes one to be raised.
 | Parameters
-| `data`      -- the data to be written to the system block (expected final state). +
-  `commandId` -- the application-supplied identifier of this command, or `null` if none.
+| `commandId` -- the application-supplied identifier of this command. +
+  `data`      -- the data to be written to the system block (expected final state).
 | Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every non-nullable parameter is non-`null`. +
+| Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` matches the block size. +
   *Capability* -- the current card type is ST25/SRT512.
 | Errors         | None.
@@ -913,9 +911,9 @@ automatic verification read, and the memory image is updated only if this verifi
 |===
 | Signature
 | `prepareWriteBlocks(` +
+`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int,` +
 `{nbsp}{nbsp}{nbsp}{nbsp}fromBlockAddress: Int,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray,` +
-`{nbsp}{nbsp}{nbsp}{nbsp}commandId: Int? = null` +
+`{nbsp}{nbsp}{nbsp}{nbsp}data: ByteArray` +
 `) -> Self`
 | Since          | 1.0
 | Description
@@ -927,14 +925,14 @@ automatic verification read, and the memory image is updated only if this verifi
   blocks after the write.
 
   For cards that do not provide reliable status codes, an automatic verification read is performed and the
-  transaction fails if the physical state does not match the provided data. When a `commandId` is supplied, it MAY
-  later be obtained via the `commandId` property of the error, if this specific command causes one to be raised.
+  transaction fails if the physical state does not match the provided data. The `commandId` MAY later be obtained
+  via the `commandId` property of the error, if this specific command causes one to be raised.
 | Parameters
-| `fromBlockAddress` -- the offset at which the blocks are written. +
-  `data`             -- the data to be written (expected final state). +
-  `commandId`        -- the application-supplied identifier of this command, or `null` if none.
+| `commandId`        -- the application-supplied identifier of this command. +
+  `fromBlockAddress` -- the offset at which the blocks are written. +
+  `data`             -- the data to be written (expected final state).
 | Returns        | The current instance (`Self`).
-| Pre-conditions | *Argument* -- every non-nullable parameter is non-`null`. +
+| Pre-conditions | *Argument* -- every parameter is non-`null`. +
   *Argument* -- the length of `data` is a multiple of the block size.
 | Errors         | None.
 | See also       | <<type_StorageCardProductType,`StorageCardProductType.blockCount`>>
