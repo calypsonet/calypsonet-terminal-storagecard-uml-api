@@ -102,7 +102,7 @@ package "terminal.storagecard" as root {
             +MIFARE_CLASSIC_1K
             +MIFARE_CLASSIC_4K
             +ST25_SRT512
-
+            .. **Properties** ..
             +val blockCount: Int
             +val blockSize: Int
             +val hasSystemBlock: Boolean
