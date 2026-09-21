@@ -163,8 +163,13 @@ Conforming implementations MUST guarantee interoperability with <<ref_cna_tr,CNA
 
 This specification covers:
 
+* the following storage card products, all contactless cards compliant with <<ref_iso14443,ISO/IEC 14443>> and
+  identified by the values of <<type_StorageCardProductType,`StorageCardProductType`>>:
+** MIFARE Ultralight,
+** MIFARE Classic 1K/4K,
+** ST25/SRT512;
 * the factory used to instantiate the public types of the API,
-* the abstract representation of a storage card and its product types,
+* the abstract representation of a storage card,
 * the card-selection extension used to enrich a selection scenario with storage-card commands,
 * the transaction manager used to exchange APDUs with the selected card,
 * the family of storage-card-specific errors.
