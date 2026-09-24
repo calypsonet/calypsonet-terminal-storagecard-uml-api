@@ -76,7 +76,7 @@ package "terminal.storagecard" as root {
     interface "StorageCardApiFactory" as StorageCardApiFactory <<blue>> {
         +createStorageCardSelectionExtension(productType: StorageCardProductType) → StorageCardSelectionExtension
 
-        +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard) → StorageCardTransactionManager
+        +createStorageCardTransactionManager(reader: <back:yellow>CardReader</back>, card: StorageCard, <color:blue>securitySettings: StorageCardSecuritySettings</color>) → StorageCardTransactionManager
     }
 
     package "card" as card {
@@ -117,6 +117,9 @@ package "terminal.storagecard" as root {
     }
 
     package "transaction" as transaction {
+        class "<color:blue>StorageCardSecuritySettings" as StorageCardSecuritySettings <<data>> <<green>> {
+            +<color:blue>val readCommandMaxDurations: Map<StorageCardProductType, Long> = emptyMap()
+        }
         interface "«<back:yellow>CardTransactionManager</back>»\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
             +prepareReadBlock(blockAddress: Int) → Self
@@ -142,17 +145,16 @@ package "terminal.storagecard" as root {
 ' Associations
 StorageCardApiFactory ..> StorageCardSelectionExtension #C_LINK : create >
 StorageCardApiFactory ..> StorageCardTransactionManager #C_LINK : create >
-StorageCardApiFactory .right.> StorageCard #C_USE : use >
-StorageCardApiFactory .right.> StorageCardProductType #C_USE : use >
+StorageCardApiFactory ..> StorageCardSecuritySettings #C_USE : use >
+StorageCardApiFactory ..> StorageCard #C_USE : use >
+StorageCardApiFactory ..> StorageCardProductType #C_USE : use >
 StorageCard ..> StorageCardProductType #C_LINK : provide >
 StorageCardSelectionExtension ..> MifareClassicKeyType #C_USE : use >
 StorageCardTransactionManager ..> MifareClassicKeyType #C_USE : use >
 
 ' == LAYOUT ==
 
-StorageCardApiFactory -[hidden]- StorageCardSelectionExtension
-StorageCardApiFactory -[hidden]- StorageCardTransactionManager
-MifareClassicKeyType -[hidden]right- errors
+StorageCardTransactionManager -[hidden]up- StorageCardSecuritySettings
 
 ' == STYLE ==
 
