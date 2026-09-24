@@ -118,7 +118,7 @@ package "terminal.storagecard" as root {
 
     package "transaction" as transaction {
         class "<color:blue>StorageCardSecuritySettings" as StorageCardSecuritySettings <<data>> <<green>> {
-            +<color:blue>val readCommandMaxDurations: Map<StorageCardProductType, Long> = emptyMap()
+            +{field} <color:blue>val readCommandMaxDurations: Map<StorageCardProductType, Long> = emptyMap()
         }
         interface "«<back:yellow>CardTransactionManager</back>»\nStorageCardTransactionManager" as StorageCardTransactionManager <<blue>> {
             ' Standard Read/Write
