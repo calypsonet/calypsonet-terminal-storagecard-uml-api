@@ -862,7 +862,7 @@ automatic verification read, and the memory image is updated only if this verifi
   When the transaction manager has been created with
   <<type_StorageCardSecuritySettings,`StorageCardSecuritySettings`>> declaring a bound for the product type of
   the card, each read command exchange is bounded by that duration; an overrun raises
-  <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>.
+  <<type_StorageCardInvalidCardResponse,`StorageCardInvalidCardResponse`>>.
 | Parameters     | `blockAddress` -- the address of the block to be read.
 | Returns        | The current instance (`Self`).
 | Pre-conditions | *Argument* -- every parameter is non-`null`. +
@@ -891,7 +891,7 @@ automatic verification read, and the memory image is updated only if this verifi
   When the transaction manager has been created with
   <<type_StorageCardSecuritySettings,`StorageCardSecuritySettings`>> declaring a bound for the product type of
   the card, each read command exchange is bounded by that duration; an overrun raises
-  <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>.
+  <<type_StorageCardInvalidCardResponse,`StorageCardInvalidCardResponse`>>.
 | Parameters
 | `fromBlockAddress` -- the starting block address (inclusive). +
   `toBlockAddress`   -- the ending block address (inclusive).
@@ -918,7 +918,7 @@ automatic verification read, and the memory image is updated only if this verifi
   When the transaction manager has been created with
   <<type_StorageCardSecuritySettings,`StorageCardSecuritySettings`>> declaring a bound for the product type of
   the card, each read command exchange is bounded by that duration; an overrun raises
-  <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>.
+  <<type_StorageCardInvalidCardResponse,`StorageCardInvalidCardResponse`>>.
 | Returns        | The current instance (`Self`).
 | Pre-conditions | *Capability* -- the current card type is ST25/SRT512.
 | Errors         | None.
@@ -1088,34 +1088,34 @@ Every error defined below carries two properties: `message` (`String`), which de
 `cause` (`Any?`), the underlying error that triggered it, `null` when there is none. They are not
 restated for each error.
 
-The storage-card errors -- <<type_SCReaderCommunication,`SCReaderCommunication`>>,
-<<type_SCCardCommunication,`SCCardCommunication`>>, <<type_SCInvalidCardResponse,`SCInvalidCardResponse`>>
-and <<type_SCAuthenticationFailed,`SCAuthenticationFailed`>> -- additionally carry `blockAddress` (`Int?`),
+The storage-card errors -- <<type_StorageCardReaderCommunication,`StorageCardReaderCommunication`>>,
+<<type_StorageCardCardCommunication,`StorageCardCardCommunication`>>, <<type_StorageCardInvalidCardResponse,`StorageCardInvalidCardResponse`>>
+and <<type_StorageCardAuthenticationFailed,`StorageCardAuthenticationFailed`>> -- additionally carry `blockAddress` (`Int?`),
 the block address involved in the error, and `commandId` (`Int?`), the application-supplied identifier of
 the failing command. Both are `null` when the information is not available.
 
-<<type_SCInvalidCardResponse,`SCInvalidCardResponse`>> is also raised when the duration of a read command
+<<type_StorageCardInvalidCardResponse,`StorageCardInvalidCardResponse`>> is also raised when the duration of a read command
 exchange exceeds the bound declared for the product type of the card in
 <<type_StorageCardSecuritySettings,`StorageCardSecuritySettings`>>.
 
-[[type_SCAuthenticationFailed]]
-==== SC Authentication Failed
+[[type_StorageCardAuthenticationFailed]]
+==== Storage Card Authentication Failed
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name       | `SCAuthenticationFailed`
+| Name       | `StorageCardAuthenticationFailed`
 | Kind       | Error
 | Namespace  | `storagecard`
 | Since      | 1.1
 | Purpose    | Indicates that an authentication attempt on a storage card has failed (typically due to incorrect key data or key type).
 |===
 
-[[type_SCCardCommunication]]
-==== SC Card Communication
+[[type_StorageCardCardCommunication]]
+==== Storage Card Card Communication
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name       | `SCCardCommunication`
+| Name       | `StorageCardCardCommunication`
 | Kind       | Error
 | Namespace  | `storagecard`
 | Extends    | `CardCommunication` (<<ref_cna_tr,CNA-TR-API>>)
@@ -1123,12 +1123,12 @@ exchange exceeds the bound declared for the product type of the card in
 | Purpose    | Indicates an input/output error during the dialog with the storage card -- e.g. transmission failures, card removal during processing, or a failed automatic verification read after a write operation on cards lacking reliable write acknowledgment.
 |===
 
-[[type_SCInvalidCardResponse]]
-==== SC Invalid Card Response
+[[type_StorageCardInvalidCardResponse]]
+==== Storage Card Invalid Card Response
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name       | `SCInvalidCardResponse`
+| Name       | `StorageCardInvalidCardResponse`
 | Kind       | Error
 | Namespace  | `storagecard`
 | Extends    | `InvalidCardResponse` (<<ref_cna_tr,CNA-TR-API>>)
@@ -1136,12 +1136,12 @@ exchange exceeds the bound declared for the product type of the card in
 | Purpose    | Indicates that a command returned an unexpected or invalid status while interacting with the storage card.
 |===
 
-[[type_SCReaderCommunication]]
-==== SC Reader Communication
+[[type_StorageCardReaderCommunication]]
+==== Storage Card Reader Communication
 
 [cols="^.^1h,.^5", grid=rows, frame=all]
 |===
-| Name       | `SCReaderCommunication`
+| Name       | `StorageCardReaderCommunication`
 | Kind       | Error
 | Namespace  | `storagecard`
 | Extends    | `ReaderCommunication` (<<ref_cna_tr,CNA-TR-API>>)

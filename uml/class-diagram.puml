@@ -134,7 +134,7 @@ package "terminal.storagecard" as root {
         }
     }
 
-    exception "SCReaderCommunication: <back:yellow>ReaderCommunication</back>\nSCCardCommunication: <back:yellow>CardCommunication</back>\nSCInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nSCAuthenticationFailed" as errors <<error>> <<green>> {
+    exception "StorageCardReaderCommunication: <back:yellow>ReaderCommunication</back>\nStorageCardCardCommunication: <back:yellow>CardCommunication</back>\nStorageCardInvalidCardResponse: <back:yellow>InvalidCardResponse</back>\nStorageCardAuthenticationFailed" as errors <<error>> <<green>> {
         +val message: String
         +val cause: Any?
         +val blockAddress: Int?
