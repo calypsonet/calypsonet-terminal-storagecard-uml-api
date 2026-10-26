@@ -9,7 +9,7 @@ versions:
     files:
       diagram:
         name: "class-diagram.svg"
-        size: "55 kB"
+        size: "59 kB"
       html:
         name: "YYMMDD-SP-CNATerminalAPI-StorageCard_v2.0.0-SNAPSHOT.html"
         size: "1.4 MB"
