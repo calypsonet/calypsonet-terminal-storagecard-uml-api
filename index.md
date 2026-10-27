@@ -2,6 +2,7 @@
 layout: default
 title: "calypsonet-terminal-storagecard-api-spec"
 repository: "calypsonet-terminal-storagecard-api-spec"
+doc_name: "Terminal Storage Card API"
 latest_stable: "1.2.0"
 latest_stable_path: ""
 versions:
