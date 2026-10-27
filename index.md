@@ -1,8 +1,9 @@
 ---
 layout: default
-title: "calypsonet-terminal-storagecard-uml-api"
-repository: "calypsonet-terminal-storagecard-uml-api"
+title: "calypsonet-terminal-storagecard-api-spec"
+repository: "calypsonet-terminal-storagecard-api-spec"
 latest_stable: "1.2.0"
+latest_stable_path: ""
 versions:
   - version: "2.0.0-SNAPSHOT"
     status: snapshot
