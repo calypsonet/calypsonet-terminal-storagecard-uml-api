@@ -16,5 +16,9 @@ applied to the specified contract:
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-28
 ### Added
 - Initial baseline (v2.0.0) of the Terminal Storage Card API specification.
+
+[unreleased]: https://github.com/calypsonet/calypsonet-terminal-storagecard-api-spec/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/calypsonet/calypsonet-terminal-storagecard-api-spec/releases/tag/2.0.0

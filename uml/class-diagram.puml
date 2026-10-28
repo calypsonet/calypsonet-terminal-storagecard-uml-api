@@ -167,7 +167,7 @@ package root.card #C_GREY2 {}
 package root.transaction #C_GREY2 {}
 
 center footer
-<size:10><color:#566573>Terminal Storage Card API 2.0 (2026-07-20) — CNA-TSC-API — Copyright © Calypso Networks Association — CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/) — https://docs.terminal-api.calypsonet.org</color></size>
+<size:10><color:#566573>Terminal Storage Card API 2.0 (2026-10-28) — CNA-TSC-API — Copyright © Calypso Networks Association — CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/) — https://docs.terminal-api.calypsonet.org</color></size>
 end footer
 
 @enduml
