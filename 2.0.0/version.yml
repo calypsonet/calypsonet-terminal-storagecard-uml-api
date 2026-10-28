@@ -1,0 +1,12 @@
+  - version: "2.0.0"
+    status: stable
+    files:
+      diagram:
+        name: "261028-SP-CNATerminalAPI-StorageCard_v2.0.0-class-diagram.svg"
+        size: "59 kB"
+      html:
+        name: "261028-SP-CNATerminalAPI-StorageCard_v2.0.0.html"
+        size: "1.4 MB"
+      pdf:
+        name: "261028-SP-CNATerminalAPI-StorageCard_v2.0.0.pdf"
+        size: "1.2 MB"
